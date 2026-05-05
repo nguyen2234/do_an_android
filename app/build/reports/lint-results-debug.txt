@@ -1,0 +1,705 @@
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\AddTransactionFragment.java:74: Warning: Implicitly using the default locale is a common source of bugs: Use String.format(Locale, ...) instead [DefaultLocale]
+                        String formatted = String.format("%,.0f", amount).replace(",", ".") + " ₫";
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\WalletFragment.java:63: Warning: Implicitly using the default locale is a common source of bugs: Use String.format(Locale, ...) instead [DefaultLocale]
+        return String.format("%,.0f", amount).replace(",", ".");
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "DefaultLocale":
+   Calling String#toLowerCase() or #toUpperCase() without specifying an
+   explicit locale is a common source of bugs. The reason for that is that
+   those methods will use the current locale on the user's device, and even
+   though the code appears to work correctly when you are developing the app,
+   it will fail in some locales. For example, in the Turkish locale, the
+   uppercase replacement for i is not I.
+
+   If you want the methods to just perform ASCII replacement, for example to
+   convert an enum name, call String#toUpperCase(Locale.ROOT) instead. If you
+   really want to use the current locale, call
+   String#toUpperCase(Locale.getDefault()) instead.
+
+   https://developer.android.com/reference/java/util/Locale.html#default_locale
+
+D:\HocKi_4.2\ANDROID\doan_android\app\build.gradle.kts:12: Warning: Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the android.os.Build.VERSION_CODES javadoc for details. [OldTargetApi]
+        targetSdk = 35
+        ~~~~~~~~~~~~~~
+
+   Explanation for issues of type "OldTargetApi":
+   When your application or sdk runs on a version of Android that is more
+   recent than your targetSdk specifies that it has been tested with, various
+   compatibility modes kick in. This ensures that your application continues
+   to work, but it may look out of place. For example, if the targetSdk is
+   less than 14, your app may get an option button in the UI.
+
+   To fix this issue, set the targetSdk to the highest available value. Then
+   test your app to make sure everything works correctly. You may want to
+   consult the compatibility notes to see what changes apply to each version
+   you are adding support for:
+   https://developer.android.com/reference/android/os/Build.VERSION_CODES.html
+   as well as follow this guide:
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.
+   html
+
+   https://developer.android.com/distribute/best-practices/develop/target-sdk.html
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\SplashActivity.java:10: Warning: The application should not provide its own launch screen [CustomSplashScreen]
+public class SplashActivity extends AppCompatActivity {
+             ~~~~~~~~~~~~~~
+
+   Explanation for issues of type "CustomSplashScreen":
+   Starting in Android 12 (API 31+), the application's Launch Screen is
+   provided by the system and the application should not create its own,
+   otherwise the user will see two splashscreens. Please check the
+   SplashScreen class to check how the Splash Screen can be controlled and
+   customized.
+
+   https://developer.android.com/guide/topics/ui/splash-screen
+
+D:\HocKi_4.2\ANDROID\doan_android\gradle\libs.versions.toml:2: Warning: A newer version of com.android.application than 9.1.1 is available: 9.2.0 [AndroidGradlePluginVersion]
+agp = "9.1.1"
+      ~~~~~~~
+
+   Explanation for issues of type "AndroidGradlePluginVersion":
+   This detector looks for usage of the Android Gradle Plugin where the
+   version you are using is not the current stable release. Using older
+   versions is fine, and there are cases where you deliberately want to stick
+   with an older version. However, you may simply not be aware that a more
+   recent version is available, and that is what this lint check helps find.
+
+D:\HocKi_4.2\ANDROID\doan_android\app\build.gradle.kts:7: Warning: A newer version of compileSdk than 35 is available: 36 [GradleDependency]
+    compileSdk = 35
+    ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\build.gradle.kts:38: Warning: A newer version of androidx.recyclerview:recyclerview than 1.3.2 is available: 1.4.0 [GradleDependency]
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\build.gradle.kts:40: Warning: A newer version of androidx.fragment:fragment than 1.6.2 is available: 1.8.9 [GradleDependency]
+    implementation("androidx.fragment:fragment:1.6.2")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\gradle\libs.versions.toml:3: Warning: A newer version of androidx.core:core-ktx than 1.10.1 is available: 1.18.0 [GradleDependency]
+coreKtx = "1.10.1"
+          ~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\gradle\libs.versions.toml:5: Warning: A newer version of androidx.test.ext:junit than 1.1.5 is available: 1.3.0 [GradleDependency]
+junitVersion = "1.1.5"
+               ~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\gradle\libs.versions.toml:6: Warning: A newer version of androidx.test.espresso:espresso-core than 3.5.1 is available: 3.7.0 [GradleDependency]
+espressoCore = "3.5.1"
+               ~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\gradle\libs.versions.toml:7: Warning: A newer version of androidx.appcompat:appcompat than 1.6.1 is available: 1.7.1 [GradleDependency]
+appcompat = "1.6.1"
+            ~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\gradle\libs.versions.toml:8: Warning: A newer version of com.google.android.material:material than 1.10.0 is available: 1.13.0 [GradleDependency]
+material = "1.10.0"
+           ~~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\activity_splash.xml:45: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+            android:tint="@color/colorPrimary"/>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:188: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                            android:tint="@color/colorPrimary"/>
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:85: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                    android:tint="@color/colorPrimary"/>
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:143: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                            android:tint="@color/colorIncome"/>
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:190: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                            android:tint="@color/colorExpense"/>
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:147: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                            android:tint="@color/colorIncome"/>
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:192: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+                            android:tint="@color/colorExpense"/>
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:38: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+            android:tint="@color/colorPrimary"/>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_menu_row.xml:14: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+        android:tint="@color/colorPrimary"/>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_menu_row.xml:30: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+        android:tint="@color/colorTextSecondary"/>
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_transaction.xml:26: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+            android:tint="@color/colorIncome"/>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_wallet.xml:26: Error: Must use app:tint instead of android:tint [UseAppTint from androidx.appcompat]
+            android:tint="@color/colorIncome"/>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UseAppTint":
+   ImageView or ImageButton uses android:tint instead of app:tint
+
+   Vendor: Android Open Source Project
+   Identifier: androidx.appcompat
+   Feedback: https://issuetracker.google.com/issues/new?component=460343
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\view\BarChartView.java:81: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            RectF expRect = new RectF(expLeft, expTop, expRight, expBottom);
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "DrawAllocation":
+   You should avoid allocating objects during a drawing or layout operation.
+   These are called frequently, so a smooth UI can be interrupted by garbage
+   collection pauses caused by the object allocations.
+
+   The way this is generally handled is to allocate the needed objects up
+   front and to reuse them for each drawing operation.
+
+   Some methods allocate memory on your behalf (such as Bitmap.create), and
+   these should be handled in the same way.
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:94: Warning: Set android:baselineAligned="false" on this element for better performance [DisableBaselineAlignment]
+                    <LinearLayout
+                     ~~~~~~~~~~~~
+
+   Explanation for issues of type "DisableBaselineAlignment":
+   When a LinearLayout is used to distribute the space proportionally between
+   nested layouts, the baseline alignment property should be turned off to
+   make the layout computation faster.
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\activity_main.xml:6: Warning: Possible overdraw: Root element paints background @color/colorBackground with a theme that also paints a background (inferred theme is @style/Theme.Android_app) [Overdraw]
+    android:background="@color/colorBackground">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\activity_splash.xml:6: Warning: Possible overdraw: Root element paints background @color/colorPrimary with a theme that also paints a background (inferred theme is @style/Theme_Android_app_Splash) [Overdraw]
+    android:background="@color/colorPrimary">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:6: Warning: Possible overdraw: Root element paints background @color/colorBackground with a theme that also paints a background (inferred theme is @style/Theme.Android_app) [Overdraw]
+    android:background="@color/colorBackground">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:6: Warning: Possible overdraw: Root element paints background @color/colorBackground with a theme that also paints a background (inferred theme is @style/Theme.Android_app) [Overdraw]
+    android:background="@color/colorBackground">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:6: Warning: Possible overdraw: Root element paints background @color/colorBackground with a theme that also paints a background (inferred theme is @style/Theme.Android_app) [Overdraw]
+    android:background="@color/colorBackground">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:6: Warning: Possible overdraw: Root element paints background @color/colorBackground with a theme that also paints a background (inferred theme is @style/Theme.Android_app) [Overdraw]
+    android:background="@color/colorBackground">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:6: Warning: Possible overdraw: Root element paints background @color/colorBackground with a theme that also paints a background (inferred theme is @style/Theme.Android_app) [Overdraw]
+    android:background="@color/colorBackground">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "Overdraw":
+   If you set a background drawable on a root view, then you should use a
+   custom theme where the theme background is null. Otherwise, the theme
+   background will be painted first, only to have your custom background
+   completely cover it; this is called "overdraw".
+
+   NOTE: This detector relies on figuring out which layouts are associated
+   with which activities based on scanning the Java code, and it's currently
+   doing that using an inexact pattern matching algorithm. Therefore, it can
+   incorrectly conclude which activity the layout is associated with and then
+   wrongly complain that a background-theme is hidden.
+
+   If you want your custom background on multiple pages, then you should
+   consider making a custom theme with your custom background and just using
+   that theme instead of a root element background.
+
+   Of course it's possible that your custom drawable is translucent and you
+   want it to be mixed with the background. However, you will get better
+   performance if you pre-mix the background with your drawable and use that
+   resulting image or color as a custom theme background instead.
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\drawable\bg_balance_card.xml:2: Warning: The resource R.drawable.bg_balance_card appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\drawable\bg_content_rounded.xml:2: Warning: The resource R.drawable.bg_content_rounded appears to be unused [UnusedResources]
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+^
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:7: Warning: The resource R.color.colorPrimaryLighter appears to be unused [UnusedResources]
+    <color name="colorPrimaryLighter">#C49A78</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:18: Warning: The resource R.color.colorCardBackground appears to be unused [UnusedResources]
+    <color name="colorCardBackground">#FFFFFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:24: Warning: The resource R.color.colorTextOnPrimary appears to be unused [UnusedResources]
+    <color name="colorTextOnPrimary">#FFFFFF</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:28: Warning: The resource R.color.colorShadow appears to be unused [UnusedResources]
+    <color name="colorShadow">#0D000000</color>
+           ~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:34: Warning: The resource R.color.colorOverlay appears to be unused [UnusedResources]
+    <color name="colorOverlay">#80634832</color>
+           ~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:35: Warning: The resource R.color.colorHeaderPattern appears to be unused [UnusedResources]
+    <color name="colorHeaderPattern">#7A5540</color>
+           ~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:39: Warning: The resource R.color.purple_500 appears to be unused [UnusedResources]
+    <color name="purple_500">#FF6200EE</color>
+           ~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\colors.xml:42: Warning: The resource R.color.teal_700 appears to be unused [UnusedResources]
+    <color name="teal_700">#FF018786</color>
+           ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:18: Warning: The resource R.string.this_month appears to be unused [UnusedResources]
+    <string name="this_month">Tháng này</string>
+            ~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:22: Warning: The resource R.string.add_transaction appears to be unused [UnusedResources]
+    <string name="add_transaction">Thêm giao dịch</string>
+            ~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:31: Warning: The resource R.string.cancel appears to be unused [UnusedResources]
+    <string name="cancel">Hủy</string>
+            ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:34: Warning: The resource R.string.cat_food appears to be unused [UnusedResources]
+    <string name="cat_food">Ăn uống</string>
+            ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:35: Warning: The resource R.string.cat_transport appears to be unused [UnusedResources]
+    <string name="cat_transport">Di chuyển</string>
+            ~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:36: Warning: The resource R.string.cat_shopping appears to be unused [UnusedResources]
+    <string name="cat_shopping">Mua sắm</string>
+            ~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:37: Warning: The resource R.string.cat_health appears to be unused [UnusedResources]
+    <string name="cat_health">Y tế</string>
+            ~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:38: Warning: The resource R.string.cat_entertainment appears to be unused [UnusedResources]
+    <string name="cat_entertainment">Giải trí</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:39: Warning: The resource R.string.cat_education appears to be unused [UnusedResources]
+    <string name="cat_education">Giáo dục</string>
+            ~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:40: Warning: The resource R.string.cat_salary appears to be unused [UnusedResources]
+    <string name="cat_salary">Lương</string>
+            ~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:41: Warning: The resource R.string.cat_other appears to be unused [UnusedResources]
+    <string name="cat_other">Khác</string>
+            ~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:45: Warning: The resource R.string.add_wallet appears to be unused [UnusedResources]
+    <string name="add_wallet">Thêm ví</string>
+            ~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:47: Warning: The resource R.string.wallet_cash appears to be unused [UnusedResources]
+    <string name="wallet_cash">Tiền mặt</string>
+            ~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:48: Warning: The resource R.string.wallet_bank appears to be unused [UnusedResources]
+    <string name="wallet_bank">Ngân hàng</string>
+            ~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:51: Warning: The resource R.string.statistics appears to be unused [UnusedResources]
+    <string name="statistics">Thống kê</string>
+            ~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:52: Warning: The resource R.string.monthly_report appears to be unused [UnusedResources]
+    <string name="monthly_report">Báo cáo tháng</string>
+            ~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:53: Warning: The resource R.string.weekly appears to be unused [UnusedResources]
+    <string name="weekly">Tuần</string>
+            ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:54: Warning: The resource R.string.monthly appears to be unused [UnusedResources]
+    <string name="monthly">Tháng</string>
+            ~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:55: Warning: The resource R.string.yearly appears to be unused [UnusedResources]
+    <string name="yearly">Năm</string>
+            ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:56: Warning: The resource R.string.top_spending appears to be unused [UnusedResources]
+    <string name="top_spending">Chi nhiều nhất</string>
+            ~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:59: Warning: The resource R.string.profile appears to be unused [UnusedResources]
+    <string name="profile">Hồ sơ</string>
+            ~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:60: Warning: The resource R.string.settings appears to be unused [UnusedResources]
+    <string name="settings">Cài đặt</string>
+            ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:61: Warning: The resource R.string.notification appears to be unused [UnusedResources]
+    <string name="notification">Thông báo</string>
+            ~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:62: Warning: The resource R.string.currency appears to be unused [UnusedResources]
+    <string name="currency">Tiền tệ</string>
+            ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:63: Warning: The resource R.string.language appears to be unused [UnusedResources]
+    <string name="language">Ngôn ngữ</string>
+            ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:64: Warning: The resource R.string.logout appears to be unused [UnusedResources]
+    <string name="logout">Đăng xuất</string>
+            ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:65: Warning: The resource R.string.about appears to be unused [UnusedResources]
+    <string name="about">Giới thiệu</string>
+            ~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:66: Warning: The resource R.string.privacy appears to be unused [UnusedResources]
+    <string name="privacy">Bảo mật</string>
+            ~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\values\strings.xml:67: Warning: The resource R.string.backup appears to be unused [UnusedResources]
+    <string name="backup">Sao lưu dữ liệu</string>
+            ~~~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests =true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests =true.
+   ,
+
+   Available options:
+
+   **skip-libraries** (default is true):
+   Whether the unused resource check should skip reporting unused resources in libraries.
+
+   Many libraries will declare resources that are part of the library surface; other modules depending on the library will also reference the resources. To avoid reporting all these resources as unused (in the context of a library), the unused resource check normally skips reporting unused resources in libraries. Instead, run the unused resource check on the consuming app module (along with `checkDependencies=true`).
+
+   However, there are cases where you want to check that all the resources declared in a library are used; in that case, you can disable the skip option.
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UnusedResources">
+           <option name="skip-libraries" value="true" />
+       </issue>
+   </lint>
+   ```
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:8: Warning: This ScrollView layout or its RelativeLayout parent is unnecessary; transfer the background attribute to the other view [UselessParent]
+    <ScrollView
+     ~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:8: Warning: This ScrollView layout or its RelativeLayout parent is unnecessary; transfer the background attribute to the other view [UselessParent]
+    <ScrollView
+     ~~~~~~~~~~
+
+   Explanation for issues of type "UselessParent":
+   A layout with children that has no siblings, is not a scrollview or a root
+   layout, and does not have a background, can be removed and have its
+   children moved directly into the parent for a flatter and more efficient
+   layout hierarchy.
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:109: Warning: Missing autofillHints attribute [Autofill]
+                    <EditText
+                     ~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:199: Warning: Missing autofillHints attribute [Autofill]
+                    <EditText
+                     ~~~~~~~~
+
+   Explanation for issues of type "Autofill":
+   Specify an autofillHints attribute when targeting SDK version 26 or higher
+   or explicitly specify that the view is not important for autofill. Your app
+   can help an autofill service classify the data correctly by providing the
+   meaning of each view that could be autofillable, such as views representing
+   usernames, passwords, credit card fields, email addresses, etc.
+
+   The hints can have any value, but it is recommended to use predefined
+   values like 'username' for a username or 'creditCardNumber' for a credit
+   card number. For a list of all predefined autofill hint constants, see the
+   AUTOFILL_HINT_ constants in the View reference at
+   https://developer.android.com/reference/android/view/View.html.
+
+   You can mark a view unimportant for autofill by specifying an
+   importantForAutofill attribute on that view or a parent view. See
+   https://developer.android.com/reference/android/view/View.html#setImportant
+   ForAutofill(int).
+
+   https://developer.android.com/guide/topics/text/autofill.html
+
+D:\HocKi_4.2\ANDROID\doan_android\app\build.gradle.kts:38: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\build.gradle.kts:39: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.cardview:cardview:1.0.0")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\build.gradle.kts:40: Warning: Use version catalog instead [UseTomlInstead]
+    implementation("androidx.fragment:fragment:1.6.2")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UseTomlInstead":
+   If your project is using a libs.versions.toml file, you should place all
+   Gradle dependencies in the TOML file. This lint check looks for version
+   declarations outside of the TOML file and suggests moving them (and in the
+   IDE, provides a quickfix to performing the operation automatically).
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\activity_main.xml:29: Warning: Missing contentDescription attribute on image [ContentDescription]
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\activity_splash.xml:39: Warning: Missing contentDescription attribute on image [ContentDescription]
+        <ImageView
+         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:182: Warning: Missing contentDescription attribute on image [ContentDescription]
+                        <ImageView
+                         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:75: Warning: Missing contentDescription attribute on image [ContentDescription]
+                <ImageView
+                 ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:137: Warning: Missing contentDescription attribute on image [ContentDescription]
+                        <ImageView
+                         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:184: Warning: Missing contentDescription attribute on image [ContentDescription]
+                        <ImageView
+                         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:58: Warning: Missing contentDescription attribute on image [ContentDescription]
+                <ImageView
+                 ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:141: Warning: Missing contentDescription attribute on image [ContentDescription]
+                        <ImageView
+                         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:186: Warning: Missing contentDescription attribute on image [ContentDescription]
+                        <ImageView
+                         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:29: Warning: Missing contentDescription attribute on image [ContentDescription]
+        <ImageView
+         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_menu_row.xml:9: Warning: Missing contentDescription attribute on image [ContentDescription]
+    <ImageView
+     ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_menu_row.xml:26: Warning: Missing contentDescription attribute on image [ContentDescription]
+    <ImageView
+     ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_transaction.xml:17: Warning: Missing contentDescription attribute on image [ContentDescription]
+        <ImageView
+         ~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_wallet.xml:17: Warning: Missing contentDescription attribute on image [ContentDescription]
+        <ImageView
+         ~~~~~~~~~
+
+   Explanation for issues of type "ContentDescription":
+   Non-textual widgets like ImageViews and ImageButtons should use the
+   contentDescription attribute to specify a textual description of the widget
+   such that screen readers and other accessibility tools can adequately
+   describe the user interface.
+
+   Note that elements in application screens that are purely decorative and do
+   not provide any content or enable a user action should not have
+   accessibility content descriptions. In this case, set their descriptions to
+   @null. If your app's minSdkVersion is 16 or higher, you can instead set
+   these graphical elements' android:importantForAccessibility attributes to
+   no.
+
+   Note that for text fields, you should not set both the hint and the
+   contentDescription attributes since the hint will never be shown. Just set
+   the hint.
+
+   https://developer.android.com/guide/topics/ui/accessibility/apps#special-cases
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\HomeFragment.java:51: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+        if (tvTotalBalance != null) tvTotalBalance.setText("15.500.000 ₫");
+                                                           ~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\HomeFragment.java:52: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+        if (tvTotalIncome != null) tvTotalIncome.setText("8.000.000 ₫");
+                                                         ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\HomeFragment.java:53: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+        if (tvTotalExpense != null) tvTotalExpense.setText("2.500.000 ₫");
+                                                           ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\HomeFragment.java:54: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+        if (tvUserName != null) tvUserName.setText("Nguyễn Văn A");
+                                                   ~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\StatisticsFragment.java:30: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+        tvStatIncome.setText("8.000.000 ₫");
+                             ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\StatisticsFragment.java:31: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+        tvStatExpense.setText("2.500.000 ₫");
+                              ~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\adapter\TransactionAdapter.java:73: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            holder.tvAmount.setText("-" + amountStr);
+                                    ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\adapter\TransactionAdapter.java:79: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            holder.tvAmount.setText("+" + amountStr);
+                                    ~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\adapter\WalletAdapter.java:64: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+        holder.tvBalance.setText(fmt.format(w.getBalance()) + " ₫");
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\java\com\example\android_app\fragment\WalletFragment.java:47: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+        tvTotalBalance.setText(formatMoney(total) + " ₫");
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "SetTextI18n":
+   When calling TextView#setText
+   * Never call Number#toString() to format numbers; it will not handle
+   fraction separators and locale-specific digits properly. Consider using
+   String#format with proper format specifications (%d or %f) instead.
+   * Do not pass a string literal (e.g. "Hello") to display text. Hardcoded
+   text can not be properly translated to other languages. Consider using
+   Android resource strings instead.
+   * Do not build messages by concatenating text chunks. Such messages can not
+   be properly translated.
+
+   https://developer.android.com/guide/topics/resources/localization.html
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\activity_splash.xml:52: Warning: Hardcoded string "Chi Tiêu Thông Minh", should use @string resource [HardcodedText]
+            android:text="Chi Tiêu Thông Minh"
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\activity_splash.xml:62: Warning: Hardcoded string "Quản lý tài chính cá nhânntheo dõi chi tiêu mỗi ngày", should use @string resource [HardcodedText]
+            android:text="Quản lý tài chính cá nhân\ntheo dõi chi tiêu mỗi ngày"
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:67: Warning: Hardcoded string "0 ₫", should use @string resource [HardcodedText]
+            android:text="0 ₫"
+            ~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:105: Warning: Hardcoded string "Nhập số tiền", should use @string resource [HardcodedText]
+                        android:text="Nhập số tiền"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:115: Warning: Hardcoded string "0", should use @string resource [HardcodedText]
+                        android:hint="0"
+                        ~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:178: Warning: Hardcoded string "Hôm nay", should use @string resource [HardcodedText]
+                            android:text="Hôm nay"
+                            ~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:206: Warning: Hardcoded string "Nhập ghi chú...", should use @string resource [HardcodedText]
+                        android:hint="Nhập ghi chú..."
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_add_transaction.xml:224: Warning: Hardcoded string "Chọn nhanh danh mục", should use @string resource [HardcodedText]
+                android:text="Chọn nhanh danh mục"
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:68: Warning: Hardcoded string "Nguyễn Văn A", should use @string resource [HardcodedText]
+                        android:text="Nguyễn Văn A"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:106: Warning: Hardcoded string "15.500.000 ₫", should use @string resource [HardcodedText]
+                    android:text="15.500.000 ₫"
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:163: Warning: Hardcoded string "8.000.000 ₫", should use @string resource [HardcodedText]
+                                android:text="8.000.000 ₫"
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:210: Warning: Hardcoded string "2.500.000 ₫", should use @string resource [HardcodedText]
+                                android:text="2.500.000 ₫"
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:245: Warning: Hardcoded string "Chi tiêu tháng này", should use @string resource [HardcodedText]
+                            android:text="Chi tiêu tháng này"
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:258: Warning: Hardcoded string "Tháng 5/2026", should use @string resource [HardcodedText]
+                            android:text="Tháng 5/2026"
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:281: Warning: Hardcoded string "2.500.000 ₫", should use @string resource [HardcodedText]
+                            android:text="2.500.000 ₫"
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:291: Warning: Hardcoded string "5.000.000 ₫", should use @string resource [HardcodedText]
+                            android:text="5.000.000 ₫"
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:311: Warning: Hardcoded string "Đã dùng 50% ngân sách", should use @string resource [HardcodedText]
+                        android:text="Đã dùng 50% ngân sách"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:42: Warning: Hardcoded string "Hồ sơ", should use @string resource [HardcodedText]
+                    android:text="Hồ sơ"
+                    ~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:73: Warning: Hardcoded string "Nguyễn Văn A", should use @string resource [HardcodedText]
+                    android:text="Nguyễn Văn A"
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:83: Warning: Hardcoded string "example@email.com", should use @string resource [HardcodedText]
+                    android:text="example@email.com"
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:110: Warning: Hardcoded string "48", should use @string resource [HardcodedText]
+                        android:text="48"
+                        ~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:117: Warning: Hardcoded string "Giao dịch", should use @string resource [HardcodedText]
+                        android:text="Giao dịch"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:135: Warning: Hardcoded string "3", should use @string resource [HardcodedText]
+                        android:text="3"
+                        ~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:142: Warning: Hardcoded string "Ví tiền", should use @string resource [HardcodedText]
+                        android:text="Ví tiền"
+                        ~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:160: Warning: Hardcoded string "5.5M", should use @string resource [HardcodedText]
+                        android:text="5.5M"
+                        ~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:167: Warning: Hardcoded string "Tiết kiệm", should use @string resource [HardcodedText]
+                        android:text="Tiết kiệm"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:181: Warning: Hardcoded string "Cài đặt", should use @string resource [HardcodedText]
+                android:text="Cài đặt"
+                ~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_profile.xml:197: Warning: Hardcoded string "Tài khoản", should use @string resource [HardcodedText]
+                android:text="Tài khoản"
+                ~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:23: Warning: Hardcoded string "Thống kê", should use @string resource [HardcodedText]
+            android:text="Thống kê"
+            ~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:43: Warning: Hardcoded string "Tuần", should use @string resource [HardcodedText]
+                android:text="Tuần"
+                ~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:53: Warning: Hardcoded string "Tháng", should use @string resource [HardcodedText]
+                android:text="Tháng"
+                ~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:62: Warning: Hardcoded string "Năm", should use @string resource [HardcodedText]
+                android:text="Năm"
+                ~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:101: Warning: Hardcoded string "Biểu đồ chi tiêu", should use @string resource [HardcodedText]
+                        android:text="Biểu đồ chi tiêu"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:153: Warning: Hardcoded string "Thu nhập", should use @string resource [HardcodedText]
+                            android:text="Thu nhập"
+                            ~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:163: Warning: Hardcoded string "8.000.000 ₫", should use @string resource [HardcodedText]
+                            android:text="8.000.000 ₫"
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:198: Warning: Hardcoded string "Chi tiêu", should use @string resource [HardcodedText]
+                            android:text="Chi tiêu"
+                            ~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:208: Warning: Hardcoded string "2.500.000 ₫", should use @string resource [HardcodedText]
+                            android:text="2.500.000 ₫"
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_statistics.xml:238: Warning: Hardcoded string "Chi nhiều nhất", should use @string resource [HardcodedText]
+                        android:text="Chi nhiều nhất"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:83: Warning: Hardcoded string "15.500.000 ₫", should use @string resource [HardcodedText]
+                        android:text="15.500.000 ₫"
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:117: Warning: Hardcoded string "+ 8.000.000 ₫", should use @string resource [HardcodedText]
+                                android:text="+ 8.000.000 ₫"
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:141: Warning: Hardcoded string "- 2.500.000 ₫", should use @string resource [HardcodedText]
+                                android:text="- 2.500.000 ₫"
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:158: Warning: Hardcoded string "Danh sách ví", should use @string resource [HardcodedText]
+                android:text="Danh sách ví"
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_menu_row.xml:22: Warning: Hardcoded string "Menu Item", should use @string resource [HardcodedText]
+        android:text="Menu Item"
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_transaction.xml:43: Warning: Hardcoded string "Ăn sáng", should use @string resource [HardcodedText]
+                android:text="Ăn sáng"
+                ~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_transaction.xml:53: Warning: Hardcoded string "Hôm nay, 7:30", should use @string resource [HardcodedText]
+                android:text="Hôm nay, 7:30"
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_transaction.xml:71: Warning: Hardcoded string "-50.000 ₫", should use @string resource [HardcodedText]
+                android:text="-50.000 ₫"
+                ~~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_transaction.xml:84: Warning: Hardcoded string "Ăn uống", should use @string resource [HardcodedText]
+                android:text="Ăn uống"
+                ~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_wallet.xml:43: Warning: Hardcoded string "Tiền mặt", should use @string resource [HardcodedText]
+                android:text="Tiền mặt"
+                ~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_wallet.xml:53: Warning: Hardcoded string "Tiền mặt", should use @string resource [HardcodedText]
+                android:text="Tiền mặt"
+                ~~~~~~~~~~~~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\item_wallet.xml:66: Warning: Hardcoded string "5.500.000 ₫", should use @string resource [HardcodedText]
+            android:text="5.500.000 ₫"
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "HardcodedText":
+   Hardcoding text attributes directly in layout files is bad for several
+   reasons:
+
+   * When creating configuration variations (for example for landscape or
+   portrait) you have to repeat the actual text (and keep it up to date when
+   making changes)
+
+   * The application cannot be translated to other languages by just adding
+   new translations for existing string resources.
+
+   There are quickfixes to automatically extract this hardcoded string into a
+   resource lookup.
+
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:48: Warning: @id/headerGreeting can overlap @id/ivNotification if @id/headerGreeting grows due to localized text expansion [RelativeOverlap]
+                <LinearLayout
+                 ~~~~~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_home.xml:335: Warning: @id/tvSeeAll can overlap TextView-1 if @string/recent_transactions, @string/see_all grow due to localized text expansion [RelativeOverlap]
+                <TextView
+                 ~~~~~~~~
+D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res\layout\fragment_wallet.xml:18: Warning: TextView-1 can overlap @id/btnAddWallet if @string/my_wallets grows due to localized text expansion [RelativeOverlap]
+        <TextView
+         ~~~~~~~~
+
+   Explanation for issues of type "RelativeOverlap":
+   If relative layout has text or button items aligned to left and right sides
+   they can overlap each other due to localized text expansion unless they
+   have mutual constraints like toEndOf/toStartOf.
+
+12 errors, 145 warnings

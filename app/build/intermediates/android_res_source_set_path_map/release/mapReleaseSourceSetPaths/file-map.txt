@@ -1,0 +1,7 @@
+com.example.android_app-pngs-0 D:\HocKi_4.2\ANDROID\doan_android\app\build\generated\res\pngs\release
+com.example.android_app-updated_navigation_xml-1 D:\HocKi_4.2\ANDROID\doan_android\app\build\generated\updated_navigation_xml\release
+com.example.android_app-packageReleaseResources-2 D:\HocKi_4.2\ANDROID\doan_android\app\build\intermediates\incremental\release\packageReleaseResources\merged.dir
+com.example.android_app-packageReleaseResources-3 D:\HocKi_4.2\ANDROID\doan_android\app\build\intermediates\incremental\release\packageReleaseResources\stripped.dir
+com.example.android_app-release-4 D:\HocKi_4.2\ANDROID\doan_android\app\build\intermediates\merged_res\release\mergeReleaseResources
+com.example.android_app-main-5 D:\HocKi_4.2\ANDROID\doan_android\app\src\main\res
+com.example.android_app-release-6 D:\HocKi_4.2\ANDROID\doan_android\app\src\release\res

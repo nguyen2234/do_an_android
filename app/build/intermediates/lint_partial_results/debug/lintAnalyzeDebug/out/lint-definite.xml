@@ -1,0 +1,2191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 9.1.1" type="incidents">
+
+    <incident
+        id="DefaultLocale"
+        severity="warning"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/AddTransactionFragment.java"
+            line="74"
+            column="44"
+            startOffset="2894"
+            endLine="74"
+            endColumn="74"
+            endOffset="2924"/>
+    </incident>
+
+    <incident
+        id="DefaultLocale"
+        severity="warning"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/WalletFragment.java"
+            line="63"
+            column="16"
+            startOffset="2260"
+            endLine="63"
+            endColumn="46"
+            endOffset="2290"/>
+    </incident>
+
+    <incident
+        id="OldTargetApi"
+        severity="warning"
+        message="Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details.">
+        <fix-replace
+            description="Update targetSdkVersion to 36"
+            oldString="35"
+            replacement="36"
+            priority="0"/>
+        <location
+            file="${:app*projectDir}/build.gradle.kts"
+            line="12"
+            column="9"
+            startOffset="228"
+            endLine="12"
+            endColumn="23"
+            endOffset="242"/>
+    </incident>
+
+    <incident
+        id="AndroidGradlePluginVersion"
+        severity="warning"
+        message="A newer version of com.android.application than 9.1.1 is available: 9.2.0">
+        <fix-replace
+            description="Replace with 9.2.0"
+            family="Update versions"
+            oldString="9.1.1"
+            replacement="9.2.0"
+            priority="0"/>
+        <location
+            file="../gradle/libs.versions.toml"
+            line="2"
+            column="7"
+            startOffset="17"
+            endLine="2"
+            endColumn="14"
+            endOffset="24"/>
+        <map>
+            <entry
+                name="coordinate"
+                string="com.android.application"/>
+            <entry
+                name="revision"
+                string="9.2.0"/>
+        </map>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of `compileSdk` than 35 is available: 36">
+        <fix-replace
+            description="Set compileSdk to 36"
+            oldString="35"
+            replacement="36"
+            priority="0"/>
+        <location
+            file="${:app*projectDir}/build.gradle.kts"
+            line="7"
+            column="5"
+            startOffset="113"
+            endLine="7"
+            endColumn="20"
+            endOffset="128"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.recyclerview:recyclerview than 1.3.2 is available: 1.4.0">
+        <fix-replace
+            description="Change to 1.4.0"
+            family="Update versions"
+            oldString="1.3.2"
+            replacement="1.4.0"
+            priority="0"/>
+        <location
+            file="${:app*projectDir}/build.gradle.kts"
+            line="38"
+            column="20"
+            startOffset="910"
+            endLine="38"
+            endColumn="62"
+            endOffset="952"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.fragment:fragment than 1.6.2 is available: 1.8.9">
+        <fix-replace
+            description="Change to 1.8.9"
+            family="Update versions"
+            oldString="1.6.2"
+            replacement="1.8.9"
+            priority="0"/>
+        <location
+            file="${:app*projectDir}/build.gradle.kts"
+            line="40"
+            column="20"
+            startOffset="1028"
+            endLine="40"
+            endColumn="54"
+            endOffset="1062"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.core:core-ktx than 1.10.1 is available: 1.18.0">
+        <fix-replace
+            description="Change to 1.18.0"
+            family="Update versions"
+            oldString="1.10.1"
+            replacement="1.18.0"
+            priority="0"/>
+        <location
+            file="../gradle/libs.versions.toml"
+            line="3"
+            column="11"
+            startOffset="35"
+            endLine="3"
+            endColumn="19"
+            endOffset="43"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.test.ext:junit than 1.1.5 is available: 1.3.0">
+        <fix-replace
+            description="Change to 1.3.0"
+            family="Update versions"
+            oldString="1.1.5"
+            replacement="1.3.0"
+            priority="0"/>
+        <location
+            file="../gradle/libs.versions.toml"
+            line="5"
+            column="16"
+            startOffset="76"
+            endLine="5"
+            endColumn="23"
+            endOffset="83"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.test.espresso:espresso-core than 3.5.1 is available: 3.7.0">
+        <fix-replace
+            description="Change to 3.7.0"
+            family="Update versions"
+            oldString="3.5.1"
+            replacement="3.7.0"
+            priority="0"/>
+        <location
+            file="../gradle/libs.versions.toml"
+            line="6"
+            column="16"
+            startOffset="99"
+            endLine="6"
+            endColumn="23"
+            endOffset="106"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of androidx.appcompat:appcompat than 1.6.1 is available: 1.7.1">
+        <fix-replace
+            description="Change to 1.7.1"
+            family="Update versions"
+            oldString="1.6.1"
+            replacement="1.7.1"
+            priority="0"/>
+        <location
+            file="../gradle/libs.versions.toml"
+            line="7"
+            column="13"
+            startOffset="119"
+            endLine="7"
+            endColumn="20"
+            endOffset="126"/>
+    </incident>
+
+    <incident
+        id="GradleDependency"
+        severity="warning"
+        message="A newer version of com.google.android.material:material than 1.10.0 is available: 1.13.0">
+        <fix-replace
+            description="Change to 1.13.0"
+            family="Update versions"
+            oldString="1.10.0"
+            replacement="1.13.0"
+            priority="0"/>
+        <location
+            file="../gradle/libs.versions.toml"
+            line="8"
+            column="12"
+            startOffset="138"
+            endLine="8"
+            endColumn="20"
+            endOffset="146"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorPrimary&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorPrimary&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorPrimary"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/activity_splash.xml"
+            line="45"
+            column="13"
+            startOffset="1625"
+            endLine="45"
+            endColumn="47"
+            endOffset="1659"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorPrimary&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorPrimary&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorPrimary"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="188"
+            column="29"
+            startOffset="8049"
+            endLine="188"
+            endColumn="63"
+            endOffset="8083"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorPrimary&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorPrimary&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorPrimary"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="85"
+            column="21"
+            startOffset="3704"
+            endLine="85"
+            endColumn="55"
+            endOffset="3738"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorIncome&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorIncome&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorIncome"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="143"
+            column="29"
+            startOffset="6322"
+            endLine="143"
+            endColumn="62"
+            endOffset="6355"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorExpense&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorExpense&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorExpense"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="190"
+            column="29"
+            startOffset="8618"
+            endLine="190"
+            endColumn="63"
+            endOffset="8652"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorIncome&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorIncome&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorIncome"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="147"
+            column="29"
+            startOffset="5839"
+            endLine="147"
+            endColumn="62"
+            endOffset="5872"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorExpense&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorExpense&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorExpense"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="192"
+            column="29"
+            startOffset="8038"
+            endLine="192"
+            endColumn="63"
+            endOffset="8072"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorPrimary&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorPrimary&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorPrimary"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="38"
+            column="13"
+            startOffset="1466"
+            endLine="38"
+            endColumn="47"
+            endOffset="1500"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorPrimary&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorPrimary&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorPrimary"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_menu_row.xml"
+            line="14"
+            column="9"
+            startOffset="477"
+            endLine="14"
+            endColumn="43"
+            endOffset="511"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorTextSecondary&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorTextSecondary&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorTextSecondary"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_menu_row.xml"
+            line="30"
+            column="9"
+            startOffset="994"
+            endLine="30"
+            endColumn="49"
+            endOffset="1034"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorIncome&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorIncome&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorIncome"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_transaction.xml"
+            line="26"
+            column="13"
+            startOffset="1012"
+            endLine="26"
+            endColumn="46"
+            endOffset="1045"/>
+    </incident>
+
+    <incident
+        id="UseAppTint"
+        severity="error"
+        message="Must use `app:tint` instead of `android:tint`">
+        <fix-composite
+            description="Set tint=&quot;@color/colorIncome&quot; and Delete tint">
+            <fix-attribute
+                description="Set tint=&quot;@color/colorIncome&quot;"
+                namespace="http://schemas.android.com/apk/res-auto"
+                attribute="tint"
+                value="@color/colorIncome"/>
+            <fix-attribute
+                description="Delete tint"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="tint"/>
+        </fix-composite>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_wallet.xml"
+            line="26"
+            column="13"
+            startOffset="1001"
+            endLine="26"
+            endColumn="46"
+            endOffset="1034"/>
+    </incident>
+
+    <incident
+        id="DrawAllocation"
+        severity="warning"
+        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/view/BarChartView.java"
+            line="81"
+            column="29"
+            startOffset="2744"
+            endLine="81"
+            endColumn="76"
+            endOffset="2791"/>
+    </incident>
+
+    <incident
+        id="DisableBaselineAlignment"
+        severity="warning"
+        message="Set `android:baselineAligned=&quot;false&quot;` on this element for better performance">
+        <fix-attribute
+            description="Set baselineAligned=&quot;false&quot;"
+            robot="true"
+            independent="true"
+            namespace="http://schemas.android.com/apk/res/android"
+            attribute="baselineAligned"
+            value="false"/>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="94"
+            column="22"
+            startOffset="3730"
+            endLine="94"
+            endColumn="34"
+            endOffset="3742"/>
+    </incident>
+
+    <incident
+        id="Overdraw"
+        severity="warning"
+        message="Possible overdraw: Root element paints background `@color/colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.Android_app`)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/activity_main.xml"
+            line="6"
+            column="5"
+            startOffset="255"
+            endLine="6"
+            endColumn="48"
+            endOffset="298"/>
+    </incident>
+
+    <incident
+        id="Overdraw"
+        severity="warning"
+        message="Possible overdraw: Root element paints background `@color/colorPrimary` with a theme that also paints a background (inferred theme is `@style/Theme_Android_app_Splash`)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/activity_splash.xml"
+            line="6"
+            column="5"
+            startOffset="255"
+            endLine="6"
+            endColumn="45"
+            endOffset="295"/>
+    </incident>
+
+    <incident
+        id="Overdraw"
+        severity="warning"
+        message="Possible overdraw: Root element paints background `@color/colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.Android_app`)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="6"
+            column="5"
+            startOffset="255"
+            endLine="6"
+            endColumn="48"
+            endOffset="298"/>
+    </incident>
+
+    <incident
+        id="Overdraw"
+        severity="warning"
+        message="Possible overdraw: Root element paints background `@color/colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.Android_app`)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="6"
+            column="5"
+            startOffset="255"
+            endLine="6"
+            endColumn="48"
+            endOffset="298"/>
+    </incident>
+
+    <incident
+        id="Overdraw"
+        severity="warning"
+        message="Possible overdraw: Root element paints background `@color/colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.Android_app`)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="6"
+            column="5"
+            startOffset="255"
+            endLine="6"
+            endColumn="48"
+            endOffset="298"/>
+    </incident>
+
+    <incident
+        id="Overdraw"
+        severity="warning"
+        message="Possible overdraw: Root element paints background `@color/colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.Android_app`)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="6"
+            column="5"
+            startOffset="255"
+            endLine="6"
+            endColumn="48"
+            endOffset="298"/>
+    </incident>
+
+    <incident
+        id="Overdraw"
+        severity="warning"
+        message="Possible overdraw: Root element paints background `@color/colorBackground` with a theme that also paints a background (inferred theme is `@style/Theme.Android_app`)">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="6"
+            column="5"
+            startOffset="255"
+            endLine="6"
+            endColumn="48"
+            endOffset="298"/>
+    </incident>
+
+    <incident
+        id="UselessParent"
+        severity="warning"
+        message="This `ScrollView` layout or its `RelativeLayout` parent is unnecessary; transfer the `background` attribute to the other view">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="8"
+            column="6"
+            startOffset="306"
+            endLine="8"
+            endColumn="16"
+            endOffset="316"/>
+    </incident>
+
+    <incident
+        id="UselessParent"
+        severity="warning"
+        message="This `ScrollView` layout or its `RelativeLayout` parent is unnecessary; transfer the `background` attribute to the other view">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="8"
+            column="6"
+            startOffset="306"
+            endLine="8"
+            endColumn="16"
+            endOffset="316"/>
+    </incident>
+
+    <incident
+        id="Autofill"
+        severity="warning"
+        message="Missing `autofillHints` attribute">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set autofillHints"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="autofillHints"
+                value=""
+                point="0"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAutofill=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAutofill"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="109"
+            column="22"
+            startOffset="4118"
+            endLine="109"
+            endColumn="30"
+            endOffset="4126"/>
+    </incident>
+
+    <incident
+        id="Autofill"
+        severity="warning"
+        message="Missing `autofillHints` attribute">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set autofillHints"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="autofillHints"
+                value=""
+                point="0"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAutofill=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAutofill"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="199"
+            column="22"
+            startOffset="8526"
+            endLine="199"
+            endColumn="30"
+            endOffset="8534"/>
+    </incident>
+
+    <incident
+        id="UseTomlInstead"
+        severity="warning"
+        message="Use version catalog instead">
+        <fix-composite
+            description="Replace with new library catalog declaration for recyclerview"
+            robot="true">
+            <fix-replace
+                description="Replace with recyclerviewVersion = &quot;1.3.2&quot;..."
+                robot="true"
+                oldString="_lint_insert_begin_"
+                replacement="recyclerviewVersion = &quot;1.3.2&quot;&#xA;"
+                priority="0">
+                <range
+                    file="../gradle/libs.versions.toml"
+                    startOffset="147"
+                    endOffset="147"/>
+            </fix-replace>
+            <fix-replace
+                description="Replace with recyclerview = { module = &quot;androidx.recyclerview:recyclerview&quot;, version.ref = &quot;recyclerviewVersion&quot; }..."
+                robot="true"
+                oldString="_lint_insert_begin_"
+                replacement="recyclerview = { module = &quot;androidx.recyclerview:recyclerview&quot;, version.ref = &quot;recyclerviewVersion&quot; }&#xA;"
+                priority="0">
+                <range
+                    file="../gradle/libs.versions.toml"
+                    startOffset="729"
+                    endOffset="729"/>
+            </fix-replace>
+            <fix-replace
+                description="Replace with libs.recyclerview"
+                robot="true"
+                replacement="libs.recyclerview"
+                priority="0">
+                <range
+                    file="${:app*projectDir}/build.gradle.kts"
+                    startOffset="910"
+                    endOffset="952"/>
+            </fix-replace>
+        </fix-composite>
+        <location
+            file="${:app*projectDir}/build.gradle.kts"
+            line="38"
+            column="20"
+            startOffset="910"
+            endLine="38"
+            endColumn="62"
+            endOffset="952"/>
+    </incident>
+
+    <incident
+        id="UseTomlInstead"
+        severity="warning"
+        message="Use version catalog instead">
+        <fix-composite
+            description="Replace with new library catalog declaration for cardview"
+            robot="true">
+            <fix-replace
+                description="Replace with cardviewVersion = &quot;1.0.0&quot;..."
+                robot="true"
+                oldString="_lint_insert_begin_"
+                replacement="cardviewVersion = &quot;1.0.0&quot;&#xA;"
+                priority="0">
+                <range
+                    file="../gradle/libs.versions.toml"
+                    startOffset="25"
+                    endOffset="25"/>
+            </fix-replace>
+            <fix-replace
+                description="Replace with cardview = { module = &quot;androidx.cardview:cardview&quot;, version.ref = &quot;cardviewVersion&quot; }..."
+                robot="true"
+                oldString="_lint_insert_begin_"
+                replacement="cardview = { module = &quot;androidx.cardview:cardview&quot;, version.ref = &quot;cardviewVersion&quot; }&#xA;"
+                priority="0">
+                <range
+                    file="../gradle/libs.versions.toml"
+                    startOffset="252"
+                    endOffset="252"/>
+            </fix-replace>
+            <fix-replace
+                description="Replace with libs.cardview"
+                robot="true"
+                replacement="libs.cardview"
+                priority="0">
+                <range
+                    file="${:app*projectDir}/build.gradle.kts"
+                    startOffset="973"
+                    endOffset="1007"/>
+            </fix-replace>
+        </fix-composite>
+        <location
+            file="${:app*projectDir}/build.gradle.kts"
+            line="39"
+            column="20"
+            startOffset="973"
+            endLine="39"
+            endColumn="54"
+            endOffset="1007"/>
+    </incident>
+
+    <incident
+        id="UseTomlInstead"
+        severity="warning"
+        message="Use version catalog instead">
+        <fix-composite
+            description="Replace with new library catalog declaration for fragment"
+            robot="true">
+            <fix-replace
+                description="Replace with fragmentVersion = &quot;1.6.2&quot;..."
+                robot="true"
+                oldString="_lint_insert_begin_"
+                replacement="fragmentVersion = &quot;1.6.2&quot;&#xA;"
+                priority="0">
+                <range
+                    file="../gradle/libs.versions.toml"
+                    startOffset="44"
+                    endOffset="44"/>
+            </fix-replace>
+            <fix-replace
+                description="Replace with fragment = { module = &quot;androidx.fragment:fragment&quot;, version.ref = &quot;fragmentVersion&quot; }..."
+                robot="true"
+                oldString="_lint_insert_begin_"
+                replacement="fragment = { module = &quot;androidx.fragment:fragment&quot;, version.ref = &quot;fragmentVersion&quot; }&#xA;"
+                priority="0">
+                <range
+                    file="../gradle/libs.versions.toml"
+                    startOffset="252"
+                    endOffset="252"/>
+            </fix-replace>
+            <fix-replace
+                description="Replace with libs.fragment"
+                robot="true"
+                replacement="libs.fragment"
+                priority="0">
+                <range
+                    file="${:app*projectDir}/build.gradle.kts"
+                    startOffset="1028"
+                    endOffset="1062"/>
+            </fix-replace>
+        </fix-composite>
+        <location
+            file="${:app*projectDir}/build.gradle.kts"
+            line="40"
+            column="20"
+            startOffset="1028"
+            endLine="40"
+            endColumn="54"
+            endOffset="1062"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/activity_main.xml"
+            line="29"
+            column="6"
+            startOffset="1150"
+            endLine="29"
+            endColumn="75"
+            endOffset="1219"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/activity_splash.xml"
+            line="39"
+            column="10"
+            startOffset="1369"
+            endLine="39"
+            endColumn="19"
+            endOffset="1378"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="182"
+            column="26"
+            startOffset="7694"
+            endLine="182"
+            endColumn="35"
+            endOffset="7703"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="75"
+            column="18"
+            startOffset="3182"
+            endLine="75"
+            endColumn="27"
+            endOffset="3191"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="137"
+            column="26"
+            startOffset="5971"
+            endLine="137"
+            endColumn="35"
+            endOffset="5980"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="184"
+            column="26"
+            startOffset="8264"
+            endLine="184"
+            endColumn="35"
+            endOffset="8273"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="58"
+            column="18"
+            startOffset="2233"
+            endLine="58"
+            endColumn="27"
+            endOffset="2242"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="141"
+            column="26"
+            startOffset="5489"
+            endLine="141"
+            endColumn="35"
+            endOffset="5498"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="186"
+            column="26"
+            startOffset="7685"
+            endLine="186"
+            endColumn="35"
+            endOffset="7694"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="29"
+            column="10"
+            startOffset="1074"
+            endLine="29"
+            endColumn="19"
+            endOffset="1083"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_menu_row.xml"
+            line="9"
+            column="6"
+            startOffset="294"
+            endLine="9"
+            endColumn="15"
+            endOffset="303"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_menu_row.xml"
+            line="26"
+            column="6"
+            startOffset="848"
+            endLine="26"
+            endColumn="15"
+            endOffset="857"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_transaction.xml"
+            line="17"
+            column="10"
+            startOffset="614"
+            endLine="17"
+            endColumn="19"
+            endOffset="623"/>
+    </incident>
+
+    <incident
+        id="ContentDescription"
+        severity="warning"
+        message="Missing `contentDescription` attribute on image">
+        <fix-alternatives>
+            <fix-attribute
+                description="Set contentDescription"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="contentDescription"
+                value="TODO"
+                point="4"
+                mark="0"/>
+            <fix-attribute
+                description="Set importantForAccessibility=&quot;no&quot;"
+                namespace="http://schemas.android.com/apk/res/android"
+                attribute="importantForAccessibility"
+                value="no"/>
+        </fix-alternatives>
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_wallet.xml"
+            line="17"
+            column="10"
+            startOffset="601"
+            endLine="17"
+            endColumn="19"
+            endOffset="610"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/HomeFragment.java"
+            line="51"
+            column="60"
+            startOffset="2195"
+            endLine="51"
+            endColumn="74"
+            endOffset="2209"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/HomeFragment.java"
+            line="52"
+            column="58"
+            startOffset="2269"
+            endLine="52"
+            endColumn="71"
+            endOffset="2282"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/HomeFragment.java"
+            line="53"
+            column="60"
+            startOffset="2344"
+            endLine="53"
+            endColumn="73"
+            endOffset="2357"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/HomeFragment.java"
+            line="54"
+            column="52"
+            startOffset="2411"
+            endLine="54"
+            endColumn="66"
+            endOffset="2425"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/StatisticsFragment.java"
+            line="30"
+            column="30"
+            startOffset="1031"
+            endLine="30"
+            endColumn="43"
+            endOffset="1044"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/StatisticsFragment.java"
+            line="31"
+            column="31"
+            startOffset="1077"
+            endLine="31"
+            endColumn="44"
+            endOffset="1090"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/adapter/TransactionAdapter.java"
+            line="73"
+            column="37"
+            startOffset="2649"
+            endLine="73"
+            endColumn="52"
+            endOffset="2664"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/adapter/TransactionAdapter.java"
+            line="79"
+            column="37"
+            startOffset="3043"
+            endLine="79"
+            endColumn="52"
+            endOffset="3058"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/adapter/WalletAdapter.java"
+            line="64"
+            column="34"
+            startOffset="2037"
+            endLine="64"
+            endColumn="67"
+            endOffset="2070"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*javaDir*0}/com/example/android_app/fragment/WalletFragment.java"
+            line="47"
+            column="32"
+            startOffset="1706"
+            endLine="47"
+            endColumn="57"
+            endOffset="1731"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Chi Tiêu Thông Minh&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/activity_splash.xml"
+            line="52"
+            column="13"
+            startOffset="1885"
+            endLine="52"
+            endColumn="47"
+            endOffset="1919"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Quản lý tài chính cá nhân\ntheo dõi chi tiêu mỗi ngày&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/activity_splash.xml"
+            line="62"
+            column="13"
+            startOffset="2249"
+            endLine="62"
+            endColumn="81"
+            endOffset="2317"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;0 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="67"
+            column="13"
+            startOffset="2538"
+            endLine="67"
+            endColumn="31"
+            endOffset="2556"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Nhập số tiền&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="105"
+            column="25"
+            startOffset="3948"
+            endLine="105"
+            endColumn="52"
+            endOffset="3975"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;0&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="115"
+            column="25"
+            startOffset="4434"
+            endLine="115"
+            endColumn="41"
+            endOffset="4450"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Hôm nay&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="178"
+            column="29"
+            startOffset="7519"
+            endLine="178"
+            endColumn="51"
+            endOffset="7541"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Nhập ghi chú...&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="206"
+            column="25"
+            startOffset="8892"
+            endLine="206"
+            endColumn="55"
+            endOffset="8922"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Chọn nhanh danh mục&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_add_transaction.xml"
+            line="224"
+            column="17"
+            startOffset="9697"
+            endLine="224"
+            endColumn="51"
+            endOffset="9731"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Nguyễn Văn A&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="68"
+            column="25"
+            startOffset="2905"
+            endLine="68"
+            endColumn="52"
+            endOffset="2932"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;15.500.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="106"
+            column="21"
+            startOffset="4695"
+            endLine="106"
+            endColumn="48"
+            endOffset="4722"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;8.000.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="163"
+            column="33"
+            startOffset="7365"
+            endLine="163"
+            endColumn="59"
+            endOffset="7391"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;2.500.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="210"
+            column="33"
+            startOffset="9664"
+            endLine="210"
+            endColumn="59"
+            endOffset="9690"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Chi tiêu tháng này&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="245"
+            column="29"
+            startOffset="11202"
+            endLine="245"
+            endColumn="62"
+            endOffset="11235"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Tháng 5/2026&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="258"
+            column="29"
+            startOffset="11913"
+            endLine="258"
+            endColumn="56"
+            endOffset="11940"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;2.500.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="281"
+            column="29"
+            startOffset="13021"
+            endLine="281"
+            endColumn="55"
+            endOffset="13047"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;5.000.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="291"
+            column="29"
+            startOffset="13544"
+            endLine="291"
+            endColumn="55"
+            endOffset="13570"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Đã dùng 50% ngân sách&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="311"
+            column="25"
+            startOffset="14533"
+            endLine="311"
+            endColumn="61"
+            endOffset="14569"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Hồ sơ&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="42"
+            column="21"
+            startOffset="1670"
+            endLine="42"
+            endColumn="41"
+            endOffset="1690"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Nguyễn Văn A&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="73"
+            column="21"
+            startOffset="2931"
+            endLine="73"
+            endColumn="48"
+            endOffset="2958"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;example@email.com&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="83"
+            column="21"
+            startOffset="3378"
+            endLine="83"
+            endColumn="53"
+            endOffset="3410"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;48&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="110"
+            column="25"
+            startOffset="4553"
+            endLine="110"
+            endColumn="42"
+            endOffset="4570"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Giao dịch&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="117"
+            column="25"
+            startOffset="4909"
+            endLine="117"
+            endColumn="49"
+            endOffset="4933"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;3&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="135"
+            column="25"
+            startOffset="5788"
+            endLine="135"
+            endColumn="41"
+            endOffset="5804"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Ví tiền&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="142"
+            column="25"
+            startOffset="6143"
+            endLine="142"
+            endColumn="47"
+            endOffset="6165"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;5.5M&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="160"
+            column="25"
+            startOffset="7020"
+            endLine="160"
+            endColumn="44"
+            endOffset="7039"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Tiết kiệm&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="167"
+            column="25"
+            startOffset="7378"
+            endLine="167"
+            endColumn="49"
+            endOffset="7402"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Cài đặt&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="181"
+            column="17"
+            startOffset="7968"
+            endLine="181"
+            endColumn="39"
+            endOffset="7990"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Tài khoản&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_profile.xml"
+            line="197"
+            column="17"
+            startOffset="8628"
+            endLine="197"
+            endColumn="41"
+            endOffset="8652"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Thống kê&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="23"
+            column="13"
+            startOffset="846"
+            endLine="23"
+            endColumn="36"
+            endOffset="869"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Tuần&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="43"
+            column="17"
+            startOffset="1597"
+            endLine="43"
+            endColumn="36"
+            endOffset="1616"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Tháng&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="53"
+            column="17"
+            startOffset="1968"
+            endLine="53"
+            endColumn="37"
+            endOffset="1988"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Năm&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="62"
+            column="17"
+            startOffset="2305"
+            endLine="62"
+            endColumn="35"
+            endOffset="2323"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Biểu đồ chi tiêu&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="101"
+            column="25"
+            startOffset="3765"
+            endLine="101"
+            endColumn="56"
+            endOffset="3796"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Thu nhập&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="153"
+            column="29"
+            startOffset="6126"
+            endLine="153"
+            endColumn="52"
+            endOffset="6149"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;8.000.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="163"
+            column="29"
+            startOffset="6655"
+            endLine="163"
+            endColumn="55"
+            endOffset="6681"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Chi tiêu&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="198"
+            column="29"
+            startOffset="8326"
+            endLine="198"
+            endColumn="52"
+            endOffset="8349"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;2.500.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="208"
+            column="29"
+            startOffset="8856"
+            endLine="208"
+            endColumn="55"
+            endOffset="8882"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Chi nhiều nhất&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_statistics.xml"
+            line="238"
+            column="25"
+            startOffset="10153"
+            endLine="238"
+            endColumn="54"
+            endOffset="10182"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;15.500.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="83"
+            column="25"
+            startOffset="3267"
+            endLine="83"
+            endColumn="52"
+            endOffset="3294"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;+ 8.000.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="117"
+            column="33"
+            startOffset="4885"
+            endLine="117"
+            endColumn="61"
+            endOffset="4913"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;- 2.500.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="141"
+            column="33"
+            startOffset="6105"
+            endLine="141"
+            endColumn="61"
+            endOffset="6133"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Danh sách ví&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="158"
+            column="17"
+            startOffset="6817"
+            endLine="158"
+            endColumn="44"
+            endOffset="6844"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Menu Item&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_menu_row.xml"
+            line="22"
+            column="9"
+            startOffset="731"
+            endLine="22"
+            endColumn="33"
+            endOffset="755"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Ăn sáng&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_transaction.xml"
+            line="43"
+            column="17"
+            startOffset="1688"
+            endLine="43"
+            endColumn="39"
+            endOffset="1710"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Hôm nay, 7:30&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_transaction.xml"
+            line="53"
+            column="17"
+            startOffset="2097"
+            endLine="53"
+            endColumn="45"
+            endOffset="2125"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;-50.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_transaction.xml"
+            line="71"
+            column="17"
+            startOffset="2772"
+            endLine="71"
+            endColumn="41"
+            endOffset="2796"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Ăn uống&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_transaction.xml"
+            line="84"
+            column="17"
+            startOffset="3333"
+            endLine="84"
+            endColumn="39"
+            endOffset="3355"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Tiền mặt&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_wallet.xml"
+            line="43"
+            column="17"
+            startOffset="1661"
+            endLine="43"
+            endColumn="40"
+            endOffset="1684"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;Tiền mặt&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_wallet.xml"
+            line="53"
+            column="17"
+            startOffset="2066"
+            endLine="53"
+            endColumn="40"
+            endOffset="2089"/>
+    </incident>
+
+    <incident
+        id="HardcodedText"
+        severity="warning"
+        message="Hardcoded string &quot;5.500.000 ₫&quot;, should use `@string` resource">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/item_wallet.xml"
+            line="66"
+            column="13"
+            startOffset="2573"
+            endLine="66"
+            endColumn="39"
+            endOffset="2599"/>
+    </incident>
+
+    <incident
+        id="RelativeOverlap"
+        severity="warning"
+        message="`@id/headerGreeting` can overlap `@id/ivNotification` if @id/headerGreeting grows due to localized text expansion">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="48"
+            column="18"
+            startOffset="1959"
+            endLine="48"
+            endColumn="30"
+            endOffset="1971"/>
+    </incident>
+
+    <incident
+        id="RelativeOverlap"
+        severity="warning"
+        message="`@id/tvSeeAll` can overlap `TextView-1` if @string/recent_transactions, @string/see_all grow due to localized text expansion">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_home.xml"
+            line="335"
+            column="18"
+            startOffset="15546"
+            endLine="335"
+            endColumn="26"
+            endOffset="15554"/>
+    </incident>
+
+    <incident
+        id="RelativeOverlap"
+        severity="warning"
+        message="`TextView-1` can overlap `@id/btnAddWallet` if @string/my_wallets grows due to localized text expansion">
+        <location
+            file="${:app*debug*MAIN*sourceProvider*0*resDir*0}/layout/fragment_wallet.xml"
+            line="18"
+            column="10"
+            startOffset="641"
+            endLine="18"
+            endColumn="18"
+            endOffset="649"/>
+    </incident>
+
+</incidents>
