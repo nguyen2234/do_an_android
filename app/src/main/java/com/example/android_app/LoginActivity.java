@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.android_app.database.UserDAO;
 import com.example.android_app.model.User;
+import com.example.android_app.utils.SecurityUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,7 +48,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        User user = userDAO.checkLogin(username, password);
+        String hashedPassword = SecurityUtils.hashPasswordSHA256(password);
+        User user = userDAO.checkLogin(username, hashedPassword);
         if (user != null) {
             // Lưu session đăng nhập
             SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);

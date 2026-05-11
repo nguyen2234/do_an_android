@@ -10,11 +10,10 @@ import android.view.View;
 
 public class BarChartView extends View {
 
-    private Paint barPaint, textPaint, linePaint, incomeBarPaint;
-    private float[] expenseData = {1200000, 800000, 1500000, 500000, 2500000, 1800000, 900000};
-    private float[] incomeData = {8000000, 0, 0, 0, 0, 0, 0};
+    private Paint barPaint, textPaint, linePaint;
+    private float[] data = {0, 0, 0, 0, 0, 0, 0};
     private String[] labels = {"T2", "T3", "T4", "T5", "T6", "T7", "CN"};
-    private float maxVal = 2500000;
+    private float maxVal = 1000000;
 
     public BarChartView(Context context) {
         super(context);
@@ -28,20 +27,27 @@ public class BarChartView extends View {
 
     private void init() {
         barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barPaint.setColor(Color.parseColor("#634832"));
-
-        incomeBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        incomeBarPaint.setColor(Color.parseColor("#2ECC71"));
-        incomeBarPaint.setAlpha(180);
+        barPaint.setColor(Color.parseColor("#634832")); // Màu nâu chủ đạo
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.parseColor("#6B7280"));
-        textPaint.setTextSize(28f);
+        textPaint.setTextSize(24f);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         linePaint.setColor(Color.parseColor("#E5E7EB"));
         linePaint.setStrokeWidth(2f);
+    }
+
+    public void setData(float[] newData, String[] newLabels) {
+        this.data = newData;
+        this.labels = newLabels;
+        this.maxVal = 0;
+        for (float val : data) {
+            if (val > maxVal) maxVal = val;
+        }
+        if (maxVal == 0) maxVal = 1000000; // Tránh chia cho 0
+        invalidate();
     }
 
     @Override
@@ -50,19 +56,19 @@ public class BarChartView extends View {
 
         int width = getWidth();
         int height = getHeight();
-        int paddingBottom = 50;
-        int paddingTop = 20;
+        int paddingBottom = 60;
+        int paddingTop = 40;
         int chartHeight = height - paddingBottom - paddingTop;
 
-        int barCount = expenseData.length;
-        float totalWidth = width;
-        float barGroupWidth = totalWidth / barCount;
-        float barWidth = barGroupWidth * 0.35f;
-        float gap = barGroupWidth * 0.05f;
+        int barCount = data.length;
+        if (barCount == 0) return;
+
+        float barGroupWidth = (float) width / barCount;
+        float barWidth = barGroupWidth * 0.5f;
 
         // Draw horizontal guide lines
-        for (int i = 0; i <= 3; i++) {
-            float y = paddingTop + chartHeight - (chartHeight * i / 3f);
+        for (int i = 0; i <= 4; i++) {
+            float y = paddingTop + chartHeight - (chartHeight * i / 4f);
             canvas.drawLine(0, y, width, y, linePaint);
         }
 
@@ -70,20 +76,23 @@ public class BarChartView extends View {
         for (int i = 0; i < barCount; i++) {
             float centerX = barGroupWidth * i + barGroupWidth / 2f;
 
-            // Expense bar
-            float expRatio = expenseData[i] / maxVal;
-            float expBarHeight = chartHeight * expRatio;
-            float expLeft = centerX - barWidth - gap / 2;
-            float expTop = paddingTop + chartHeight - expBarHeight;
-            float expRight = centerX - gap / 2;
-            float expBottom = paddingTop + chartHeight;
+            float ratio = data[i] / maxVal;
+            float barHeight = chartHeight * ratio;
+            
+            float left = centerX - barWidth / 2;
+            float top = paddingTop + chartHeight - barHeight;
+            float right = centerX + barWidth / 2;
+            float bottom = paddingTop + chartHeight;
 
-            RectF expRect = new RectF(expLeft, expTop, expRight, expBottom);
-            barPaint.setAlpha(i == 4 ? 255 : 180); // Highlight current highest
-            canvas.drawRoundRect(expRect, 8, 8, barPaint);
+            if (data[i] > 0) {
+                RectF rect = new RectF(left, top, right, bottom);
+                // Highlight cột cao nhất hoặc dùng màu mặc định
+                barPaint.setAlpha(data[i] == maxVal && maxVal > 0 ? 255 : 180);
+                canvas.drawRoundRect(rect, 12, 12, barPaint);
+            }
 
             // Label
-            canvas.drawText(labels[i], centerX, height - 10, textPaint);
+            canvas.drawText(labels[i], centerX, height - 15, textPaint);
         }
     }
 }
