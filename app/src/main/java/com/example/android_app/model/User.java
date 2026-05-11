@@ -7,16 +7,18 @@ public class User {
     private long id;
     private String username;
     private String password;
+    private String email;
     private String avatar;
     private int themeMode; // 0: Auto, 1: Light, 2: Dark
 
     public User() {
     }
 
-    public User(long id, String username, String password, String avatar, int themeMode) {
+    public User(long id, String username, String password, String email, String avatar, int themeMode) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.avatar = avatar;
         this.themeMode = themeMode;
     }
@@ -29,6 +31,9 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public String getAvatar() { return avatar; }
     public void setAvatar(String avatar) { this.avatar = avatar; }

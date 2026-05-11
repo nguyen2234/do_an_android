@@ -76,7 +76,11 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        if (tvUserName != null) tvUserName.setText("Nguyễn Văn A");
+        if (tvUserName != null) {
+            android.content.SharedPreferences prefs = requireContext().getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE);
+            String username = prefs.getString("username", "Người dùng");
+            tvUserName.setText(username);
+        }
 
         View tvSeeAll = view.findViewById(R.id.tvSeeAll);
         if (tvSeeAll != null) {

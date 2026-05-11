@@ -12,13 +12,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 3; // Tăng version lên 3 để thêm bảng User
+    private static final int DATABASE_VERSION = 4; // Tăng version lên 4 để thêm email
 
     // --- BẢNG NGƯỜI DÙNG (USERS) ---
     public static final String TABLE_USERS = "users";
     public static final String COL_USER_ID = "id";
     public static final String COL_USER_USERNAME = "username";
     public static final String COL_USER_PASSWORD = "password";
+    public static final String COL_USER_EMAIL = "email";
     public static final String COL_USER_AVATAR = "avatar";
     public static final String COL_USER_THEME = "theme_mode";
 
@@ -27,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_USER_USERNAME + " TEXT UNIQUE NOT NULL, " +
                     COL_USER_PASSWORD + " TEXT NOT NULL, " +
+                    COL_USER_EMAIL + " TEXT, " +
                     COL_USER_AVATAR + " TEXT, " +
                     COL_USER_THEME + " INTEGER DEFAULT 0" +
                     ");";

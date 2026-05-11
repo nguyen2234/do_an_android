@@ -29,9 +29,25 @@ public class UserDAO {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_USER_USERNAME, user.getUsername());
         values.put(DatabaseHelper.COL_USER_PASSWORD, user.getPassword());
+        values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
         return db.insert(DatabaseHelper.TABLE_USERS, null, values);
+    }
+
+    /**
+     * Kiểm tra xem username đã tồn tại chưa
+     */
+    public boolean checkUsernameExist(String username) {
+        Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, new String[]{DatabaseHelper.COL_USER_ID},
+                DatabaseHelper.COL_USER_USERNAME + "=?",
+                new String[]{username}, null, null, null);
+        
+        boolean exists = (cursor != null && cursor.getCount() > 0);
+        if (cursor != null) {
+            cursor.close();
+        }
+        return exists;
     }
 
     /**
@@ -47,6 +63,7 @@ public class UserDAO {
             user.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_ID)));
             user.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_USERNAME)));
             user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PASSWORD)));
+            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_EMAIL)));
             user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
             user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
             cursor.close();
@@ -69,6 +86,7 @@ public class UserDAO {
             user.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_ID)));
             user.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_USERNAME)));
             user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PASSWORD)));
+            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_EMAIL)));
             user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
             user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
             cursor.close();
@@ -84,6 +102,7 @@ public class UserDAO {
     public int updateUser(User user) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_USER_PASSWORD, user.getPassword());
+        values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
 
