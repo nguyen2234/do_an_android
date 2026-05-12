@@ -14,7 +14,7 @@
 
         <!-- Splash Screen -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".ChaoMungActivity"
             android:exported="true"
             android:theme="@style/Theme.Android_app.Splash">
             <intent-filter>
@@ -31,18 +31,18 @@
 
         <!-- Authentication -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".DangNhapActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
             
         <activity
-            android:name=".RegisterActivity"
+            android:name=".DangKyActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Transaction Result -->
+        <!-- GiaoDich Result -->
         <activity
-            android:name=".TransactionResultActivity"
+            android:name=".KetQuaGiaoDichActivity"
             android:exported="false"
             android:theme="@style/Theme.Android_app"/>
 

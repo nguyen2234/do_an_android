@@ -25,7 +25,7 @@
         app:menu="@menu/bottom_nav_menu"
         app:elevation="8dp"/>
 
-    <!-- FAB for Add Transaction -->
+    <!-- FAB for Add GiaoDich -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
