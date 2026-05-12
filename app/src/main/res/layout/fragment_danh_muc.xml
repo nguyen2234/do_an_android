@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_header"
-        android:padding="20dp"
+        android:padding="40dp"
         android:paddingBottom="40dp">
 
         <TextView
@@ -20,7 +20,7 @@
             android:gravity="center"
             android:text="Quản lý Danh Mục"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="-24dp"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
         android:background="@drawable/bg_card_white"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabSelectedTextColor="@color/colorPrimary"
