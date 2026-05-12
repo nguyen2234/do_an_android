@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Switch;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.android_app.DangNhapActivity;
@@ -25,7 +25,7 @@ import com.example.android_app.model.NguoiDung;
 public class HoSoFragment extends Fragment {
 
     private TextView tvProfileName, tvProfileEmail;
-    private Switch switchTheme;
+
     private LinearLayout btnLogout, btnChangePassword;
     private NguoiDungDAO userDAO;
     private SharedPreferences prefs;
@@ -48,36 +48,14 @@ public class HoSoFragment extends Fragment {
 
         tvProfileName = view.findViewById(R.id.tvProfileName);
         tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
-        switchTheme = view.findViewById(R.id.switchTheme);
+
         btnLogout = view.findViewById(R.id.btnLogout);
         btnChangePassword = view.findViewById(R.id.btnChangePassword);
 
         // Load thông tin NguoiDung
         loadUserProfile();
 
-        // Xử lý đổi giao diện Sáng/Tối
-        int currentTheme = prefs.getInt("theme_mode", 0);
-        switchTheme.setChecked(currentTheme == 2);
-        
-        switchTheme.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            int newTheme = isChecked ? 2 : 1;
-            prefs.edit().putInt("theme_mode", newTheme).apply();
-            
-            long userId = prefs.getLong("user_id", -1);
-            if (userId != -1) {
-                NguoiDung user = userDAO.getUserById(userId);
-                if (user != null) {
-                    user.setThemeMode(newTheme);
-                    userDAO.updateUser(user);
-                }
-            }
 
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-        });
 
         // Xử lý Đổi mật khẩu
         btnChangePassword.setOnClickListener(v -> {

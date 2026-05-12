@@ -20,20 +20,20 @@
     <!-- Username Input -->
     <EditText
         android:id="@+id/etRegisterUsername"
-        android:layout_width="match_parent"
+        android:layout_width="345dp"
         android:layout_height="56dp"
-        android:background="@drawable/bg_input"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_input_bold"
         android:hint="Tên đăng nhập"
         android:paddingHorizontal="16dp"
-        android:textColor="@color/colorTextPrimary"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="@color/colorTextPrimary" />
 
     <!-- Email Input -->
     <EditText
         android:id="@+id/etRegisterEmail"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/bg_input"
+        android:background="@drawable/bg_input_bold"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:paddingHorizontal="16dp"
@@ -54,7 +54,7 @@
             android:id="@+id/etRegisterPassword"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@drawable/bg_input"
+            android:background="@drawable/bg_input_bold"
             android:hint="Mật khẩu"
             android:inputType="textPassword"
             android:paddingStart="16dp"
@@ -76,7 +76,7 @@
             android:id="@+id/etRegisterConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@drawable/bg_input"
+            android:background="@drawable/bg_input_bold"
             android:hint="Nhập lại mật khẩu"
             android:inputType="textPassword"
             android:paddingStart="16dp"
@@ -93,6 +93,7 @@
         android:text="Đăng ký"
         android:textColor="@color/white"
         android:textSize="16sp"
+        android:background="@drawable/bg_button_rounded"
         android:textStyle="bold"/>
 
     <!-- Login Link -->

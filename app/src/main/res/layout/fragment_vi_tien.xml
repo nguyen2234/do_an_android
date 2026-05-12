@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_header"
         android:paddingHorizontal="20dp"
-        android:paddingTop="20dp"
+        android:paddingTop="40dp"
         android:paddingBottom="30dp">
 
         <TextView
@@ -79,16 +79,6 @@
                             android:textSize="32sp"
                             android:textStyle="bold"/>
 
-                        <ImageView
-                            android:id="@+id/btnAddWallet"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/bg_card_white"
-                            android:padding="8dp"
-                            android:src="@android:drawable/ic_input_add"
-                            app:tint="@color/colorPrimary"/>
                     </RelativeLayout>
 
                     <View
@@ -155,6 +145,7 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Wallets List Header -->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -166,6 +157,18 @@
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
+            <ImageView
+                android:id="@+id/btnAddWallet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+
+                android:background="@drawable/bg_card_white"
+                android:padding="8sp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="24dp"                android:src="@android:drawable/ic_input_add"
+                app:tint="@color/colorPrimary" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvWallets"
                 android:layout_width="match_parent"
@@ -173,7 +176,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="24dp"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
     </ScrollView>

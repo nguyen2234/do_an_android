@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.SharedPreferences;
 
 public class ChaoMungActivity extends AppCompatActivity {
 
@@ -14,15 +15,6 @@ public class ChaoMungActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chao_mung);
 
-        // Load Theme preference
-        android.content.SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int currentTheme = prefs.getInt("theme_mode", 0);
-        if (currentTheme == 2) {
-            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
-        }
-
         // Fade in animation on root view
         View root = getWindow().getDecorView();
         AlphaAnimation fadeIn = new AlphaAnimation(0f, 1f);
@@ -30,6 +22,7 @@ public class ChaoMungActivity extends AppCompatActivity {
         root.startAnimation(fadeIn);
 
         new Handler().postDelayed(() -> {
+            SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             long userId = prefs.getLong("user_id", -1);
             if (userId != -1) {
                 startActivity(new Intent(ChaoMungActivity.this, MainActivity.class));
