@@ -18,7 +18,7 @@
     <string name="this_month">Tháng này</string>
     <string name="budget_limit">Hạn mức ngân sách</string>
 
-    <!-- Add Transaction -->
+    <!-- Add GiaoDich -->
     <string name="add_transaction">Thêm giao dịch</string>
     <string name="add_income">Thu nhập</string>
     <string name="add_expense">Chi tiêu</string>
@@ -40,7 +40,7 @@
     <string name="cat_salary">Lương</string>
     <string name="cat_other">Khác</string>
 
-    <!-- Wallet -->
+    <!-- ViTien -->
     <string name="my_wallets">Ví của tôi</string>
     <string name="add_wallet">Thêm ví</string>
     <string name="total_balance">Tổng số dư</string>
