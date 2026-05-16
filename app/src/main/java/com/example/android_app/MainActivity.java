@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import com.example.android_app.fragment.ThemGiaoDichFragment;
 import com.example.android_app.fragment.TrangChuFragment;
 import com.example.android_app.fragment.HoSoFragment;
-import com.example.android_app.fragment.DanhMucFragment;
+import com.example.android_app.fragment.ThongKeFragment;
 import com.example.android_app.fragment.ViTienFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 loadFragment(new TrangChuFragment());
                 return true;
-            } else if (id == R.id.nav_category) {
-                loadFragment(new DanhMucFragment());
+            } else if (id == R.id.nav_stats) {
+                loadFragment(new ThongKeFragment());
                 return true;
             } else if (id == R.id.nav_add) {
                 loadFragment(new ThemGiaoDichFragment());

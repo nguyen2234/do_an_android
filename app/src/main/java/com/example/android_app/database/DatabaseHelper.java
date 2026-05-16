@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 5; // Tăng version lên 5 để thêm note cho categories
+    private static final int DATABASE_VERSION = 4; // Tăng version lên 4 để thêm email
 
     // --- BẢNG NGƯỜI DÙNG (USERS) ---
     public static final String TABLE_USERS = "users";
@@ -61,7 +61,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_CATEGORY_ICON = "icon";
     public static final String COL_CATEGORY_TYPE = "type"; // "income" hoặc "expense"
     public static final String COL_CATEGORY_COLOR = "color";
-    public static final String COL_CATEGORY_NOTE = "note";
 
     private static final String CREATE_TABLE_CATEGORIES =
             "CREATE TABLE " + TABLE_CATEGORIES + " (" +
@@ -69,8 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_CATEGORY_NAME + " TEXT NOT NULL, " +
                     COL_CATEGORY_ICON + " TEXT, " +
                     COL_CATEGORY_TYPE + " TEXT, " +
-                    COL_CATEGORY_COLOR + " INTEGER, " +
-                    COL_CATEGORY_NOTE + " TEXT" +
+                    COL_CATEGORY_COLOR + " INTEGER" +
                     ");";
 
     // --- BẢNG GIAO DỊCH (TRANSACTIONS) ---
