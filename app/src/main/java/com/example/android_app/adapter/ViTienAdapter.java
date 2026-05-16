@@ -12,131 +12,139 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.android_app.R;
 import com.example.android_app.model.ViTien;
+import com.google.android.material.card.MaterialCardView;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Adapter dùng để hiển thị danh sách các Ví tiền (ViTien) lên RecyclerView.
- */
 public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<ViTien> wallets; // Danh sách dữ liệu ví
-    
+    private final List<ViTien> wallets;
     private OnEditClickListener editListener;
     private OnDeleteClickListener deleteListener;
+    private OnItemClickListener itemClickListener;
+    
+    private long selectedId = -1;
+    private boolean isSelectionMode = false;
 
-    public interface OnEditClickListener {
-        void onEditClick(ViTien wallet);
-    }
+    public interface OnEditClickListener { void onEditClick(ViTien wallet); }
+    public interface OnDeleteClickListener { void onDeleteClick(ViTien wallet); }
+    public interface OnItemClickListener { void onItemClick(ViTien wallet); }
 
-    public interface OnDeleteClickListener {
-        void onDeleteClick(ViTien wallet);
-    }
+    private boolean isHorizontal = false;
 
     public ViTienAdapter(Context context, List<ViTien> wallets) {
         this.context = context;
         this.wallets = wallets;
     }
 
-    public void setOnEditClickListener(OnEditClickListener listener) {
-        this.editListener = listener;
+    public ViTienAdapter(Context context, List<ViTien> wallets, boolean isHorizontal) {
+        this.context = context;
+        this.wallets = wallets;
+        this.isHorizontal = isHorizontal;
     }
 
-    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
-        this.deleteListener = listener;
+    public void setOnEditClickListener(OnEditClickListener listener) { this.editListener = listener; }
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) { this.deleteListener = listener; }
+    public void setOnItemClickListener(OnItemClickListener listener) { 
+        this.itemClickListener = listener; 
+        this.isSelectionMode = (listener != null);
     }
 
-    /**
-     * Tạo giao diện cho một dòng ví.
-     */
+    public void setSelectedId(long id) {
+        this.selectedId = id;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_vi_tien, parent, false);
+        int layoutId = isHorizontal ? R.layout.item_vi_tien_horizontal : R.layout.item_vi_tien;
+        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
         return new ViewHolder(view);
     }
 
-    /**
-     * Gắn dữ liệu của một ví cụ thể vào giao diện dòng.
-     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ViTien w = wallets.get(position);
         
-        // Hiển thị tên ví và loại ví
         holder.tvName.setText(w.getName());
-        holder.tvType.setText(getTypeName(w.getIcon())); // Dùng icon làm type
+        if (holder.tvType != null) {
+            holder.tvType.setText(getTypeName(w.getIcon()));
+        }
 
-        // Định dạng số dư ví
         NumberFormat fmt = NumberFormat.getInstance(new Locale("vi", "VN"));
         holder.tvBalance.setText(fmt.format(w.getBalance()) + " ₫");
 
-        // Chọn icon tùy theo wallet.getIcon()
-        String icon = w.getIcon() != null ? w.getIcon() : "cash";
-        switch (icon) {
-            case "bank":
-                holder.ivIcon.setImageResource(android.R.drawable.ic_menu_send);
-                break;
-            case "saving":
-                holder.ivIcon.setImageResource(android.R.drawable.ic_menu_save);
-                break;
-            default: // cash
-                holder.ivIcon.setImageResource(android.R.drawable.ic_menu_myplaces);
-                break;
+        // Giao diện khi chọn ví trong màn hình chuyển tiền
+        if (isSelectionMode) {
+            holder.ivEdit.setVisibility(View.GONE);
+            holder.ivDelete.setVisibility(View.GONE);
+            if (w.getId() == selectedId) {
+                holder.cardView.setStrokeWidth(4);
+                holder.cardView.setStrokeColor(context.getColor(R.color.colorPrimary));
+                holder.cardView.setCardElevation(12f);
+            } else {
+                holder.cardView.setStrokeWidth(0);
+                holder.cardView.setCardElevation(2f);
+            }
+        } else {
+            holder.ivEdit.setVisibility(View.VISIBLE);
+            holder.ivDelete.setVisibility(View.VISIBLE);
+            holder.cardView.setStrokeWidth(0);
         }
 
-        // Tạo hình nền bo góc cho icon với màu sắc tương ứng wallet.getColor()
-        String colorStr = w.getColor() != null ? w.getColor() : "#4CAF50";
+        // Icon mapping - Using system icons since ic_cash, ic_bank, ic_savings are missing
+        int iconRes = android.R.drawable.ic_menu_agenda;
+        if ("bank".equals(w.getIcon())) {
+            iconRes = android.R.drawable.ic_menu_myplaces;
+        } else if ("saving".equals(w.getIcon())) {
+            iconRes = android.R.drawable.ic_menu_save;
+        }
+        holder.ivIcon.setImageResource(iconRes);
+
+        // Color & Background
         try {
-            int colorInt = Color.parseColor(colorStr);
+            int colorInt = Color.parseColor(w.getColor());
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.OVAL);
-            // Pha thêm màu trắng để làm nền sáng hơn (ví dụ: alpha 30%)
-            int bgColor = Color.argb(40, Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt));
-            shape.setColor(bgColor);
+            shape.setColor(Color.argb(30, Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt)));
             holder.ivIcon.setBackground(shape);
             holder.ivIcon.setColorFilter(colorInt);
         } catch (Exception e) {
-            e.printStackTrace();
+            holder.ivIcon.setColorFilter(context.getColor(R.color.colorPrimary));
         }
 
-        // Bắt sự kiện click sửa
-        holder.ivEdit.setOnClickListener(v -> {
-            if (editListener != null) editListener.onEditClick(w);
+        holder.itemView.setOnClickListener(v -> {
+            if (itemClickListener != null) {
+                selectedId = w.getId();
+                itemClickListener.onItemClick(w);
+                notifyDataSetChanged();
+            }
         });
 
-        // Bắt sự kiện click xóa
-        holder.ivDelete.setOnClickListener(v -> {
-            if (deleteListener != null) deleteListener.onDeleteClick(w);
-        });
+        holder.ivEdit.setOnClickListener(v -> { if (editListener != null) editListener.onEditClick(w); });
+        holder.ivDelete.setOnClickListener(v -> { if (deleteListener != null) deleteListener.onDeleteClick(w); });
     }
 
-    /**
-     * Dịch loại ví từ tiếng Anh sang tiếng Việt để hiển thị lên giao diện
-     */
     private String getTypeName(String type) {
-        if (type == null) return "Tiền mặt";
-        switch (type) {
-            case "bank": return "Ngân hàng";
-            case "saving": return "Tiết kiệm";
-            default: return "Tiền mặt";
-        }
+        if ("bank".equals(type)) return "Ngân hàng";
+        if ("saving".equals(type)) return "Tiết kiệm";
+        return "Tiền mặt";
     }
 
     @Override
     public int getItemCount() { return wallets.size(); }
 
-    /**
-     * Lớp ánh xạ các thành phần UI của dòng.
-     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivIcon, ivEdit, ivDelete;
         TextView tvName, tvType, tvBalance;
+        MaterialCardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            cardView = (MaterialCardView) itemView;
             ivIcon = itemView.findViewById(R.id.ivWalletIcon);
             ivEdit = itemView.findViewById(R.id.ivEdit);
             ivDelete = itemView.findViewById(R.id.ivDelete);
@@ -146,4 +154,3 @@ public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder
         }
     }
 }
-

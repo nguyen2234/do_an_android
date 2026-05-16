@@ -14,7 +14,6 @@ import com.example.android_app.R;
 import com.example.android_app.adapter.GiaoDichAdapter;
 import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.model.GiaoDich;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TrangChuFragment extends Fragment {
@@ -81,13 +80,6 @@ public class TrangChuFragment extends Fragment {
             String username = prefs.getString("username", "Người dùng");
             tvUserName.setText(username);
         }
-
-        // View tvSeeAll = view.findViewById(R.id.tvSeeAll);
-        // if (tvSeeAll != null) {
-        //     tvSeeAll.setOnClickListener(v -> {
-        //         // TODO: Chuyển sang màn hình tất cả giao dịch
-        //     });
-        // }
     }
 
     @Override

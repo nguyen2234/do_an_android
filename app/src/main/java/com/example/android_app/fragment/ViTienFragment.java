@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -21,7 +22,6 @@ import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.database.ViTienDAO;
 import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.ViTien;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,6 +33,8 @@ public class ViTienFragment extends Fragment {
     private GiaoDichDAO transactionDAO;
     private ViTienAdapter adapter;
     private List<ViTien> wallets;
+    private ImageButton btnTransferMoney;
+    private View cardTransfer;
 
     @Nullable
     @Override
@@ -44,11 +46,12 @@ public class ViTienFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Ánh xạ View với ID chính xác từ fragment_vi_tien.xml
         tvTotalBalance = view.findViewById(R.id.tvTotalBalance);
         tvTongThuNhap = view.findViewById(R.id.tvCardIncome);
         tvTongChiTieu = view.findViewById(R.id.tvCardExpense);
         rvWallets = view.findViewById(R.id.rvWallets);
+        btnTransferMoney = view.findViewById(R.id.btnTransferMoney);
+        cardTransfer = view.findViewById(R.id.cardTransfer);
 
         rvWallets.setLayoutManager(new LinearLayoutManager(getContext()));
         rvWallets.setNestedScrollingEnabled(false);
@@ -61,6 +64,22 @@ public class ViTienFragment extends Fragment {
         refreshData();
 
         view.findViewById(R.id.btnAddWallet).setOnClickListener(v -> showWalletDialog(null));
+        
+        if (btnTransferMoney != null) {
+            btnTransferMoney.setOnClickListener(v -> openTransferFragment());
+        }
+
+        if (cardTransfer != null) {
+            cardTransfer.setOnClickListener(v -> openTransferFragment());
+        }
+    }
+
+    private void openTransferFragment() {
+        getParentFragmentManager().beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .replace(R.id.fragmentContainer, new ChuyenTienFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     private void refreshData() {
@@ -70,11 +89,6 @@ public class ViTienFragment extends Fragment {
 
     private void loadWallets() {
         wallets = walletDAO.getAllWallets();
-        if (wallets.isEmpty()) {
-            walletDAO.addWallet(new ViTien(0, "Tiền mặt", 0, "cash", "VND", "cash", "#4CAF50"));
-            wallets = walletDAO.getAllWallets();
-        }
-
         adapter = new ViTienAdapter(getContext(), wallets);
         adapter.setOnEditClickListener(this::showWalletDialog);
         adapter.setOnDeleteClickListener(this::showDeleteConfirmDialog);
@@ -89,17 +103,18 @@ public class ViTienFragment extends Fragment {
         for (GiaoDich t : transactions) {
             if ("income".equalsIgnoreCase(t.getLoai())) {
                 income += t.getSoTien();
-            } else {
+            } else if ("expense".equalsIgnoreCase(t.getLoai())) {
                 expense += t.getSoTien();
             }
         }
 
-        // Cập nhật text Thu nhập / Chi tiêu
         if (tvTongThuNhap != null) tvTongThuNhap.setText("+ " + dinhDangTien(income) + " ₫");
         if (tvTongChiTieu != null) tvTongChiTieu.setText("- " + dinhDangTien(expense) + " ₫");
         
-        // QUAN TRỌNG: Tổng số dư = Tổng Thu nhập - Tổng Chi tiêu
-        double actualTotalBalance = income - expense;
+        double actualTotalBalance = 0;
+        if (wallets != null) {
+            for (ViTien w : wallets) actualTotalBalance += w.getBalance();
+        }
         tvTotalBalance.setText(dinhDangTien(actualTotalBalance) + " ₫");
     }
 
@@ -109,10 +124,14 @@ public class ViTienFragment extends Fragment {
         builder.setView(dialogView);
         
         AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
 
         EditText etName = dialogView.findViewById(R.id.etWalletName);
         EditText etBalance = dialogView.findViewById(R.id.etWalletBalance);
+        EditText etBankName = dialogView.findViewById(R.id.etBankName);
+        EditText etAccountNumber = dialogView.findViewById(R.id.etAccountNumber);
         Spinner spinnerIcon = dialogView.findViewById(R.id.spinnerWalletIcon);
         Spinner spinnerColor = dialogView.findViewById(R.id.spinnerWalletColor);
         Button btnHuy = dialogView.findViewById(R.id.btnCancelWallet);
@@ -125,13 +144,15 @@ public class ViTienFragment extends Fragment {
 
         ArrayAdapter<String> iconAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, iconLabels);
         spinnerIcon.setAdapter(iconAdapter);
-
         ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, colorLabels);
         spinnerColor.setAdapter(colorAdapter);
 
         if (walletToEdit != null) {
             etName.setText(walletToEdit.getName());
             etBalance.setText(String.valueOf((long) walletToEdit.getBalance()));
+            etBankName.setText(walletToEdit.getBankName());
+            etAccountNumber.setText(walletToEdit.getAccountNumber());
+            
             for (int i = 0; i < iconKeys.length; i++) {
                 if (iconKeys[i].equals(walletToEdit.getIcon())) {
                     spinnerIcon.setSelection(i);
@@ -139,7 +160,7 @@ public class ViTienFragment extends Fragment {
                 }
             }
             for (int i = 0; i < colorHexes.length; i++) {
-                if (colorHexes[i].equals(walletToEdit.getColor())) {
+                if (colorHexes[i].equalsIgnoreCase(walletToEdit.getColor())) {
                     spinnerColor.setSelection(i);
                     break;
                 }
@@ -147,21 +168,23 @@ public class ViTienFragment extends Fragment {
         }
 
         btnHuy.setOnClickListener(v -> dialog.dismiss());
-
         btnLuu.setOnClickListener(v -> {
-            String name = etName.getText().toString().trim();
-            String balanceStr = etBalance.getText().toString().trim();
-            if (name.isEmpty() || balanceStr.isEmpty()) return;
-
-            double balance = Double.parseDouble(balanceStr);
+            String name = etName.getText().toString();
+            String balanceStr = etBalance.getText().toString();
+            double balance = Double.parseDouble(balanceStr.isEmpty() ? "0" : balanceStr);
+            String bankName = etBankName.getText().toString();
+            String accountNum = etAccountNumber.getText().toString();
             String selectedIcon = iconKeys[spinnerIcon.getSelectedItemPosition()];
             String selectedColor = colorHexes[spinnerColor.getSelectedItemPosition()];
-
+            
             if (walletToEdit == null) {
-                walletDAO.addWallet(new ViTien(0, name, balance, "cash", "VND", selectedIcon, selectedColor));
+                ViTien newWallet = new ViTien(0, name, balance, selectedIcon, "VND", selectedIcon, selectedColor, accountNum, bankName);
+                walletDAO.addWallet(newWallet);
             } else {
                 walletToEdit.setName(name);
                 walletToEdit.setBalance(balance);
+                walletToEdit.setBankName(bankName);
+                walletToEdit.setAccountNumber(accountNum);
                 walletToEdit.setIcon(selectedIcon);
                 walletToEdit.setColor(selectedColor);
                 walletDAO.updateWallet(walletToEdit);

@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 5; // Tăng version lên 5 để thêm note cho categories
+    private static final int DATABASE_VERSION = 6; // Tăng version để thêm phone cho users và bank info cho wallets
 
     // --- BẢNG NGƯỜI DÙNG (USERS) ---
     public static final String TABLE_USERS = "users";
@@ -20,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_USER_USERNAME = "username";
     public static final String COL_USER_PASSWORD = "password";
     public static final String COL_USER_EMAIL = "email";
+    public static final String COL_USER_PHONE = "phone";
     public static final String COL_USER_AVATAR = "avatar";
     public static final String COL_USER_THEME = "theme_mode";
 
@@ -29,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_USERNAME + " TEXT UNIQUE NOT NULL, " +
                     COL_USER_PASSWORD + " TEXT NOT NULL, " +
                     COL_USER_EMAIL + " TEXT, " +
+                    COL_USER_PHONE + " TEXT, " +
                     COL_USER_AVATAR + " TEXT, " +
                     COL_USER_THEME + " INTEGER DEFAULT 0" +
                     ");";
@@ -42,6 +44,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_WALLET_CURRENCY = "currency";
     public static final String COL_WALLET_ICON = "icon";
     public static final String COL_WALLET_COLOR = "color";
+    public static final String COL_WALLET_ACCOUNT_NUMBER = "account_number";
+    public static final String COL_WALLET_BANK_NAME = "bank_name";
 
     private static final String CREATE_TABLE_WALLETS =
             "CREATE TABLE " + TABLE_WALLETS + " (" +
@@ -51,7 +55,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_WALLET_TYPE + " TEXT, " +
                     COL_WALLET_CURRENCY + " TEXT, " +
                     COL_WALLET_ICON + " TEXT, " +
-                    COL_WALLET_COLOR + " TEXT" +
+                    COL_WALLET_COLOR + " TEXT, " +
+                    COL_WALLET_ACCOUNT_NUMBER + " TEXT, " +
+                    COL_WALLET_BANK_NAME + " TEXT" +
                     ");";
 
     // --- BẢNG DANH MỤC (CATEGORIES) ---

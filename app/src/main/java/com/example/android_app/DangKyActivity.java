@@ -77,7 +77,8 @@ public class DangKyActivity extends AppCompatActivity {
         }
 
         String hashedPassword = SecurityUtils.hashPasswordSHA256(password);
-        NguoiDung newUser = new NguoiDung(0, username, hashedPassword, email, null, 0);
+        // Cập nhật constructor NguoiDung để khớp với định nghĩa (7 tham số: id, username, password, email, phone, avatar, themeMode)
+        NguoiDung newUser = new NguoiDung(0, username, hashedPassword, email, null, null, 0);
         long result = userDAO.registerUser(newUser);
 
         if (result > 0) {

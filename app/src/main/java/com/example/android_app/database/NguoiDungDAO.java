@@ -22,22 +22,17 @@ public class NguoiDungDAO {
         dbHelper.close();
     }
 
-    /**
-     * Đăng ký người dùng mới
-     */
     public long registerUser(NguoiDung user) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_USER_USERNAME, user.getUsername());
         values.put(DatabaseHelper.COL_USER_PASSWORD, user.getPassword());
         values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
+        values.put(DatabaseHelper.COL_USER_PHONE, user.getPhone());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
         return db.insert(DatabaseHelper.TABLE_USERS, null, values);
     }
 
-    /**
-     * Kiểm tra xem username đã tồn tại chưa
-     */
     public boolean checkUsernameExist(String username) {
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, new String[]{DatabaseHelper.COL_USER_ID},
                 DatabaseHelper.COL_USER_USERNAME + "=?",
@@ -50,22 +45,13 @@ public class NguoiDungDAO {
         return exists;
     }
 
-    /**
-     * Kiểm tra đăng nhập
-     */
     public NguoiDung checkLogin(String username, String password) {
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, null,
                 DatabaseHelper.COL_USER_USERNAME + "=? AND " + DatabaseHelper.COL_USER_PASSWORD + "=?",
                 new String[]{username, password}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            NguoiDung user = new NguoiDung();
-            user.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_ID)));
-            user.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_USERNAME)));
-            user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PASSWORD)));
-            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_EMAIL)));
-            user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
-            user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
+            NguoiDung user = mapCursorToUser(cursor);
             cursor.close();
             return user;
         }
@@ -73,22 +59,13 @@ public class NguoiDungDAO {
         return null;
     }
 
-    /**
-     * Lấy thông tin user theo ID
-     */
     public NguoiDung getUserById(long id) {
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, null,
                 DatabaseHelper.COL_USER_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            NguoiDung user = new NguoiDung();
-            user.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_ID)));
-            user.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_USERNAME)));
-            user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PASSWORD)));
-            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_EMAIL)));
-            user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
-            user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
+            NguoiDung user = mapCursorToUser(cursor);
             cursor.close();
             return user;
         }
@@ -96,18 +73,29 @@ public class NguoiDungDAO {
         return null;
     }
 
-    /**
-     * Cập nhật thông tin NguoiDung (Mật khẩu, Avatar, Theme)
-     */
     public int updateUser(NguoiDung user) {
         ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_USER_USERNAME, user.getUsername());
         values.put(DatabaseHelper.COL_USER_PASSWORD, user.getPassword());
         values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
+        values.put(DatabaseHelper.COL_USER_PHONE, user.getPhone());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
 
         return db.update(DatabaseHelper.TABLE_USERS, values,
                 DatabaseHelper.COL_USER_ID + "=?",
                 new String[]{String.valueOf(user.getId())});
+    }
+
+    private NguoiDung mapCursorToUser(Cursor cursor) {
+        NguoiDung user = new NguoiDung();
+        user.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_ID)));
+        user.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_USERNAME)));
+        user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PASSWORD)));
+        user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_EMAIL)));
+        user.setPhone(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PHONE)));
+        user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
+        user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
+        return user;
     }
 }

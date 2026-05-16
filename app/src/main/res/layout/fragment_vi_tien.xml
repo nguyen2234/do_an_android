@@ -21,10 +21,21 @@
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:fontFamily="sans-serif-medium"
-            android:text="@string/my_wallets"
+            android:text="Ví của tôi"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>
+
+        <ImageButton
+            android:id="@+id/btnTransferMoney"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:rotation="90"
+            app:tint="@color/white" />
 
     </RelativeLayout>
 
@@ -59,27 +70,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/total_balance"
+                        android:text="Tổng số dư"
                         android:textColor="#B8D4C8"
                         android:textSize="13sp"/>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvTotalBalance"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp">
-
-                        <TextView
-                            android:id="@+id/tvTotalBalance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="15.500.000 ₫"
-                            android:textColor="@color/white"
-                            android:textSize="32sp"
-                            android:textStyle="bold"/>
-
-                    </RelativeLayout>
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="0 ₫"
+                        android:textColor="@color/white"
+                        android:textSize="32sp"
+                        android:textStyle="bold"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -97,20 +101,18 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/income"
+                                android:text="Thu nhập"
                                 android:textColor="#B8D4C8"
                                 android:textSize="12sp"/>
-
                             <TextView
                                 android:id="@+id/tvCardIncome"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="+ 8.000.000 ₫"
+                                android:text="+ 0 ₫"
                                 android:textColor="@color/colorIncome"
                                 android:textSize="14sp"
                                 android:textStyle="bold"/>
@@ -121,60 +123,123 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/expense"
+                                android:text="Chi tiêu"
                                 android:textColor="#B8D4C8"
                                 android:textSize="12sp"/>
-
                             <TextView
                                 android:id="@+id/tvCardExpense"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="- 2.500.000 ₫"
+                                android:text="- 0 ₫"
                                 android:textColor="@color/colorExpense"
                                 android:textSize="14sp"
                                 android:textStyle="bold"/>
                         </LinearLayout>
-
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Wallets List Header -->
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Danh sách ví"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <ImageView
-                android:id="@+id/btnAddWallet"
+            <!-- Nút Chuyển Tiền -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTransfer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
-                android:background="@drawable/bg_card_white"
-                android:padding="8sp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp"                android:src="@android:drawable/ic_input_add"
-                app:tint="@color/colorPrimary" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <View
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_icon_primary"
+                        android:alpha="0.2"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="-36dp"
+                        android:src="@android:drawable/ic_menu_sort_by_size"
+                        android:rotation="90"
+                        app:tint="@color/colorPrimary"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chuyển tiền"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chuyển tiền giữa các ví của bạn"
+                            android:textColor="@color/colorTextSecondary"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_media_play"
+                        app:tint="@color/colorTextSecondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Danh sách ví"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddWallet"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+ Thêm"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvWallets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
                 android:nestedScrollingEnabled="false" />
 

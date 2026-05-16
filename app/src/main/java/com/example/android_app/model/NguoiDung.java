@@ -8,17 +8,19 @@ public class NguoiDung {
     private String username;
     private String password;
     private String email;
+    private String phone;
     private String avatar;
     private int themeMode; // 0: Auto, 1: Light, 2: Dark
 
     public NguoiDung() {
     }
 
-    public NguoiDung(long id, String username, String password, String email, String avatar, int themeMode) {
+    public NguoiDung(long id, String username, String password, String email, String phone, String avatar, int themeMode) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.phone = phone;
         this.avatar = avatar;
         this.themeMode = themeMode;
     }
@@ -34,6 +36,9 @@ public class NguoiDung {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public String getAvatar() { return avatar; }
     public void setAvatar(String avatar) { this.avatar = avatar; }
