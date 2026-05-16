@@ -2,8 +2,6 @@ package com.example.android_app.fragment;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +20,6 @@ import com.example.android_app.R;
 import com.example.android_app.adapter.ThongKeDanhMucAdapter;
 import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.model.GiaoDich;
-import com.example.android_app.utils.ExcelExporter;
 import com.example.android_app.view.BarChartView;
 
 import java.text.NumberFormat;
@@ -38,14 +34,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ThongKeFragment extends Fragment {
 
     private TextView tvNgayBatDau, tvNgayKetThuc, tvThongKeThuNhap, tvThongKeChiTieu;
     private EditText etTimKiemThongKe;
-    private ImageView btnLocThongKe, btnExportExcel;
+    private ImageView btnLocThongKe;
     private BarChartView bieuDoCot;
     private RecyclerView rvTopDanhMuc;
     private GiaoDichDAO transactionDAO;
@@ -53,10 +47,6 @@ public class ThongKeFragment extends Fragment {
     private Calendar startCal = Calendar.getInstance();
     private Calendar endCal = Calendar.getInstance();
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-    
-    private List<GiaoDich> currentFilteredList = new ArrayList<>();
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Nullable
     @Override
@@ -89,45 +79,11 @@ public class ThongKeFragment extends Fragment {
         tvNgayKetThuc = view.findViewById(R.id.tvNgayKetThuc);
         etTimKiemThongKe = view.findViewById(R.id.etTimKiemThongKe);
         btnLocThongKe = view.findViewById(R.id.btnLocThongKe);
-        btnExportExcel = view.findViewById(R.id.btnExportExcel);
         bieuDoCot = view.findViewById(R.id.bieuDoCot);
         rvTopDanhMuc = view.findViewById(R.id.rvTopDanhMuc);
 
         rvTopDanhMuc.setLayoutManager(new LinearLayoutManager(getContext()));
         btnLocThongKe.setOnClickListener(v -> apDungBoLoc());
-        
-        btnExportExcel.setOnClickListener(v -> {
-            if (currentFilteredList.isEmpty()) {
-                Toast.makeText(getContext(), "Không có dữ liệu để xuất!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            
-            Toast.makeText(getContext(), "Đang xử lý xuất file...", Toast.LENGTH_SHORT).show();
-            
-            // Thực hiện xuất file trong luồng nền để tránh crash/treo máy
-            executorService.execute(() -> {
-                try {
-                    final String path = ExcelExporter.exportTransactionsToExcel(requireContext(), new ArrayList<>(currentFilteredList));
-                    
-                    mainHandler.post(() -> {
-                        if (isAdded()) {
-                            if (path != null) {
-                                Toast.makeText(getContext(), "Xuất thành công! File tại: " + path, Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getContext(), "Lỗi: Không thể tạo file Excel", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("ExportError", "Error during export: " + e.getMessage());
-                    mainHandler.post(() -> {
-                        if (isAdded()) {
-                            Toast.makeText(getContext(), "Lỗi hệ thống khi xuất file!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
-        });
     }
 
     private void caiDatChonNgay() {
@@ -153,11 +109,12 @@ public class ThongKeFragment extends Fragment {
         String keyword = etTimKiemThongKe.getText().toString();
         List<GiaoDich> allTransactions = transactionDAO.getTransactionsByFilter(keyword, null, null);
         
-        currentFilteredList.clear();
+        List<GiaoDich> filteredList = new ArrayList<>();
         double totalIncome = 0;
         double totalExpense = 0;
         Map<String, Double> categoryMap = new HashMap<>();
 
+        // Chuẩn hóa thời gian lọc (Bắt đầu lúc 00:00:00 và kết thúc lúc 23:59:59)
         Calendar startLimit = (Calendar) startCal.clone();
         startLimit.set(Calendar.HOUR_OF_DAY, 0);
         startLimit.set(Calendar.MINUTE, 0);
@@ -180,7 +137,7 @@ public class ThongKeFragment extends Fragment {
                     long transTime = tDate.getTime();
                     
                     if (transTime >= startTime && transTime <= endTime) {
-                        currentFilteredList.add(t);
+                        filteredList.add(t);
                         if ("income".equalsIgnoreCase(t.getLoai())) {
                             totalIncome += t.getSoTien();
                         } else {
@@ -191,12 +148,12 @@ public class ThongKeFragment extends Fragment {
                     }
                 }
             } catch (ParseException e) {
-                Log.e("StatError", "Lỗi định dạng ngày: " + t.getNgay());
+                Log.e("StatError", "Lỗi định dạng ngày: " + t.getNgay() + ". Mong đợi dd/MM/yyyy");
             }
         }
 
         capNhatGiaoDienTongQuan(totalIncome, totalExpense);
-        updateChartData(currentFilteredList);
+        updateChartData(filteredList);
         updateCategoryList(categoryMap);
     }
 
@@ -246,6 +203,5 @@ public class ThongKeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (transactionDAO != null) transactionDAO.close();
-        executorService.shutdown();
     }
 }

@@ -4,7 +4,6 @@
     <!-- Bottom Navigation -->
     <string name="nav_home">Tổng quan</string>
     <string name="nav_stats">Thống kê</string>
-    <string name="nav_category">Danh mục</string>
     <string name="nav_add">Thêm</string>
     <string name="nav_wallet">Ví</string>
     <string name="nav_profile">Hồ sơ</string>
