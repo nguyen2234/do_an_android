@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 4; // Tăng version lên 4 để thêm email
+    private static final int DATABASE_VERSION = 6;
 
     // --- BẢNG NGƯỜI DÙNG (USERS) ---
     public static final String TABLE_USERS = "users";
@@ -95,6 +95,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(" + COL_TRANS_WALLET_ID + ") REFERENCES " + TABLE_WALLETS + "(" + COL_WALLET_ID + ")" +
                     ");";
 
+    public static final String TABLE_BUDGETS = "budgets";
+    public static final String COL_BUDGET_ID = "id";
+    public static final String COL_BUDGET_NAME = "name";
+    public static final String COL_BUDGET_AMOUNT = "amount";
+    public static final String COL_BUDGET_SPENT = "spent_amount";
+    public static final String COL_BUDGET_START = "start_date";
+    public static final String COL_BUDGET_END = "end_date";
+    public static final String COL_BUDGET_CATEGORIES = "category_ids";
+
+    private static final String CREATE_TABLE_BUDGETS =
+            "CREATE TABLE " + TABLE_BUDGETS + " (" +
+                    COL_BUDGET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_BUDGET_NAME + " TEXT NOT NULL, " +
+                    COL_BUDGET_AMOUNT + " REAL NOT NULL, " +
+                    COL_BUDGET_SPENT + " REAL NOT NULL, " +
+                    COL_BUDGET_START + " TEXT, " +
+                    COL_BUDGET_END + " TEXT, " +
+                    COL_BUDGET_CATEGORIES + " TEXT" +
+                    ");";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -106,6 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_WALLETS);
         db.execSQL(CREATE_TABLE_CATEGORIES);
         db.execSQL(CREATE_TABLE_TRANSACTIONS);
+        db.execSQL(CREATE_TABLE_BUDGETS);
     }
 
     @Override
@@ -115,6 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WALLETS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUDGETS);
         onCreate(db);
     }
 }

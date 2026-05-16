@@ -16,13 +16,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.example.android_app.R;
 import com.example.android_app.database.GiaoDichDAO;
+import com.example.android_app.database.NganSachDAO;
 import com.example.android_app.database.ViTienDAO;
+import com.example.android_app.database.DanhMucDAO;
 import com.example.android_app.model.GiaoDich;
+import com.example.android_app.model.NganSach;
 import com.example.android_app.model.ViTien;
+import com.example.android_app.model.DanhMuc;
 import com.google.android.material.button.MaterialButton;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,6 +42,8 @@ public class ThemGiaoDichFragment extends Fragment {
 
     private GiaoDichDAO transactionDAO;
     private ViTienDAO walletDAO;
+    private NganSachDAO budgetDAO;
+    private DanhMucDAO categoryDAO;
     private List<ViTien> walletList;
 
     @Nullable
@@ -52,8 +60,12 @@ public class ThemGiaoDichFragment extends Fragment {
 
         transactionDAO = new GiaoDichDAO(getContext());
         walletDAO = new ViTienDAO(getContext());
+        budgetDAO = new NganSachDAO(getContext());
+        categoryDAO = new DanhMucDAO(getContext());
         transactionDAO.open();
         walletDAO.open();
+        budgetDAO.open();
+        categoryDAO.open();
 
         btnExpenseTab = view.findViewById(R.id.btnExpenseTab);
         btnIncomeTab = view.findViewById(R.id.btnIncomeTab);
@@ -118,12 +130,28 @@ public class ThemGiaoDichFragment extends Fragment {
     }
 
     private void setupCategorySpinner() {
-        String[] categories = isExpense
-                ? new String[]{"Ăn uống", "Di chuyển", "Mua sắm", "Y tế", "Giải trí", "Giáo dục", "Khác"}
-                : new String[]{"Lương", "Thưởng", "Đầu tư", "Quà tặng", "Khác"};
+        String type = isExpense ? "expense" : "income";
+        List<DanhMuc> categories = categoryDAO.getCategoriesByType(type);
+        List<String> categoryNames = new ArrayList<>();
+        
+        if (categories.isEmpty()) {
+            if (isExpense) {
+                categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "expense", Color.parseColor("#E74C3C")));
+                categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "expense", Color.parseColor("#3498DB")));
+                categoryDAO.addCategory(new DanhMuc(0, "Khác", "ic_other", "expense", Color.parseColor("#95A5A6")));
+            } else {
+                categoryDAO.addCategory(new DanhMuc(0, "Lương", "ic_salary", "income", Color.parseColor("#2ECC71")));
+                categoryDAO.addCategory(new DanhMuc(0, "Khác", "ic_other", "income", Color.parseColor("#95A5A6")));
+            }
+            categories = categoryDAO.getCategoriesByType(type);
+        }
+
+        for (DanhMuc c : categories) {
+            categoryNames.add(c.getName());
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, categories);
+                android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
     }
@@ -194,6 +222,10 @@ public class ThemGiaoDichFragment extends Fragment {
             double newBalance = isExpense ? selectedWallet.getBalance() - amount : selectedWallet.getBalance() + amount;
             walletDAO.updateBalance(selectedWallet.getId(), newBalance);
             
+            if (isExpense) {
+                capNhatNganSach(date, category, amount);
+            }
+            
             // Reset form
             etSoTien.setText("");
             etGhiChu.setText("");
@@ -215,10 +247,33 @@ public class ThemGiaoDichFragment extends Fragment {
         }
     }
 
+    private void capNhatNganSach(String transDateStr, String category, double amount) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
+            Date transDate = sdf.parse(transDateStr);
+
+            List<NganSach> list = budgetDAO.getAllBudgets();
+            for (NganSach b : list) {
+                Date start = sdf.parse(b.getStartDate());
+                Date end = sdf.parse(b.getEndDate());
+
+                if (!transDate.before(start) && !transDate.after(end)) {
+                    if (b.getCategoryIds() != null && b.getCategoryIds().contains(category)) {
+                        budgetDAO.updateSpentAmount(b.getId(), b.getSpentAmount() + amount);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (transactionDAO != null) transactionDAO.close();
         if (walletDAO != null) walletDAO.close();
+        if (budgetDAO != null) budgetDAO.close();
+        if (categoryDAO != null) categoryDAO.close();
     }
 }

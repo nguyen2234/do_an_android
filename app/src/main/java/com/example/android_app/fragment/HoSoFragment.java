@@ -57,6 +57,34 @@ public class HoSoFragment extends Fragment {
 
 
 
+        // Xử lý Quản lý
+        View btnManageCategories = view.findViewById(R.id.btnManageCategories);
+        View btnManageWallets = view.findViewById(R.id.btnManageWallets);
+
+        if (btnManageCategories != null) {
+            btnManageCategories.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, new DanhMucFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
+        if (btnManageWallets != null) {
+            btnManageWallets.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, new ViTienFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
         // Xử lý Đổi mật khẩu
         btnChangePassword.setOnClickListener(v -> {
             showChangePasswordDialog();

@@ -3,6 +3,7 @@
 
     <!-- Bottom Navigation -->
     <string name="nav_home">Tổng quan</string>
+    <string name="nav_budget">Ngân sách</string>
     <string name="nav_stats">Thống kê</string>
     <string name="nav_add">Thêm</string>
     <string name="nav_wallet">Ví</string>
