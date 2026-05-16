@@ -9,17 +9,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import android.widget.ProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.android_app.R;
 import com.example.android_app.adapter.GiaoDichAdapter;
 import com.example.android_app.database.GiaoDichDAO;
+import com.example.android_app.database.NganSachDAO;
 import com.example.android_app.model.GiaoDich;
+import com.example.android_app.model.NganSach;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class TrangChuFragment extends Fragment {
 
     private GiaoDichDAO transactionDAO;
+    private NganSachDAO budgetDAO;
 
     @Nullable
     @Override
@@ -35,13 +42,22 @@ public class TrangChuFragment extends Fragment {
 
         // Khởi tạo DAO
         transactionDAO = new GiaoDichDAO(getContext());
+        budgetDAO = new NganSachDAO(getContext());
         transactionDAO.open();
+        budgetDAO.open();
 
         TextView tvTotalBalance = view.findViewById(R.id.tvTongSoDu);
         TextView tvTongThuNhap = view.findViewById(R.id.tvThuNhap);
         TextView tvTongChiTieu = view.findViewById(R.id.tvChiTieu);
         TextView tvUserName = view.findViewById(R.id.tvTenNguoiDung);
         RecyclerView rvTransactions = view.findViewById(R.id.rvGiaoDich);
+
+        TextView tvBudgetUsedHome = view.findViewById(R.id.tvBudgetUsedHome);
+        TextView tvBudgetTotalHome = view.findViewById(R.id.tvBudgetTotalHome);
+        TextView tvBudgetStatusHome = view.findViewById(R.id.tvBudgetStatusHome);
+        ProgressBar pbBudgetHome = view.findViewById(R.id.pbBudgetHome);
+
+        tinhToanNganSachThang(tvBudgetUsedHome, tvBudgetTotalHome, tvBudgetStatusHome, pbBudgetHome);
 
         // Thiết lập RecyclerView
         if (rvTransactions != null) {
@@ -93,9 +109,45 @@ public class TrangChuFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (transactionDAO != null) {
-            transactionDAO.close();
+        if (transactionDAO != null) transactionDAO.close();
+        if (budgetDAO != null) budgetDAO.close();
+    }
+
+    private void tinhToanNganSachThang(TextView tvUsed, TextView tvTotal, TextView tvStatus, ProgressBar pb) {
+        if (tvUsed == null || tvTotal == null || tvStatus == null || pb == null) return;
+
+        double totalAmount = 0;
+        double totalSpent = 0;
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
+            Date today = new Date();
+
+            List<NganSach> list = budgetDAO.getAllBudgets();
+            for (NganSach b : list) {
+                Date start = sdf.parse(b.getStartDate());
+                Date end = sdf.parse(b.getEndDate());
+
+                if (!today.before(start) && !today.after(end)) {
+                    totalAmount += b.getAmount();
+                    totalSpent += b.getSpentAmount();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        tvUsed.setText(dinhDangTien(totalSpent) + " ₫");
+        tvTotal.setText(dinhDangTien(totalAmount) + " ₫");
+
+        int progress = 0;
+        if (totalAmount > 0) {
+            progress = (int) ((totalSpent / totalAmount) * 100);
+        }
+        if (progress > 100) progress = 100;
+        pb.setProgress(progress);
+
+        tvStatus.setText("Đã dùng " + progress + "% ngân sách");
     }
 
     private String dinhDangTien(double amount) {

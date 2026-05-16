@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
     android:layout_marginVertical="8dp"
     app:cardBackgroundColor="@color/colorSurface"
     app:cardCornerRadius="16dp"
@@ -11,84 +12,69 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp">
-            
-            <View
-                android:id="@+id/vCategoryColor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.2"
-                android:background="@drawable/bg_icon_primary" />
-
-            <ImageView
-                android:id="@+id/ivCategoryIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@android:drawable/ic_menu_agenda" />
-        </FrameLayout>
+        <ImageView
+            android:id="@+id/ivCategoryIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_icon_primary"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:tint="@color/white"/>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_weight="1"
+            android:layout_marginStart="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvCategoryName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
                 android:text="Tên danh mục"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tvCategoryType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="Loại danh mục"
                 android:textColor="@color/colorTextSecondary"
-                android:textSize="14sp" />
-                
-            <TextView
-                android:id="@+id/tvCategoryNote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Ghi chú"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                android:textSize="14sp"/>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/btnEditCategory"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            android:src="@android:drawable/ic_menu_edit"
-            app:tint="@color/colorTextSecondary" />
-            
-        <ImageView
-            android:id="@+id/btnDeleteCategory"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            android:src="@android:drawable/ic_menu_delete"
-            app:tint="#F44336" />
+        <!-- Edit/Delete Actions -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnEditCategory"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@android:drawable/ic_menu_edit"
+                android:tint="@color/colorPrimary"
+                android:padding="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+
+            <ImageView
+                android:id="@+id/btnDeleteCategory"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:tint="#E74C3C"
+                android:padding="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </LinearLayout>
 
     </LinearLayout>
 

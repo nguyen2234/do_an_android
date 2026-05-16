@@ -14,19 +14,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import com.example.android_app.R;
-import com.example.android_app.database.DanhMucDAO;
 import com.example.android_app.database.GiaoDichDAO;
+import com.example.android_app.database.NganSachDAO;
 import com.example.android_app.database.ViTienDAO;
-import com.example.android_app.model.DanhMuc;
+import com.example.android_app.database.DanhMucDAO;
 import com.example.android_app.model.GiaoDich;
+import com.example.android_app.model.NganSach;
 import com.example.android_app.model.ViTien;
+import com.example.android_app.model.DanhMuc;
 import com.google.android.material.button.MaterialButton;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,11 +38,12 @@ public class ThemGiaoDichFragment extends Fragment {
     private TextView btnExpenseTab, btnIncomeTab, tvNgayThang, tvAmountDisplay;
     private EditText etSoTien, etGhiChu;
     private Spinner spinnerCategory, spinnerWallet;
-    private RecyclerView rvCategories;
     private Calendar selectedDate = Calendar.getInstance();
 
     private GiaoDichDAO transactionDAO;
     private ViTienDAO walletDAO;
+    private NganSachDAO budgetDAO;
+    private DanhMucDAO categoryDAO;
     private List<ViTien> walletList;
 
     @Nullable
@@ -57,8 +60,12 @@ public class ThemGiaoDichFragment extends Fragment {
 
         transactionDAO = new GiaoDichDAO(getContext());
         walletDAO = new ViTienDAO(getContext());
+        budgetDAO = new NganSachDAO(getContext());
+        categoryDAO = new DanhMucDAO(getContext());
         transactionDAO.open();
         walletDAO.open();
+        budgetDAO.open();
+        categoryDAO.open();
 
         btnExpenseTab = view.findViewById(R.id.btnExpenseTab);
         btnIncomeTab = view.findViewById(R.id.btnIncomeTab);
@@ -68,8 +75,6 @@ public class ThemGiaoDichFragment extends Fragment {
         etGhiChu = view.findViewById(R.id.etGhiChu);
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerWallet = view.findViewById(R.id.spinnerWallet);
-        rvCategories = view.findViewById(R.id.rvCategories);
-        rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         // Set current date
         updateDateDisplay();
@@ -125,91 +130,30 @@ public class ThemGiaoDichFragment extends Fragment {
     }
 
     private void setupCategorySpinner() {
-        DanhMucDAO categoryDAO = new DanhMucDAO(getContext());
-        categoryDAO.open();
         String type = isExpense ? "expense" : "income";
-        List<DanhMuc> dbCategories = categoryDAO.getCategoriesByType(type);
+        List<DanhMuc> categories = categoryDAO.getCategoriesByType(type);
         List<String> categoryNames = new ArrayList<>();
-
-        if (dbCategories.isEmpty()) {
-            String[] defaultCats = isExpense
-                    ? new String[]{"Ăn uống", "Di chuyển", "Mua sắm", "Y tế", "Giải trí", "Giáo dục", "Khác"}
-                    : new String[]{"Lương", "Thưởng", "Đầu tư", "Quà tặng", "Khác"};
-            for (String cat : defaultCats) {
-                categoryNames.add(cat);
-                DanhMuc dm = new DanhMuc();
-                dm.setName(cat);
-                dm.setLoai(type);
-                categoryDAO.addCategory(dm);
+        
+        if (categories.isEmpty()) {
+            if (isExpense) {
+                categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "expense", Color.parseColor("#E74C3C")));
+                categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "expense", Color.parseColor("#3498DB")));
+                categoryDAO.addCategory(new DanhMuc(0, "Khác", "ic_other", "expense", Color.parseColor("#95A5A6")));
+            } else {
+                categoryDAO.addCategory(new DanhMuc(0, "Lương", "ic_salary", "income", Color.parseColor("#2ECC71")));
+                categoryDAO.addCategory(new DanhMuc(0, "Khác", "ic_other", "income", Color.parseColor("#95A5A6")));
             }
-        } else {
-            for (DanhMuc cat : dbCategories) {
-                categoryNames.add(cat.getName());
-            }
+            categories = categoryDAO.getCategoriesByType(type);
         }
-        categoryDAO.close();
+
+        for (DanhMuc c : categories) {
+            categoryNames.add(c.getName());
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
-
-        setupQuickCategories(categoryNames);
-    }
-
-    private void setupQuickCategories(List<String> categoryNames) {
-        QuickCategoryAdapter adapter = new QuickCategoryAdapter(categoryNames, category -> {
-            for (int i = 0; i < spinnerCategory.getCount(); i++) {
-                if (spinnerCategory.getItemAtPosition(i).toString().equals(category)) {
-                    spinnerCategory.setSelection(i);
-                    break;
-                }
-            }
-        });
-        rvCategories.setAdapter(adapter);
-    }
-
-    class QuickCategoryAdapter extends RecyclerView.Adapter<QuickCategoryAdapter.ViewHolder> {
-        private List<String> categories;
-        private OnCategorySelectedListener listener;
-
-        public QuickCategoryAdapter(List<String> categories, OnCategorySelectedListener listener) {
-            this.categories = categories;
-            this.listener = listener;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            TextView tv = new TextView(parent.getContext());
-            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, 24, 0);
-            tv.setLayoutParams(params);
-            tv.setPadding(40, 20, 40, 20);
-            tv.setBackgroundResource(R.drawable.bg_input);
-            tv.setTextColor(Color.parseColor("#1A1A2E"));
-            tv.setTextSize(14f);
-            return new ViewHolder(tv);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            String cat = categories.get(position);
-            ((TextView)holder.itemView).setText(cat);
-            holder.itemView.setOnClickListener(v -> listener.onSelected(cat));
-        }
-
-        @Override
-        public int getItemCount() { return categories.size(); }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            public ViewHolder(@NonNull View itemView) { super(itemView); }
-        }
-    }
-
-    interface OnCategorySelectedListener {
-        void onSelected(String category);
     }
 
     private void setupWalletSpinner() {
@@ -278,6 +222,10 @@ public class ThemGiaoDichFragment extends Fragment {
             double newBalance = isExpense ? selectedWallet.getBalance() - amount : selectedWallet.getBalance() + amount;
             walletDAO.updateBalance(selectedWallet.getId(), newBalance);
             
+            if (isExpense) {
+                capNhatNganSach(date, category, amount);
+            }
+            
             // Reset form
             etSoTien.setText("");
             etGhiChu.setText("");
@@ -288,9 +236,6 @@ public class ThemGiaoDichFragment extends Fragment {
             intent.putExtra("isSuccess", true);
             intent.putExtra("amount", amount);
             intent.putExtra("type", type);
-            intent.putExtra("category", category);
-            intent.putExtra("walletName", selectedWallet.getName());
-            intent.putExtra("note", note);
             startActivity(intent);
         } else {
             // Chuyển sang màn hình thông báo thất bại
@@ -298,10 +243,28 @@ public class ThemGiaoDichFragment extends Fragment {
             intent.putExtra("isSuccess", false);
             intent.putExtra("amount", amount);
             intent.putExtra("type", type);
-            intent.putExtra("category", category);
-            intent.putExtra("walletName", selectedWallet.getName());
-            intent.putExtra("note", note);
             startActivity(intent);
+        }
+    }
+
+    private void capNhatNganSach(String transDateStr, String category, double amount) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
+            Date transDate = sdf.parse(transDateStr);
+
+            List<NganSach> list = budgetDAO.getAllBudgets();
+            for (NganSach b : list) {
+                Date start = sdf.parse(b.getStartDate());
+                Date end = sdf.parse(b.getEndDate());
+
+                if (!transDate.before(start) && !transDate.after(end)) {
+                    if (b.getCategoryIds() != null && b.getCategoryIds().contains(category)) {
+                        budgetDAO.updateSpentAmount(b.getId(), b.getSpentAmount() + amount);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -310,5 +273,7 @@ public class ThemGiaoDichFragment extends Fragment {
         super.onDestroyView();
         if (transactionDAO != null) transactionDAO.close();
         if (walletDAO != null) walletDAO.close();
+        if (budgetDAO != null) budgetDAO.close();
+        if (categoryDAO != null) categoryDAO.close();
     }
 }

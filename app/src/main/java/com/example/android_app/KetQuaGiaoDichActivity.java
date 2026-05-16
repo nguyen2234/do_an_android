@@ -20,28 +20,15 @@ public class KetQuaGiaoDichActivity extends AppCompatActivity {
         ImageView ivIcon = findViewById(R.id.ivResultIcon);
         TextView tvMessage = findViewById(R.id.tvResultMessage);
         TextView tvAmount = findViewById(R.id.tvResultAmount);
-        TextView tvType = findViewById(R.id.tvResultType);
-        TextView tvCategory = findViewById(R.id.tvResultCategory);
-        TextView tvWallet = findViewById(R.id.tvResultWallet);
-        TextView tvNote = findViewById(R.id.tvResultNote);
         Button btnBack = findViewById(R.id.btnBackToHome);
 
         Intent intent = getIntent();
         boolean isSuccess = intent.getBooleanExtra("isSuccess", true);
         double amount = intent.getDoubleExtra("amount", 0);
         String type = intent.getStringExtra("type");
-        String category = intent.getStringExtra("category");
-        String walletName = intent.getStringExtra("walletName");
-        String note = intent.getStringExtra("note");
 
         NumberFormat fmt = NumberFormat.getInstance(new Locale("vi", "VN"));
         String amountStr = fmt.format(amount) + " ₫";
-
-        // Display transaction details
-        tvType.setText("income".equals(type) ? "Khoản thu" : "Khoản chi");
-        tvCategory.setText(category != null ? category : "");
-        tvWallet.setText(walletName != null ? walletName : "");
-        tvNote.setText((note != null && !note.isEmpty()) ? note : "Không có");
 
         if (isSuccess) {
             // Icon Success (Có thể dùng ảnh tích xanh tự tạo, ở đây dùng mặc định)

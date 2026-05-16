@@ -46,6 +46,12 @@
             android:exported="false"
             android:theme="@style/Theme.Android_app"/>
 
+        <!-- Budget Activity -->
+        <activity
+            android:name=".ThemNganSachActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
     </application>
 
 </manifest>

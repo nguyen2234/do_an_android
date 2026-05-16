@@ -26,7 +26,7 @@ public class HoSoFragment extends Fragment {
 
     private TextView tvProfileName, tvProfileEmail;
 
-    private LinearLayout btnLogout, btnChangePassword, btnStatistics;
+    private LinearLayout btnLogout, btnChangePassword;
     private NguoiDungDAO userDAO;
     private SharedPreferences prefs;
 
@@ -51,26 +51,43 @@ public class HoSoFragment extends Fragment {
 
         btnLogout = view.findViewById(R.id.btnLogout);
         btnChangePassword = view.findViewById(R.id.btnChangePassword);
-        btnStatistics = view.findViewById(R.id.btnStatistics);
 
         // Load thông tin NguoiDung
         loadUserProfile();
 
 
 
+        // Xử lý Quản lý
+        View btnManageCategories = view.findViewById(R.id.btnManageCategories);
+        View btnManageWallets = view.findViewById(R.id.btnManageWallets);
+
+        if (btnManageCategories != null) {
+            btnManageCategories.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, new DanhMucFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
+        if (btnManageWallets != null) {
+            btnManageWallets.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, new ViTienFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
         // Xử lý Đổi mật khẩu
         btnChangePassword.setOnClickListener(v -> {
             showChangePasswordDialog();
-        });
-
-        // Xử lý Thống kê
-        btnStatistics.setOnClickListener(v -> {
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .replace(R.id.fragmentContainer, new ThongKeFragment())
-                    .addToBackStack(null)
-                    .commit();
         });
 
         // Xử lý Đăng xuất
