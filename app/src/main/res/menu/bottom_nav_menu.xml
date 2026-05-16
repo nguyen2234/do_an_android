@@ -5,9 +5,9 @@
         android:icon="@android:drawable/ic_menu_today"
         android:title="@string/nav_home"/>
     <item
-        android:id="@+id/nav_stats"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
-        android:title="@string/nav_stats"/>
+        android:id="@+id/nav_category"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/nav_category"/>
     <item
         android:id="@+id/nav_add"
         android:icon="@android:drawable/ic_input_add"

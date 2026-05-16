@@ -9,17 +9,19 @@ public class DanhMuc {
     private String icon;        // Tên icon (dùng để map với drawable)
     private String type;        // Loại danh mục: "income" (thu nhập) hoặc "expense" (chi tiêu)
     private int color;          // Mã màu hiển thị cho danh mục
+    private String note;        // Ghi chú danh mục
 
     public DanhMuc() {
         // Constructor mặc định cần thiết cho một số thao tác
     }
 
-    public DanhMuc(long id, String name, String icon, String type, int color) {
+    public DanhMuc(long id, String name, String icon, String type, int color, String note) {
         this.id = id;
         this.name = name;
         this.icon = icon;
         this.type = type;
         this.color = color;
+        this.note = note;
     }
 
     // Các hàm Getter và Setter (Lấy và Gán giá trị)
@@ -37,4 +39,7 @@ public class DanhMuc {
 
     public int getColor() { return color; }
     public void setColor(int color) { this.color = color; }
+
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
 }

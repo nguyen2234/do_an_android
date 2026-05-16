@@ -33,7 +33,100 @@
         android:textColor="@color/colorIncome"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:layout_marginBottom="48dp"/>
+        android:layout_marginBottom="24dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_white"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginBottom="48dp"
+        android:elevation="2dp">
+
+        <!-- Type -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Loại giao dịch:"
+                android:textColor="@color/colorTextSecondary"/>
+            <TextView
+                android:id="@+id/tvResultType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Khoản chi"
+                android:textColor="@color/colorTextPrimary"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Category -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Danh mục:"
+                android:textColor="@color/colorTextSecondary"/>
+            <TextView
+                android:id="@+id/tvResultCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ăn uống"
+                android:textColor="@color/colorTextPrimary"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Wallet -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Ví điện tử:"
+                android:textColor="@color/colorTextSecondary"/>
+            <TextView
+                android:id="@+id/tvResultWallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiền mặt"
+                android:textColor="@color/colorTextPrimary"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Note -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Ghi chú:"
+                android:textColor="@color/colorTextSecondary"/>
+            <TextView
+                android:id="@+id/tvResultNote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="..."
+                android:textColor="@color/colorTextPrimary"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnBackToHome"

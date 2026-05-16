@@ -14,9 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.android_app.R;
+import com.example.android_app.database.DanhMucDAO;
 import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.database.ViTienDAO;
+import com.example.android_app.model.DanhMuc;
 import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.ViTien;
 import com.google.android.material.button.MaterialButton;
@@ -32,6 +36,7 @@ public class ThemGiaoDichFragment extends Fragment {
     private TextView btnExpenseTab, btnIncomeTab, tvNgayThang, tvAmountDisplay;
     private EditText etSoTien, etGhiChu;
     private Spinner spinnerCategory, spinnerWallet;
+    private RecyclerView rvCategories;
     private Calendar selectedDate = Calendar.getInstance();
 
     private GiaoDichDAO transactionDAO;
@@ -63,6 +68,8 @@ public class ThemGiaoDichFragment extends Fragment {
         etGhiChu = view.findViewById(R.id.etGhiChu);
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerWallet = view.findViewById(R.id.spinnerWallet);
+        rvCategories = view.findViewById(R.id.rvCategories);
+        rvCategories.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         // Set current date
         updateDateDisplay();
@@ -118,14 +125,91 @@ public class ThemGiaoDichFragment extends Fragment {
     }
 
     private void setupCategorySpinner() {
-        String[] categories = isExpense
-                ? new String[]{"Ăn uống", "Di chuyển", "Mua sắm", "Y tế", "Giải trí", "Giáo dục", "Khác"}
-                : new String[]{"Lương", "Thưởng", "Đầu tư", "Quà tặng", "Khác"};
+        DanhMucDAO categoryDAO = new DanhMucDAO(getContext());
+        categoryDAO.open();
+        String type = isExpense ? "expense" : "income";
+        List<DanhMuc> dbCategories = categoryDAO.getCategoriesByType(type);
+        List<String> categoryNames = new ArrayList<>();
+
+        if (dbCategories.isEmpty()) {
+            String[] defaultCats = isExpense
+                    ? new String[]{"Ăn uống", "Di chuyển", "Mua sắm", "Y tế", "Giải trí", "Giáo dục", "Khác"}
+                    : new String[]{"Lương", "Thưởng", "Đầu tư", "Quà tặng", "Khác"};
+            for (String cat : defaultCats) {
+                categoryNames.add(cat);
+                DanhMuc dm = new DanhMuc();
+                dm.setName(cat);
+                dm.setLoai(type);
+                categoryDAO.addCategory(dm);
+            }
+        } else {
+            for (DanhMuc cat : dbCategories) {
+                categoryNames.add(cat.getName());
+            }
+        }
+        categoryDAO.close();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, categories);
+                android.R.layout.simple_spinner_item, categoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
+
+        setupQuickCategories(categoryNames);
+    }
+
+    private void setupQuickCategories(List<String> categoryNames) {
+        QuickCategoryAdapter adapter = new QuickCategoryAdapter(categoryNames, category -> {
+            for (int i = 0; i < spinnerCategory.getCount(); i++) {
+                if (spinnerCategory.getItemAtPosition(i).toString().equals(category)) {
+                    spinnerCategory.setSelection(i);
+                    break;
+                }
+            }
+        });
+        rvCategories.setAdapter(adapter);
+    }
+
+    class QuickCategoryAdapter extends RecyclerView.Adapter<QuickCategoryAdapter.ViewHolder> {
+        private List<String> categories;
+        private OnCategorySelectedListener listener;
+
+        public QuickCategoryAdapter(List<String> categories, OnCategorySelectedListener listener) {
+            this.categories = categories;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            TextView tv = new TextView(parent.getContext());
+            ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 24, 0);
+            tv.setLayoutParams(params);
+            tv.setPadding(40, 20, 40, 20);
+            tv.setBackgroundResource(R.drawable.bg_input);
+            tv.setTextColor(Color.parseColor("#1A1A2E"));
+            tv.setTextSize(14f);
+            return new ViewHolder(tv);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            String cat = categories.get(position);
+            ((TextView)holder.itemView).setText(cat);
+            holder.itemView.setOnClickListener(v -> listener.onSelected(cat));
+        }
+
+        @Override
+        public int getItemCount() { return categories.size(); }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            public ViewHolder(@NonNull View itemView) { super(itemView); }
+        }
+    }
+
+    interface OnCategorySelectedListener {
+        void onSelected(String category);
     }
 
     private void setupWalletSpinner() {
@@ -204,6 +288,9 @@ public class ThemGiaoDichFragment extends Fragment {
             intent.putExtra("isSuccess", true);
             intent.putExtra("amount", amount);
             intent.putExtra("type", type);
+            intent.putExtra("category", category);
+            intent.putExtra("walletName", selectedWallet.getName());
+            intent.putExtra("note", note);
             startActivity(intent);
         } else {
             // Chuyển sang màn hình thông báo thất bại
@@ -211,6 +298,9 @@ public class ThemGiaoDichFragment extends Fragment {
             intent.putExtra("isSuccess", false);
             intent.putExtra("amount", amount);
             intent.putExtra("type", type);
+            intent.putExtra("category", category);
+            intent.putExtra("walletName", selectedWallet.getName());
+            intent.putExtra("note", note);
             startActivity(intent);
         }
     }
