@@ -46,6 +46,20 @@
             android:exported="false"
             android:theme="@style/Theme.Android_app"/>
 
+        <!-- Profile Edit -->
+        <activity
+            android:name=".ChinhSuaHoSoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Android_app"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Money Transfer -->
+        <activity
+            android:name=".ChuyenTienActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Android_app"
+            android:windowSoftInputMode="adjustResize"/>
+
     </application>
 
 </manifest>

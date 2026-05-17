@@ -24,9 +24,12 @@ import com.example.android_app.model.NguoiDung;
 
 public class HoSoFragment extends Fragment {
 
-    private TextView tvProfileName, tvProfileEmail;
+    private static final int EDIT_PROFILE_REQUEST = 102;
 
-    private LinearLayout btnLogout, btnChangePassword, btnStatistics;
+    private TextView tvProfileName, tvProfileEmail;
+    private android.widget.ImageView ivAvatar;
+
+    private LinearLayout btnLogout, btnChangePassword, btnStatistics, btnEditProfile, btnTransferMoney;
     private NguoiDungDAO userDAO;
     private SharedPreferences prefs;
 
@@ -48,15 +51,28 @@ public class HoSoFragment extends Fragment {
 
         tvProfileName = view.findViewById(R.id.tvProfileName);
         tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
+        ivAvatar = view.findViewById(R.id.ivAvatar);
 
         btnLogout = view.findViewById(R.id.btnLogout);
         btnChangePassword = view.findViewById(R.id.btnChangePassword);
         btnStatistics = view.findViewById(R.id.btnStatistics);
+        btnEditProfile = view.findViewById(R.id.btnEditProfile);
+        btnTransferMoney = view.findViewById(R.id.btnTransferMoney);
 
         // Load thông tin NguoiDung
         loadUserProfile();
 
+        // Xử lý Chỉnh sửa hồ sơ
+        btnEditProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), com.example.android_app.ChinhSuaHoSoActivity.class);
+            startActivityForResult(intent, EDIT_PROFILE_REQUEST);
+        });
 
+        // Xử lý Chuyển tiền
+        btnTransferMoney.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), com.example.android_app.ChuyenTienActivity.class);
+            startActivity(intent);
+        });
 
         // Xử lý Đổi mật khẩu
         btnChangePassword.setOnClickListener(v -> {
@@ -82,6 +98,14 @@ public class HoSoFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_PROFILE_REQUEST && resultCode == android.app.Activity.RESULT_OK) {
+            loadUserProfile();
+        }
+    }
+
     private void loadUserProfile() {
         long userId = prefs.getLong("user_id", -1);
         if (userId != -1) {
@@ -92,6 +116,20 @@ public class HoSoFragment extends Fragment {
                     tvProfileEmail.setText(user.getEmail());
                 } else {
                     tvProfileEmail.setText("Chưa cập nhật Email");
+                }
+
+                // Load Avatar
+                String avatarPath = user.getAvatar();
+                if (avatarPath != null && !avatarPath.isEmpty()) {
+                    java.io.File imgFile = new java.io.File(avatarPath);
+                    if (imgFile.exists()) {
+                        android.graphics.Bitmap myBitmap = android.graphics.BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        ivAvatar.setImageBitmap(myBitmap);
+                    } else {
+                        ivAvatar.setImageResource(R.drawable.ic_avatar_banana);
+                    }
+                } else {
+                    ivAvatar.setImageResource(R.drawable.ic_avatar_banana);
                 }
             }
         }
