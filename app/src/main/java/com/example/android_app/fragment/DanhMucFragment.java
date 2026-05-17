@@ -2,17 +2,16 @@ package com.example.android_app.fragment;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,51 +24,20 @@ import com.example.android_app.R;
 import com.example.android_app.adapter.DanhMucAdapter;
 import com.example.android_app.database.DanhMucDAO;
 import com.example.android_app.model.DanhMuc;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class DanhMucFragment extends Fragment {
 
     private RecyclerView rvCategories;
-    private View layoutEmpty;
-    private FloatingActionButton fabAddCategory;
-    private TabLayout tabLayout;
-    
     private DanhMucAdapter adapter;
     private DanhMucDAO categoryDAO;
-    private List<DanhMuc> fullCategoryList;
-    
-    private String currentTypeFilter = "expense"; // "expense" for Chi tiêu, "income" for Thu nhập
+    private MaterialButtonToggleGroup toggleGroupType;
+    private FloatingActionButton fabAddCategory;
 
-    // Data arrays
-    private final String[] iconValues = {"food", "shopping", "transport", "health", "salary", "entertainment", "other"};
-    private final int[] iconDrawables = {
-        android.R.drawable.ic_menu_directions,
-        android.R.drawable.ic_menu_myplaces,
-        android.R.drawable.ic_menu_mapmode,
-        android.R.drawable.ic_menu_add,
-        android.R.drawable.ic_menu_sort_by_size,
-        android.R.drawable.ic_menu_camera,
-        android.R.drawable.ic_menu_agenda
-    };
-    
-    private final int[] colorValues = {
-        Color.parseColor("#4CAF50"), 
-        Color.parseColor("#F44336"), 
-        Color.parseColor("#2196F3"), 
-        Color.parseColor("#FFEB3B"), 
-        Color.parseColor("#FF9800"), 
-        Color.parseColor("#9C27B0"),
-        Color.parseColor("#9E9E9E"),
-        Color.parseColor("#00BCD4"),
-        Color.parseColor("#E91E63")
-    };
-
-    private String selectedIcon = "other";
-    private int selectedColor = Color.parseColor("#9E9E9E");
+    private String currentFilter = "all"; // all, expense, income
 
     @Nullable
     @Override
@@ -82,260 +50,153 @@ public class DanhMucFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         rvCategories = view.findViewById(R.id.rvCategories);
-        layoutEmpty = view.findViewById(R.id.layoutEmpty);
+        rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
+        toggleGroupType = view.findViewById(R.id.toggleGroupType);
         fabAddCategory = view.findViewById(R.id.fabAddCategory);
-        tabLayout = view.findViewById(R.id.tabLayout);
 
         categoryDAO = new DanhMucDAO(getContext());
         categoryDAO.open();
 
-        rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
-        
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                currentTypeFilter = tab.getPosition() == 0 ? "expense" : "income";
-                updateListUI();
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
-        });
-
         loadCategories();
+
+        toggleGroupType.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == R.id.btnFilterAll) {
+                    currentFilter = "all";
+                } else if (checkedId == R.id.btnFilterExpense) {
+                    currentFilter = "expense";
+                } else if (checkedId == R.id.btnFilterIncome) {
+                    currentFilter = "income";
+                }
+                loadCategories();
+            }
+        });
 
         fabAddCategory.setOnClickListener(v -> showCategoryDialog(null));
     }
 
     private void loadCategories() {
-        fullCategoryList = categoryDAO.getAllCategories();
-        updateListUI();
-    }
-
-    private void updateListUI() {
-        if (fullCategoryList == null) return;
-
-        List<DanhMuc> filteredList = new ArrayList<>();
-        for (DanhMuc c : fullCategoryList) {
-            if (currentTypeFilter.equals(c.getLoai())) {
-                filteredList.add(c);
-            }
-        }
-
-        if (filteredList.isEmpty()) {
-            layoutEmpty.setVisibility(View.VISIBLE);
-            rvCategories.setVisibility(View.GONE);
+        List<DanhMuc> list;
+        if (currentFilter.equals("expense")) {
+            list = categoryDAO.getCategoriesByType("expense");
+        } else if (currentFilter.equals("income")) {
+            list = categoryDAO.getCategoriesByType("income");
         } else {
-            layoutEmpty.setVisibility(View.GONE);
-            rvCategories.setVisibility(View.VISIBLE);
-            
-            if (adapter == null) {
-                adapter = new DanhMucAdapter(getContext(), filteredList, new DanhMucAdapter.OnCategoryClickListener() {
-                    @Override
-                    public void onEditClick(DanhMuc category) {
-                        showCategoryDialog(category);
-                    }
-
-                    @Override
-                    public void onDeleteClick(DanhMuc category) {
-                        showDeleteConfirmDialog(category);
-                    }
-                });
-                rvCategories.setAdapter(adapter);
-            } else {
-                adapter.updateData(filteredList);
-            }
+            list = categoryDAO.getAllCategories();
         }
+
+        // Thêm danh mục mặc định nếu chưa có (chỉ check khi all)
+        if (currentFilter.equals("all") && list.isEmpty()) {
+            categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "expense", Color.parseColor("#E74C3C")));
+            categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "expense", Color.parseColor("#3498DB")));
+            categoryDAO.addCategory(new DanhMuc(0, "Lương", "ic_salary", "income", Color.parseColor("#2ECC71")));
+            list = categoryDAO.getAllCategories();
+        }
+
+        adapter = new DanhMucAdapter(getContext(), list, new DanhMucAdapter.OnCategoryClickListener() {
+            @Override
+            public void onEditClick(DanhMuc category) {
+                showCategoryDialog(category);
+            }
+
+            @Override
+            public void onDeleteClick(DanhMuc category) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Xóa Danh Mục")
+                        .setMessage("Bạn có chắc chắn muốn xóa danh mục này?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            categoryDAO.deleteCategory(category.getId());
+                            Toast.makeText(getContext(), "Đã xóa", Toast.LENGTH_SHORT).show();
+                            loadCategories();
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+            }
+        });
+        rvCategories.setAdapter(adapter);
     }
 
-    private void showCategoryDialog(DanhMuc categoryToEdit) {
+    private void showCategoryDialog(DanhMuc existingCategory) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View view = getLayoutInflater().inflate(R.layout.dialog_danh_muc, null);
-        builder.setView(view);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_them_danh_muc, null);
+        builder.setView(dialogView);
 
         AlertDialog dialog = builder.create();
         if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        // Init views
-        android.widget.TextView tvTitle = view.findViewById(R.id.tvDialogTitle);
-        EditText etName = view.findViewById(R.id.etCategoryName);
-        EditText etNote = view.findViewById(R.id.etCategoryNote);
-        RadioGroup rgType = view.findViewById(R.id.rgCategoryType);
-        RadioButton rbExpense = view.findViewById(R.id.rbExpense);
-        RadioButton rbIncome = view.findViewById(R.id.rbIncome);
-        LinearLayout layoutIcons = view.findViewById(R.id.layoutCategoryIcons);
-        LinearLayout layoutColors = view.findViewById(R.id.layoutCategoryColors);
-        Button btnCancel = view.findViewById(R.id.btnCancelDialog);
-        Button btnSave = view.findViewById(R.id.btnSaveCategory);
+        TextView tvTitle = dialogView.findViewById(R.id.tvDialogTitle);
+        EditText etName = dialogView.findViewById(R.id.etCategoryName);
+        RadioGroup rgType = dialogView.findViewById(R.id.rgCategoryType);
+        RadioButton rbExpense = dialogView.findViewById(R.id.rbExpense);
+        RadioButton rbIncome = dialogView.findViewById(R.id.rbIncome);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancelCategory);
+        Button btnSave = dialogView.findViewById(R.id.btnSaveCategory);
 
-        // Default selections
-        selectedIcon = categoryToEdit != null ? categoryToEdit.getIcon() : "other";
-        selectedColor = categoryToEdit != null ? categoryToEdit.getColor() : colorValues[0];
-        
-        setupIconPicker(layoutIcons);
-        setupColorPicker(layoutColors);
+        View[] colorViews = {
+                dialogView.findViewById(R.id.color1),
+                dialogView.findViewById(R.id.color2),
+                dialogView.findViewById(R.id.color3),
+                dialogView.findViewById(R.id.color4),
+                dialogView.findViewById(R.id.color5)
+        };
+        int[] colors = {Color.parseColor("#8B5CF6"), Color.parseColor("#E74C3C"), Color.parseColor("#2ECC71"), Color.parseColor("#F1C40F"), Color.parseColor("#3498DB")};
+        final int[] selectedColor = {colors[0]};
 
-        if (categoryToEdit != null) {
-            tvTitle.setText("Sửa danh mục");
-            etName.setText(categoryToEdit.getName());
-            if (categoryToEdit.getNote() != null) {
-                etNote.setText(categoryToEdit.getNote());
-            }
-            if ("income".equals(categoryToEdit.getLoai())) {
+        for (int i = 0; i < colorViews.length; i++) {
+            final int index = i;
+            colorViews[i].setOnClickListener(v -> {
+                selectedColor[0] = colors[index];
+                for (View cv : colorViews) {
+                    cv.setAlpha(0.3f);
+                }
+                v.setAlpha(1.0f);
+            });
+            // Init alpha
+            if (i == 0) colorViews[i].setAlpha(1.0f);
+            else colorViews[i].setAlpha(0.3f);
+        }
+
+        if (existingCategory != null) {
+            tvTitle.setText("Sửa Danh mục");
+            etName.setText(existingCategory.getName());
+            if (existingCategory.getLoai().equals("income")) {
                 rbIncome.setChecked(true);
             } else {
                 rbExpense.setChecked(true);
             }
-        } else {
-            // Default to current tab
-            if ("income".equals(currentTypeFilter)) {
-                rbIncome.setChecked(true);
-            } else {
-                rbExpense.setChecked(true);
-            }
+            selectedColor[0] = existingCategory.getColor();
         }
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
         btnSave.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
-            String note = etNote.getText().toString().trim();
-            String type = rbIncome.isChecked() ? "income" : "expense";
-
             if (name.isEmpty()) {
                 Toast.makeText(getContext(), "Vui lòng nhập tên danh mục", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (categoryToEdit == null) {
-                // Add new
-                DanhMuc newCategory = new DanhMuc();
-                newCategory.setName(name);
-                newCategory.setNote(note);
-                newCategory.setLoai(type);
-                newCategory.setIcon(selectedIcon);
-                newCategory.setColor(selectedColor);
-                
-                long result = categoryDAO.addCategory(newCategory);
-                if (result > 0) {
-                    Toast.makeText(getContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
-                    loadCategories();
-                    dialog.dismiss();
-                } else {
-                    Toast.makeText(getContext(), "Lỗi khi thêm danh mục", Toast.LENGTH_SHORT).show();
-                }
+            String type = rbExpense.isChecked() ? "expense" : "income";
+
+            if (existingCategory == null) {
+                DanhMuc newCat = new DanhMuc(0, name, "ic_menu_sort_by_size", type, selectedColor[0]);
+                long id = categoryDAO.addCategory(newCat);
+                if (id > 0) Toast.makeText(getContext(), "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
             } else {
-                // Update
-                categoryToEdit.setName(name);
-                categoryToEdit.setNote(note);
-                categoryToEdit.setLoai(type);
-                categoryToEdit.setIcon(selectedIcon);
-                categoryToEdit.setColor(selectedColor);
-                
-                int result = categoryDAO.updateCategory(categoryToEdit);
-                if (result > 0) {
-                    Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                    loadCategories();
-                    dialog.dismiss();
-                } else {
-                    Toast.makeText(getContext(), "Lỗi khi cập nhật danh mục", Toast.LENGTH_SHORT).show();
-                }
+                existingCategory.setName(name);
+                existingCategory.setLoai(type);
+                existingCategory.setColor(selectedColor[0]);
+                categoryDAO.updateCategory(existingCategory);
+                Toast.makeText(getContext(), "Đã sửa danh mục", Toast.LENGTH_SHORT).show();
             }
+
+            loadCategories();
+            dialog.dismiss();
         });
 
         dialog.show();
-    }
-
-    private void setupIconPicker(LinearLayout layoutIcons) {
-        layoutIcons.removeAllViews();
-        int size = dpToPx(48);
-        int margin = dpToPx(8);
-        int padding = dpToPx(12);
-
-        for (int i = 0; i < iconValues.length; i++) {
-            final String iconVal = iconValues[i];
-            ImageView iv = new ImageView(getContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
-            params.setMargins(0, 0, margin, 0);
-            iv.setLayoutParams(params);
-            iv.setPadding(padding, padding, padding, padding);
-            iv.setImageResource(iconDrawables[i]);
-
-            if (iconVal.equals(selectedIcon)) {
-                iv.setBackgroundResource(R.drawable.bg_input); // Highlight selected
-                iv.setColorFilter(Color.parseColor("#4CAF50")); // Highlight color
-            } else {
-                iv.setBackgroundResource(android.R.color.transparent);
-                iv.setColorFilter(Color.parseColor("#757575"));
-            }
-
-            iv.setOnClickListener(v -> {
-                selectedIcon = iconVal;
-                setupIconPicker(layoutIcons); // Refresh
-            });
-
-            layoutIcons.addView(iv);
-        }
-    }
-
-    private void setupColorPicker(LinearLayout layoutColors) {
-        layoutColors.removeAllViews();
-        int size = dpToPx(40);
-        int margin = dpToPx(8);
-
-        for (int i = 0; i < colorValues.length; i++) {
-            final int colorVal = colorValues[i];
-            View colorView = new View(getContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
-            params.setMargins(0, 0, margin, 0);
-            colorView.setLayoutParams(params);
-
-            GradientDrawable shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.OVAL);
-            shape.setColor(colorVal);
-
-            if (colorVal == selectedColor) {
-                shape.setStroke(dpToPx(3), Color.BLACK); // Highlight selected
-            } else {
-                shape.setStroke(0, Color.TRANSPARENT);
-            }
-            
-            colorView.setBackground(shape);
-
-            colorView.setOnClickListener(v -> {
-                selectedColor = colorVal;
-                setupColorPicker(layoutColors); // Refresh
-            });
-
-            layoutColors.addView(colorView);
-        }
-    }
-
-    private int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
-    }
-
-    private void showDeleteConfirmDialog(DanhMuc category) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("Xóa danh mục")
-                .setMessage("Bạn có chắc chắn muốn xóa danh mục '" + category.getName() + "' không?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    int result = categoryDAO.deleteCategory(category.getId());
-                    if (result > 0) {
-                        Toast.makeText(getContext(), "Đã xóa danh mục", Toast.LENGTH_SHORT).show();
-                        loadCategories();
-                    } else {
-                        Toast.makeText(getContext(), "Lỗi khi xóa", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
     }
 
     @Override

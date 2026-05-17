@@ -7,95 +7,89 @@
 
     <!-- Header -->
     <RelativeLayout
-        android:id="@+id/header"
+        android:id="@+id/headerCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_header"
-        android:padding="40dp"
-        android:paddingBottom="40dp">
+        android:paddingHorizontal="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Quản lý Danh Mục"
+            android:text="Quản lý Danh mục"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="bold"/>
     </RelativeLayout>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <!-- Filters -->
+    <LinearLayout
+        android:id="@+id/llFilters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="10sp"
-        android:layout_marginBottom="10sp"
-        android:background="@drawable/bg_card_white"
-        app:tabIndicatorColor="@color/colorPrimary"
-        app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabTextColor="@color/colorTextSecondary">
+        android:layout_below="@id/headerCategory"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="12dp">
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleGroupType"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chi tiêu" />
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:checkedButton="@+id/btnFilterAll">
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thu nhập" />
-    </com.google.android.material.tabs.TabLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFilterAll"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tất cả"/>
 
-    <!-- Main Content -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFilterExpense"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Chi"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFilterIncome"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Thu"/>
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+    </LinearLayout>
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tabLayout"
-        android:layout_marginTop="8dp"
+        android:layout_below="@id/llFilters"
+        android:layout_marginTop="12dp"
         android:clipToPadding="false"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="80dp" />
+        android:paddingBottom="80dp"/>
 
-    <!-- Empty State -->
-    <LinearLayout
-        android:id="@+id/layoutEmpty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:alpha="0.5"
-            android:src="@android:drawable/ic_menu_agenda"
-            app:tint="@color/colorTextSecondary" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Chưa có danh mục nào"
-            android:textColor="@color/colorTextSecondary"
-            android:textSize="16sp" />
-    </LinearLayout>
-
+    <!-- FAB Add -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="24dp"
         android:src="@android:drawable/ic_input_add"
-        app:tint="@color/white" />
+        android:tint="@color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:elevation="6dp"/>
 
 </RelativeLayout>

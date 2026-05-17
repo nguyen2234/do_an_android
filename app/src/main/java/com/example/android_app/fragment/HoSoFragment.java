@@ -26,10 +26,14 @@ public class HoSoFragment extends Fragment {
 
     private static final int EDIT_PROFILE_REQUEST = 102;
 
+<<<<<<< HEAD
     private TextView tvProfileName, tvProfileEmail;
     private android.widget.ImageView ivAvatar;
 
     private LinearLayout btnLogout, btnChangePassword, btnStatistics, btnEditProfile, btnTransferMoney;
+=======
+    private LinearLayout btnLogout, btnChangePassword;
+>>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
     private NguoiDungDAO userDAO;
     private SharedPreferences prefs;
 
@@ -55,9 +59,12 @@ public class HoSoFragment extends Fragment {
 
         btnLogout = view.findViewById(R.id.btnLogout);
         btnChangePassword = view.findViewById(R.id.btnChangePassword);
+<<<<<<< HEAD
         btnStatistics = view.findViewById(R.id.btnStatistics);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
         btnTransferMoney = view.findViewById(R.id.btnTransferMoney);
+=======
+>>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
 
         // Load thông tin NguoiDung
         loadUserProfile();
@@ -74,19 +81,37 @@ public class HoSoFragment extends Fragment {
             startActivity(intent);
         });
 
+        // Xử lý Quản lý
+        View btnManageCategories = view.findViewById(R.id.btnManageCategories);
+        View btnManageWallets = view.findViewById(R.id.btnManageWallets);
+
+        if (btnManageCategories != null) {
+            btnManageCategories.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, new DanhMucFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
+        if (btnManageWallets != null) {
+            btnManageWallets.setOnClickListener(v -> {
+                if (getActivity() != null) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragmentContainer, new ViTienFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }
+
         // Xử lý Đổi mật khẩu
         btnChangePassword.setOnClickListener(v -> {
             showChangePasswordDialog();
-        });
-
-        // Xử lý Thống kê
-        btnStatistics.setOnClickListener(v -> {
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .replace(R.id.fragmentContainer, new ThongKeFragment())
-                    .addToBackStack(null)
-                    .commit();
         });
 
         // Xử lý Đăng xuất

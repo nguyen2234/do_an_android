@@ -46,6 +46,7 @@
             android:exported="false"
             android:theme="@style/Theme.Android_app"/>
 
+<<<<<<< HEAD
         <!-- Profile Edit -->
         <activity
             android:name=".ChinhSuaHoSoActivity"
@@ -58,6 +59,12 @@
             android:name=".ChuyenTienActivity"
             android:exported="false"
             android:theme="@style/Theme.Android_app"
+=======
+        <!-- Budget Activity -->
+        <activity
+            android:name=".ThemNganSachActivity"
+            android:exported="false"
+>>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
             android:windowSoftInputMode="adjustResize"/>
 
     </application>
