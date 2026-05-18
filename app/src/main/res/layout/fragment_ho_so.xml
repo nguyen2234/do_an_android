@@ -374,7 +374,6 @@
                         android:layout_marginVertical="12dp"
                         android:background="@color/colorDivider"/>
 
-<<<<<<< HEAD
                     <!-- Statistics -->
                     <LinearLayout
                         android:id="@+id/btnStatistics"
@@ -451,8 +450,6 @@
                         android:layout_marginVertical="12dp"
                         android:background="@color/colorDivider"/>
 
-=======
->>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
                     <!-- Logout -->
                     <LinearLayout
                         android:id="@+id/btnLogout"

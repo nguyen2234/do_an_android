@@ -13,7 +13,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Android_app">
+        android:theme="@style/Theme.Android_app"
+        tools:ignore="ExtraText">
 
         <!-- Splash Screen -->
         <activity
@@ -49,7 +50,6 @@
             android:exported="false"
             android:theme="@style/Theme.Android_app"/>
 
-<<<<<<< HEAD
         <!-- Profile Edit -->
         <activity
             android:name=".ChinhSuaHoSoActivity"
@@ -57,17 +57,10 @@
             android:theme="@style/Theme.Android_app"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Money Transfer -->
-        <activity
-            android:name=".ChuyenTienActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Android_app"
-=======
         <!-- Budget Activity -->
         <activity
             android:name=".ThemNganSachActivity"
             android:exported="false"
->>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
             android:windowSoftInputMode="adjustResize"/>
 
         <!-- Nạp tiền -->
@@ -80,6 +73,7 @@
         <activity
             android:name=".ChuyenTienActivity"
             android:exported="false"
+            android:theme="@style/Theme.Android_app"
             android:windowSoftInputMode="adjustResize"/>
 
         <!-- Cài đặt -->

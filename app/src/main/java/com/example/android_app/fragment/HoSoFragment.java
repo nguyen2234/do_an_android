@@ -8,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -26,14 +24,10 @@ public class HoSoFragment extends Fragment {
 
     private static final int EDIT_PROFILE_REQUEST = 102;
 
-<<<<<<< HEAD
     private TextView tvProfileName, tvProfileEmail;
     private android.widget.ImageView ivAvatar;
 
     private LinearLayout btnLogout, btnChangePassword, btnStatistics, btnEditProfile, btnTransferMoney;
-=======
-    private LinearLayout btnLogout, btnChangePassword;
->>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
     private NguoiDungDAO userDAO;
     private SharedPreferences prefs;
 
@@ -59,27 +53,36 @@ public class HoSoFragment extends Fragment {
 
         btnLogout = view.findViewById(R.id.btnLogout);
         btnChangePassword = view.findViewById(R.id.btnChangePassword);
-<<<<<<< HEAD
         btnStatistics = view.findViewById(R.id.btnStatistics);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
         btnTransferMoney = view.findViewById(R.id.btnTransferMoney);
-=======
->>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
 
         // Load thông tin NguoiDung
         loadUserProfile();
 
         // Xử lý Chỉnh sửa hồ sơ
-        btnEditProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), com.example.android_app.ChinhSuaHoSoActivity.class);
-            startActivityForResult(intent, EDIT_PROFILE_REQUEST);
-        });
+        if (btnEditProfile != null) {
+            btnEditProfile.setOnClickListener(v -> {
+                // Sử dụng CaiDatActivity thay vì ChinhSuaHoSoActivity vì đã gộp
+                Intent intent = new Intent(getActivity(), com.example.android_app.CaiDatActivity.class);
+                startActivity(intent);
+            });
+        }
 
         // Xử lý Chuyển tiền
-        btnTransferMoney.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), com.example.android_app.ChuyenTienActivity.class);
-            startActivity(intent);
-        });
+        if (btnTransferMoney != null) {
+            btnTransferMoney.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), com.example.android_app.ChuyenTienActivity.class);
+                startActivity(intent);
+            });
+        }
+        
+        // Xử lý Thống kê (Chưa có tính năng nên có thể để trống hoặc báo Toast)
+        if (btnStatistics != null) {
+            btnStatistics.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Tính năng thống kê đang phát triển", Toast.LENGTH_SHORT).show();
+            });
+        }
 
         // Xử lý Quản lý
         View btnManageCategories = view.findViewById(R.id.btnManageCategories);
@@ -110,25 +113,27 @@ public class HoSoFragment extends Fragment {
         }
 
         // Xử lý Đổi mật khẩu
-        btnChangePassword.setOnClickListener(v -> {
-            showChangePasswordDialog();
-        });
+        if (btnChangePassword != null) {
+            btnChangePassword.setOnClickListener(v -> {
+                showChangePasswordDialog();
+            });
+        }
 
         // Xử lý Đăng xuất
-        btnLogout.setOnClickListener(v -> {
-            prefs.edit().clear().apply();
-            Toast.makeText(getContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(), DangNhapActivity.class));
-            if (getActivity() != null) getActivity().finish();
-        });
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> {
+                prefs.edit().clear().apply();
+                Toast.makeText(getContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), DangNhapActivity.class));
+                if (getActivity() != null) getActivity().finish();
+            });
+        }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_PROFILE_REQUEST && resultCode == android.app.Activity.RESULT_OK) {
-            loadUserProfile();
-        }
+    public void onResume() {
+        super.onResume();
+        loadUserProfile();
     }
 
     private void loadUserProfile() {
@@ -146,12 +151,18 @@ public class HoSoFragment extends Fragment {
                 // Load Avatar
                 String avatarPath = user.getAvatar();
                 if (avatarPath != null && !avatarPath.isEmpty()) {
-                    java.io.File imgFile = new java.io.File(avatarPath);
-                    if (imgFile.exists()) {
-                        android.graphics.Bitmap myBitmap = android.graphics.BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        ivAvatar.setImageBitmap(myBitmap);
+                    if (avatarPath.startsWith("/")) {
+                        java.io.File imgFile = new java.io.File(avatarPath);
+                        if (imgFile.exists()) {
+                            android.graphics.Bitmap myBitmap = android.graphics.BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                            ivAvatar.setImageBitmap(myBitmap);
+                        } else {
+                            ivAvatar.setImageResource(R.drawable.ic_avatar_banana);
+                        }
                     } else {
-                        ivAvatar.setImageResource(R.drawable.ic_avatar_banana);
+                        int resId = getResources().getIdentifier(avatarPath, "drawable", getContext().getPackageName());
+                        if (resId != 0) ivAvatar.setImageResource(resId);
+                        else ivAvatar.setImageResource(R.drawable.ic_avatar_banana);
                     }
                 } else {
                     ivAvatar.setImageResource(R.drawable.ic_avatar_banana);
@@ -164,7 +175,7 @@ public class HoSoFragment extends Fragment {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_doi_mat_khau, null);
         builder.setView(dialogView);
-        
+
         android.app.AlertDialog dialog = builder.create();
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -202,14 +213,12 @@ public class HoSoFragment extends Fragment {
             if (userId != -1) {
                 NguoiDung user = userDAO.getUserById(userId);
                 if (user != null) {
-                    // Băm mật khẩu cũ để kiểm tra
                     String hashedCurrentInput = com.example.android_app.utils.SecurityUtils.hashPasswordSHA256(currentPwd);
                     if (!hashedCurrentInput.equals(user.getPassword())) {
                         Toast.makeText(getContext(), "Mật khẩu hiện tại không đúng", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    // Cập nhật mật khẩu mới (đã mã hóa)
                     user.setPassword(com.example.android_app.utils.SecurityUtils.hashPasswordSHA256(newPwd));
                     int result = userDAO.updateUser(user);
                     if (result > 0) {

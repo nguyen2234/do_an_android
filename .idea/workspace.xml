@@ -231,29 +231,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4738d2a4-f23a-4095-a584-7980e95e4bac" name="Changes" comment="">
+    <list default="true" id="4738d2a4-f23a-4095-a584-7980e95e4bac" name="Changes" comment="Thay đổi tổng thể dự án.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/MainActivity.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/MainActivity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/database/DatabaseHelper.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/database/DatabaseHelper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/MainActivity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/view/BarChartView.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/adapter/GiaoDichAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/adapter/GiaoDichAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/adapter/ViTienAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/adapter/ViTienAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/DatabaseHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/DatabaseHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/GiaoDichDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/GiaoDichDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/ViTienDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/ViTienDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/HoSoFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/HoSoFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/ThemGiaoDichFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/ThemGiaoDichFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/TrangChuFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/TrangChuFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/ViTienFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/ViTienFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/model/ViTien.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/model/ViTien.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_chao_mung.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_chao_mung.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/dialog_vi_tien.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/dialog_vi_tien.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_ho_so.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_ho_so.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trang_chu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_trang_chu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_giao_dich.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_giao_dich.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -297,7 +281,7 @@
     &quot;accountId&quot;: &quot;9455158a-2b64-411a-adc3-d816db992f71&quot;
   }
 }</component>
-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\LeMoi\.gradle\wrapper\dists\gradle-9.3.1-bin\23ovyewtku6u96viwx3xl3oks\gradle-9.3.1" javaHome="C:\Program Files\Android\Android Studio\jbr" gradleVersion="9.3.1" />
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\Lucci\.gradle\wrapper\dists\gradle-9.3.1-bin\23ovyewtku6u96viwx3xl3oks\gradle-9.3.1" javaHome="C:\Program Files\Android\Android Studio\jbr" gradleVersion="9.3.1" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -492,6 +476,23 @@
       <option name="presentableId" value="Default" />
       <updated>1778427287878</updated>
     </task>
+    <task id="LOCAL-00001" summary="Thay đổi tổng thể dự án.">
+      <option name="closed" value="true" />
+      <created>1779105533740</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1779105533740</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Thay đổi tổng thể dự án.">
+      <option name="closed" value="true" />
+      <created>1779105656146</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1779105656146</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -504,6 +505,14 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Thay đổi tổng thể ứng dụng" />
+    <MESSAGE value="Thêm chức năng Chuyển tiền và Chỉnh sửa profile" />
+    <MESSAGE value="Tính năng: Thêm cảnh báo số dư thấp và giao dịch theo kế hoạch&#10;&#10;- Thêm phụ thuộc `androidx.work:work-runtime` và triển khai `DailyReminderWork` cho các tác vụ định kỳ.&#10;&#10;- Triển khai thông báo số dư thấp khi số dư ví giảm xuống dưới ngưỡng do người dùng định nghĩa.&#10;&#10;- Cập nhật `DatabaseHelper` (v7) để bao gồm `min_balance` trong bảng `wallets` và tạo bảng `planned_transactions` mới.&#10;&#10;- Nâng cấp mô hình `ViTien` và DAO để hỗ trợ cài đặt số dư tối thiểu và truy xuất theo ID.&#10;&#10;- Thêm các thao tác nhanh &quot;Nạp tiền&quot; và &quot;Chuyển tiền&quot; và phím tắt &quot;Ngày đến hạn&quot; vào `TrangChuFragment`.&#10;&#10;- Giới thiệu `NapTienActivity`, `ChuyenTienActivity` và `CaiDatActivity`.&#10;&#10;- Cập nhật chủ đề giao diện người dùng từ màu tím sang màu xanh ngọc lục bảo và làm mới một số biểu tượng theo phong cách hiện đại.&#10;&#10;- Tái cấu trúc `TrangChuFragment` để hiển thị 5 giao dịch gần đây nhất thay vì tất cả.&#10;- Yêu cầu quyền `POST_NOTIFICATIONS` cho Android 13 trở lên." />
+    <MESSAGE value="Thay đỏio tổng thể dự án." />
+    <MESSAGE value="Thay đổi tổng thể dự án." />
+    <option name="LAST_COMMIT_MESSAGE" value="Thay đổi tổng thể dự án." />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
