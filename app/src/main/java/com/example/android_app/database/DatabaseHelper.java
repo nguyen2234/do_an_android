@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // --- BẢNG NGƯỜI DÙNG (USERS) ---
     public static final String TABLE_USERS = "users";
@@ -42,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_WALLET_CURRENCY = "currency";
     public static final String COL_WALLET_ICON = "icon";
     public static final String COL_WALLET_COLOR = "color";
+    public static final String COL_WALLET_MIN_BALANCE = "min_balance"; // [MỚI] Hạn mức tối thiểu nhắc nhở
 
     private static final String CREATE_TABLE_WALLETS =
             "CREATE TABLE " + TABLE_WALLETS + " (" +
@@ -51,7 +52,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_WALLET_TYPE + " TEXT, " +
                     COL_WALLET_CURRENCY + " TEXT, " +
                     COL_WALLET_ICON + " TEXT, " +
-                    COL_WALLET_COLOR + " TEXT" +
+                    COL_WALLET_COLOR + " TEXT, " +
+                    COL_WALLET_MIN_BALANCE + " REAL DEFAULT 0" +
                     ");";
 
     // --- BẢNG DANH MỤC (CATEGORIES) ---
@@ -61,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_CATEGORY_ICON = "icon";
     public static final String COL_CATEGORY_TYPE = "type"; // "income" hoặc "expense"
     public static final String COL_CATEGORY_COLOR = "color";
+    public static final String COL_CATEGORY_NOTE = "note";
 
     private static final String CREATE_TABLE_CATEGORIES =
             "CREATE TABLE " + TABLE_CATEGORIES + " (" +
@@ -68,7 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_CATEGORY_NAME + " TEXT NOT NULL, " +
                     COL_CATEGORY_ICON + " TEXT, " +
                     COL_CATEGORY_TYPE + " TEXT, " +
-                    COL_CATEGORY_COLOR + " INTEGER" +
+                    COL_CATEGORY_COLOR + " INTEGER, " +
+                    COL_CATEGORY_NOTE + " TEXT" +
                     ");";
 
     // --- BẢNG GIAO DỊCH (TRANSACTIONS) ---
@@ -76,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_TRANS_ID = "id";
     public static final String COL_TRANS_TITLE = "title";
     public static final String COL_TRANS_AMOUNT = "amount";
-    public static final String COL_TRANS_CATEGORY = "category"; // Có thể lưu tên hoặc ID danh mục
+    public static final String COL_TRANS_CATEGORY = "category";
     public static final String COL_TRANS_TYPE = "type"; // "income" hoặc "expense"
     public static final String COL_TRANS_DATE = "date";
     public static final String COL_TRANS_NOTE = "note";
@@ -95,6 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(" + COL_TRANS_WALLET_ID + ") REFERENCES " + TABLE_WALLETS + "(" + COL_WALLET_ID + ")" +
                     ");";
 
+    // --- BẢNG NGÂN SÁCH (BUDGETS) ---
     public static final String TABLE_BUDGETS = "budgets";
     public static final String COL_BUDGET_ID = "id";
     public static final String COL_BUDGET_NAME = "name";
@@ -109,10 +114,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_BUDGET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_BUDGET_NAME + " TEXT NOT NULL, " +
                     COL_BUDGET_AMOUNT + " REAL NOT NULL, " +
-                    COL_BUDGET_SPENT + " REAL NOT NULL, " +
+                    COL_BUDGET_SPENT + " REAL DEFAULT 0, " +
                     COL_BUDGET_START + " TEXT, " +
                     COL_BUDGET_END + " TEXT, " +
                     COL_BUDGET_CATEGORIES + " TEXT" +
+                    ");";
+
+    // --- BẢNG GIAO DỊCH DỰ KIẾN (PLANNED TRANSACTIONS) [MỚI] ---
+    public static final String TABLE_PLANNED = "planned_transactions";
+    public static final String COL_PLANNED_ID = "id";
+    public static final String COL_PLANNED_TITLE = "title";
+    public static final String COL_PLANNED_AMOUNT = "amount";
+    public static final String COL_PLANNED_CATEGORY = "category";
+    public static final String COL_PLANNED_TYPE = "type";           // "income" hoặc "expense"
+    public static final String COL_PLANNED_DUE_DATE = "due_date";   // Ngày đến hạn (dd/MM/yyyy)
+    public static final String COL_PLANNED_STATUS = "status";       // "pending" hoặc "completed"
+    public static final String COL_PLANNED_NOTE = "note";
+    public static final String COL_PLANNED_WALLET_ID = "wallet_id";
+
+    private static final String CREATE_TABLE_PLANNED =
+            "CREATE TABLE " + TABLE_PLANNED + " (" +
+                    COL_PLANNED_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_PLANNED_TITLE + " TEXT NOT NULL, " +
+                    COL_PLANNED_AMOUNT + " REAL NOT NULL, " +
+                    COL_PLANNED_CATEGORY + " TEXT, " +
+                    COL_PLANNED_TYPE + " TEXT, " +
+                    COL_PLANNED_DUE_DATE + " TEXT, " +
+                    COL_PLANNED_STATUS + " TEXT DEFAULT 'pending', " +
+                    COL_PLANNED_NOTE + " TEXT, " +
+                    COL_PLANNED_WALLET_ID + " INTEGER" +
                     ");";
 
     public DatabaseHelper(Context context) {
@@ -121,22 +151,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Tạo các bảng khi database được khởi tạo lần đầu
         db.execSQL(CREATE_TABLE_USERS);
         db.execSQL(CREATE_TABLE_WALLETS);
         db.execSQL(CREATE_TABLE_CATEGORIES);
         db.execSQL(CREATE_TABLE_TRANSACTIONS);
         db.execSQL(CREATE_TABLE_BUDGETS);
+        db.execSQL(CREATE_TABLE_PLANNED);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Xóa bảng cũ nếu tồn tại và tạo lại khi có phiên bản mới
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTIONS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WALLETS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUDGETS);
-        onCreate(db);
+        // Nâng cấp khéo léo để giữ lại dữ liệu cũ
+        if (oldVersion < 7) {
+            // Thêm cột min_balance vào bảng wallets nếu chưa có
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_WALLETS + " ADD COLUMN " + COL_WALLET_MIN_BALANCE + " REAL DEFAULT 0");
+            } catch (Exception e) {
+                // Cột đã tồn tại, bỏ qua
+            }
+            // Tạo bảng planned_transactions nếu chưa tồn tại
+            try {
+                db.execSQL(CREATE_TABLE_PLANNED);
+            } catch (Exception e) {
+                // Bảng đã tồn tại, bỏ qua
+            }
+        }
+        
+        // Tạo bảng budgets nếu chưa tồn tại (cho các phiên bản cũ hơn)
+        try {
+            db.execSQL(CREATE_TABLE_BUDGETS);
+        } catch (Exception e) {
+            // Bảng đã tồn tại, bỏ qua
+        }
     }
 }

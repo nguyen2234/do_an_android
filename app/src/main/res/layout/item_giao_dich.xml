@@ -22,8 +22,8 @@
             android:layout_centerVertical="true"
             android:background="@drawable/bg_icon_income"
             android:padding="12dp"
-            android:src="@android:drawable/ic_menu_edit"
-            android:tint="@color/colorIncome"/>
+            android:src="@drawable/ic_expense_modern"
+            android:tint="@color/colorExpense"/>
 
         <!-- GiaoDich Details -->
         <LinearLayout

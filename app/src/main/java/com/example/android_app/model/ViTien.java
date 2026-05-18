@@ -11,12 +11,13 @@ public class ViTien {
     private String currency;    // Đơn vị tiền tệ (vd: VNĐ, USD)
     private String icon;        // Tên icon
     private String color;       // Màu sắc (mã hex)
+    private double minBalance;  // Hạn mức tối thiểu để nhắc nhở nạp tiền
 
     public ViTien() {
         // Constructor mặc định
     }
 
-    public ViTien(long id, String name, double balance, String type, String currency, String icon, String color) {
+    public ViTien(long id, String name, double balance, String type, String currency, String icon, String color, double minBalance) {
         this.id = id;
         this.name = name;
         this.balance = balance;
@@ -24,6 +25,7 @@ public class ViTien {
         this.currency = currency;
         this.icon = icon;
         this.color = color;
+        this.minBalance = minBalance;
     }
 
     // Constructor cũ cho tương thích (hoặc gán mặc định icon/color)
@@ -58,4 +60,7 @@ public class ViTien {
 
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }
+
+    public double getMinBalance() { return minBalance; }
+    public void setMinBalance(double minBalance) { this.minBalance = minBalance; }
 }

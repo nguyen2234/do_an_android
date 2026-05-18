@@ -77,13 +77,13 @@ public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder
         String icon = w.getIcon() != null ? w.getIcon() : "cash";
         switch (icon) {
             case "bank":
-                holder.ivIcon.setImageResource(android.R.drawable.ic_menu_send);
+                holder.ivIcon.setImageResource(R.drawable.ic_bank_modern);
                 break;
             case "saving":
-                holder.ivIcon.setImageResource(android.R.drawable.ic_menu_save);
+                holder.ivIcon.setImageResource(R.drawable.ic_piggy_bank);
                 break;
             default: // cash
-                holder.ivIcon.setImageResource(android.R.drawable.ic_menu_myplaces);
+                holder.ivIcon.setImageResource(R.drawable.ic_wallet_modern);
                 break;
         }
 

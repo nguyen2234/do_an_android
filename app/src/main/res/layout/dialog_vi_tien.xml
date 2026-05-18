@@ -56,6 +56,27 @@
         android:textColor="@color/colorTextPrimary"
         android:textColorHint="@color/colorTextHint"/>
 
+    <!-- MỚI: Nhập số dư cảnh báo (min_balance) -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Cảnh báo khi số dư dưới mức (tùy chọn)"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="12sp"/>
+
+    <EditText
+        android:id="@+id/etWalletMinBalance"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input"
+        android:hint="Ví dụ: 50000"
+        android:inputType="numberDecimal"
+        android:paddingHorizontal="16dp"
+        android:textColor="@color/colorTextPrimary"
+        android:textColorHint="@color/colorTextHint"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -43,6 +43,7 @@ public class ViTienDAO {
         values.put(DatabaseHelper.COL_WALLET_CURRENCY, wallet.getCurrency());
         values.put(DatabaseHelper.COL_WALLET_ICON, wallet.getIcon());
         values.put(DatabaseHelper.COL_WALLET_COLOR, wallet.getColor());
+        values.put(DatabaseHelper.COL_WALLET_MIN_BALANCE, wallet.getMinBalance());
 
         return db.insert(DatabaseHelper.TABLE_WALLETS, null, values);
     }
@@ -58,6 +59,7 @@ public class ViTienDAO {
         values.put(DatabaseHelper.COL_WALLET_CURRENCY, wallet.getCurrency());
         values.put(DatabaseHelper.COL_WALLET_ICON, wallet.getIcon());
         values.put(DatabaseHelper.COL_WALLET_COLOR, wallet.getColor());
+        values.put(DatabaseHelper.COL_WALLET_MIN_BALANCE, wallet.getMinBalance());
 
         return db.update(DatabaseHelper.TABLE_WALLETS, values,
                 DatabaseHelper.COL_WALLET_ID + " = ?",
@@ -103,12 +105,55 @@ public class ViTienDAO {
                 } else {
                     wallet.setColor("#4CAF50");
                 }
-                
+
+                int minBalIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_MIN_BALANCE);
+                if (minBalIdx != -1) {
+                    wallet.setMinBalance(cursor.getDouble(minBalIdx));
+                }
+
                 wallets.add(wallet);
             } while (cursor.moveToNext());
             cursor.close();
         }
         return wallets;
+    }
+
+    /**
+     * Lấy thông tin một ví theo ID.
+     */
+    public ViTien getWalletById(long id) {
+        Cursor cursor = db.query(DatabaseHelper.TABLE_WALLETS, null,
+                DatabaseHelper.COL_WALLET_ID + " = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            ViTien wallet = new ViTien();
+            wallet.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_ID)));
+            wallet.setName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_NAME)));
+            wallet.setBalance(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_BALANCE)));
+            wallet.setLoai(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_TYPE)));
+            wallet.setCurrency(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_CURRENCY)));
+            int iconIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_ICON);
+            if (iconIdx != -1) wallet.setIcon(cursor.getString(iconIdx));
+            int colorIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_COLOR);
+            if (colorIdx != -1) wallet.setColor(cursor.getString(colorIdx));
+            int minBalIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_MIN_BALANCE);
+            if (minBalIdx != -1) wallet.setMinBalance(cursor.getDouble(minBalIdx));
+            cursor.close();
+            return wallet;
+        }
+        if (cursor != null) cursor.close();
+        return null;
+    }
+
+    /**
+     * Cập nhật hạn mức số dư tối thiểu của ví.
+     */
+    public int updateMinBalance(long walletId, double minBalance) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_WALLET_MIN_BALANCE, minBalance);
+        return db.update(DatabaseHelper.TABLE_WALLETS, values,
+                DatabaseHelper.COL_WALLET_ID + " = ?",
+                new String[]{String.valueOf(walletId)});
     }
 
     /**

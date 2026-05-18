@@ -122,4 +122,30 @@ public class GiaoDichDAO {
         }
         return transactions;
     }
+
+    /**
+     * Lấy danh sách giao dịch gần đây với số lượng giới hạn.
+     */
+    public List<GiaoDich> getRecentTransactions(int limit) {
+        List<GiaoDich> transactions = new ArrayList<>();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_TRANSACTIONS, null, null, null, null, null, DatabaseHelper.COL_TRANS_ID + " DESC", String.valueOf(limit));
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                GiaoDich t = new GiaoDich();
+                t.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_ID)));
+                t.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_TITLE)));
+                t.setSoTien(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_AMOUNT)));
+                t.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_CATEGORY)));
+                t.setLoai(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_TYPE)));
+                t.setNgay(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_DATE)));
+                t.setNote(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_NOTE)));
+                t.setWalletId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TRANS_WALLET_ID)));
+                
+                transactions.add(t);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return transactions;
+    }
 }

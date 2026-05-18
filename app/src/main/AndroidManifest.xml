@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Quyền gửi thông báo (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -65,6 +68,24 @@
             android:name=".ThemNganSachActivity"
             android:exported="false"
 >>>>>>> f895c47fe0d5e2f1097a84761decba7f79d65467
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Nạp tiền -->
+        <activity
+            android:name=".NapTienActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Chuyển tiền -->
+        <activity
+            android:name=".ChuyenTienActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Cài đặt -->
+        <activity
+            android:name=".CaiDatActivity"
+            android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
     </application>

@@ -75,16 +75,16 @@ public class GiaoDichAdapter extends RecyclerView.Adapter<GiaoDichAdapter.ViewHo
             amountFormatted = context.getString(R.string.format_currency_expense, amountValue);
             holder.tvAmount.setText(amountFormatted);
             holder.tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorExpense));
-            holder.ivIcon.setImageResource(android.R.drawable.arrow_down_float);
+            holder.ivIcon.setImageResource(R.drawable.ic_expense_modern);
             holder.ivIcon.setBackgroundResource(R.drawable.bg_icon_expense);
-            holder.ivIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorExpense));
+            holder.ivIcon.setColorFilter(null);
         } else {
             amountFormatted = context.getString(R.string.format_currency_income, amountValue);
             holder.tvAmount.setText(amountFormatted);
             holder.tvAmount.setTextColor(ContextCompat.getColor(context, R.color.colorIncome));
-            holder.ivIcon.setImageResource(android.R.drawable.arrow_up_float);
+            holder.ivIcon.setImageResource(R.drawable.ic_income_modern);
             holder.ivIcon.setBackgroundResource(R.drawable.bg_icon_income);
-            holder.ivIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorIncome));
+            holder.ivIcon.setColorFilter(null);
         }
 
         // Bắt sự kiện click vào dòng hiện tại

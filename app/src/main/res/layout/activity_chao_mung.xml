@@ -41,8 +41,7 @@
             android:layout_height="100dp"
             android:background="@drawable/bg_card_white"
             android:padding="24dp"
-            android:src="@android:drawable/ic_menu_manage"
-            android:tint="@color/colorPrimary"/>
+            android:src="@android:drawable/ic_menu_manage"/>
 
         <TextView
             android:layout_width="wrap_content"

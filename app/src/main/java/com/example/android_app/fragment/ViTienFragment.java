@@ -71,7 +71,7 @@ public class ViTienFragment extends Fragment {
     private void loadWallets() {
         wallets = walletDAO.getAllWallets();
         if (wallets.isEmpty()) {
-            walletDAO.addWallet(new ViTien(0, "Tiền mặt", 0, "cash", "VND", "cash", "#4CAF50"));
+            walletDAO.addWallet(new ViTien(0, "Tiền mặt", 0, "cash", "VND", "cash", "#4CAF50", 0));
             wallets = walletDAO.getAllWallets();
         }
 
@@ -113,6 +113,7 @@ public class ViTienFragment extends Fragment {
 
         EditText etName = dialogView.findViewById(R.id.etWalletName);
         EditText etBalance = dialogView.findViewById(R.id.etWalletBalance);
+        EditText etMinBalance = dialogView.findViewById(R.id.etWalletMinBalance);
         Spinner spinnerIcon = dialogView.findViewById(R.id.spinnerWalletIcon);
         Spinner spinnerColor = dialogView.findViewById(R.id.spinnerWalletColor);
         Button btnHuy = dialogView.findViewById(R.id.btnCancelWallet);
@@ -123,15 +124,20 @@ public class ViTienFragment extends Fragment {
         String[] colorHexes = {"#4CAF50", "#2196F3", "#F44336", "#FF9800", "#9C27B0"};
         String[] colorLabels = {"Xanh lá", "Xanh dương", "Đỏ", "Cam", "Tím"};
 
-        ArrayAdapter<String> iconAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, iconLabels);
+        ArrayAdapter<String> iconAdapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner, iconLabels);
+        iconAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerIcon.setAdapter(iconAdapter);
 
-        ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, colorLabels);
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner, colorLabels);
+        colorAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerColor.setAdapter(colorAdapter);
 
         if (walletToEdit != null) {
             etName.setText(walletToEdit.getName());
             etBalance.setText(String.valueOf((long) walletToEdit.getBalance()));
+            if (walletToEdit.getMinBalance() > 0) {
+                etMinBalance.setText(String.valueOf((long) walletToEdit.getMinBalance()));
+            }
             for (int i = 0; i < iconKeys.length; i++) {
                 if (iconKeys[i].equals(walletToEdit.getIcon())) {
                     spinnerIcon.setSelection(i);
@@ -150,18 +156,36 @@ public class ViTienFragment extends Fragment {
 
         btnLuu.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
-            String balanceStr = etBalance.getText().toString().trim();
-            if (name.isEmpty() || balanceStr.isEmpty()) return;
+            // Xử lý dấu phẩy do bàn phím tạo ra
+            String balanceStr = etBalance.getText().toString().trim().replace(",", ".");
+            String minBalanceStr = etMinBalance.getText().toString().trim().replace(",", ".");
+            
+            if (name.isEmpty() || balanceStr.isEmpty()) {
+                android.widget.Toast.makeText(getContext(), "Vui lòng nhập tên và số dư", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            double balance = Double.parseDouble(balanceStr);
+            double balance = 0;
+            double minBalance = 0;
+            try {
+                balance = Double.parseDouble(balanceStr);
+                if (!minBalanceStr.isEmpty()) {
+                    minBalance = Double.parseDouble(minBalanceStr);
+                }
+            } catch (NumberFormatException e) {
+                android.widget.Toast.makeText(getContext(), "Số tiền không hợp lệ!", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String selectedIcon = iconKeys[spinnerIcon.getSelectedItemPosition()];
             String selectedColor = colorHexes[spinnerColor.getSelectedItemPosition()];
 
             if (walletToEdit == null) {
-                walletDAO.addWallet(new ViTien(0, name, balance, "cash", "VND", selectedIcon, selectedColor));
+                walletDAO.addWallet(new ViTien(0, name, balance, "cash", "VND", selectedIcon, selectedColor, minBalance));
             } else {
                 walletToEdit.setName(name);
                 walletToEdit.setBalance(balance);
+                walletToEdit.setMinBalance(minBalance);
                 walletToEdit.setIcon(selectedIcon);
                 walletToEdit.setColor(selectedColor);
                 walletDAO.updateWallet(walletToEdit);

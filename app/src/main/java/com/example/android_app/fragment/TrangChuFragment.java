@@ -1,5 +1,6 @@
 package com.example.android_app.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.widget.ProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.android_app.ChuyenTienActivity;
+import com.example.android_app.NapTienActivity;
 import com.example.android_app.R;
 import com.example.android_app.adapter.GiaoDichAdapter;
 import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.database.NganSachDAO;
 import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.NganSach;
+import com.example.android_app.fragment.GiaoDichDuKienFragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +71,7 @@ public class TrangChuFragment extends Fragment {
             // Lấy dữ liệu từ DB
             List<GiaoDich> transactions = transactionDAO.getAllTransactions();
             
-            // Tính toán tổng thu chi
+            // Tính toán tổng thu chi từ tất cả giao dịch
             double totalIncome = 0;
             double totalExpense = 0;
             for (GiaoDich t : transactions) {
@@ -76,8 +80,11 @@ public class TrangChuFragment extends Fragment {
             }
             double balance = totalIncome - totalExpense;
 
+            // Lấy 5 giao dịch gần đây nhất để hiển thị
+            List<GiaoDich> recentTransactions = transactionDAO.getRecentTransactions(5);
+
             // Hiển thị danh sách
-            GiaoDichAdapter adapter = new GiaoDichAdapter(getContext(), transactions);
+            GiaoDichAdapter adapter = new GiaoDichAdapter(getContext(), recentTransactions);
             rvTransactions.setAdapter(adapter);
 
             // Cập nhật text tổng quan
@@ -98,12 +105,32 @@ public class TrangChuFragment extends Fragment {
             tvUserName.setText(username);
         }
 
-        // View tvSeeAll = view.findViewById(R.id.tvSeeAll);
-        // if (tvSeeAll != null) {
-        //     tvSeeAll.setOnClickListener(v -> {
-        //         // TODO: Chuyển sang màn hình tất cả giao dịch
-        //     });
-        // }
+        // Nút Nạp tiền
+        View cardNapTien = view.findViewById(R.id.cardNapTien);
+        if (cardNapTien != null) {
+            cardNapTien.setOnClickListener(v ->
+                    startActivity(new Intent(getContext(), NapTienActivity.class)));
+        }
+
+        // Nút Chuyển tiền
+        View cardChuyenTien = view.findViewById(R.id.cardChuyenTien);
+        if (cardChuyenTien != null) {
+            cardChuyenTien.setOnClickListener(v ->
+                    startActivity(new Intent(getContext(), ChuyenTienActivity.class)));
+        }
+
+        // Nút xem khoản đến hạn
+        View tvXemDuKien = view.findViewById(R.id.tvXemDuKien);
+        if (tvXemDuKien != null) {
+            tvXemDuKien.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.fragmentContainer, new GiaoDichDuKienFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
     }
 
     @Override

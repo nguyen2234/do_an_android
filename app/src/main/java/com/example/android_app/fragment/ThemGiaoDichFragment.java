@@ -23,6 +23,7 @@ import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.NganSach;
 import com.example.android_app.model.ViTien;
 import com.example.android_app.model.DanhMuc;
+import com.example.android_app.utils.NotificationHelper;
 import com.google.android.material.button.MaterialButton;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -151,8 +152,8 @@ public class ThemGiaoDichFragment extends Fragment {
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, categoryNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.item_spinner, categoryNames);
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerCategory.setAdapter(adapter);
     }
 
@@ -171,8 +172,8 @@ public class ThemGiaoDichFragment extends Fragment {
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, walletNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.item_spinner, walletNames);
+        adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerWallet.setAdapter(adapter);
     }
 
@@ -221,9 +222,16 @@ public class ThemGiaoDichFragment extends Fragment {
             // Cập nhật số dư ví
             double newBalance = isExpense ? selectedWallet.getBalance() - amount : selectedWallet.getBalance() + amount;
             walletDAO.updateBalance(selectedWallet.getId(), newBalance);
-            
+
+            // Kiểm tra cảnh báo số dư thấp (chỉ khi chi tiêu)
             if (isExpense) {
                 capNhatNganSach(date, category, amount);
+                ViTien updatedWallet = walletDAO.getWalletById(selectedWallet.getId());
+                if (updatedWallet != null && updatedWallet.getMinBalance() > 0
+                        && newBalance < updatedWallet.getMinBalance()) {
+                    NotificationHelper.showLowBalanceNotification(
+                            getContext(), selectedWallet.getName(), newBalance);
+                }
             }
             
             // Reset form
