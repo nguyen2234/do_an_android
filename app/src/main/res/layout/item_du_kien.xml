@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="@color/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="center_vertical">
+
+        <!-- Badge loại: Xanh = thu, Đỏ = chi -->
+        <View
+            android:id="@+id/viewTypeBadge"
+            android:layout_width="5dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="12dp"
+            android:background="#4CAF50"/>
+
+        <!-- Thông tin -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvTieuDe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiêu đề"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="2dp">
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@android:drawable/ic_menu_my_calendar"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="Ngày hạn"/>
+                <TextView
+                    android:id="@+id/tvNgayHan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01/01/2025"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextSecondary"
+                    android:layout_marginStart="4dp"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tvDanhMuc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Danh mục"
+                android:textSize="12sp"
+                android:textColor="@color/colorTextSecondary"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- Phần phải: số tiền + trạng thái -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end">
+            <TextView
+                android:id="@+id/tvSoTien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="500.000 ₫"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorExpense"/>
+            <TextView
+                android:id="@+id/tvTrangThai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chờ"
+                android:textSize="11sp"
+                android:textColor="@color/colorTextSecondary"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:background="@drawable/bg_card_primary"/>
+
+            <!-- Nút xóa -->
+            <ImageView
+                android:id="@+id/btnXoa"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:tint="@color/colorExpense"
+                android:layout_marginTop="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Xóa"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
