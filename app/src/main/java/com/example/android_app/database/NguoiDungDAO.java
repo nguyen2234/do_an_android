@@ -101,6 +101,7 @@ public class NguoiDungDAO {
      */
     public int updateUser(NguoiDung user) {
         ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_USER_USERNAME, user.getUsername());
         values.put(DatabaseHelper.COL_USER_PASSWORD, user.getPassword());
         values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
@@ -109,5 +110,20 @@ public class NguoiDungDAO {
         return db.update(DatabaseHelper.TABLE_USERS, values,
                 DatabaseHelper.COL_USER_ID + "=?",
                 new String[]{String.valueOf(user.getId())});
+    }
+
+    /**
+     * Cập nhật thông tin profile của người dùng (Username, Email, Avatar)
+     */
+    public int updateUserProfile(long userId, String username, String email, String avatar) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_USER_USERNAME, username);
+        values.put(DatabaseHelper.COL_USER_EMAIL, email);
+        if (avatar != null) {
+            values.put(DatabaseHelper.COL_USER_AVATAR, avatar);
+        }
+        return db.update(DatabaseHelper.TABLE_USERS, values,
+                DatabaseHelper.COL_USER_ID + "=?",
+                new String[]{String.valueOf(userId)});
     }
 }

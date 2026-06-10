@@ -27,7 +27,13 @@ public class BarChartView extends View {
 
     private void init() {
         barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barPaint.setColor(Color.parseColor("#634832")); // Màu nâu chủ đạo
+        int colorPrimary;
+        try {
+            colorPrimary = getContext().getResources().getColor(com.example.android_app.R.color.colorPrimary);
+        } catch (Exception e) {
+            colorPrimary = Color.parseColor("#10B981");
+        }
+        barPaint.setColor(colorPrimary);
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.parseColor("#6B7280"));

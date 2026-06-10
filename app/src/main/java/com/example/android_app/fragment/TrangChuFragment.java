@@ -1,5 +1,6 @@
 package com.example.android_app.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.widget.ProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.android_app.ChuyenTienActivity;
+import com.example.android_app.NapTienActivity;
 import com.example.android_app.R;
 import com.example.android_app.adapter.GiaoDichAdapter;
 import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.database.NganSachDAO;
 import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.NganSach;
+import com.example.android_app.fragment.GiaoDichDuKienFragment;
+import com.example.android_app.database.ThongBaoDAO;
+import com.example.android_app.ThongBaoActivity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +33,8 @@ public class TrangChuFragment extends Fragment {
 
     private GiaoDichDAO transactionDAO;
     private NganSachDAO budgetDAO;
+    private ThongBaoDAO notificationDAO;
+    private TextView tvNotificationBadge;
 
     @Nullable
     @Override
@@ -43,8 +51,10 @@ public class TrangChuFragment extends Fragment {
         // Khởi tạo DAO
         transactionDAO = new GiaoDichDAO(getContext());
         budgetDAO = new NganSachDAO(getContext());
+        notificationDAO = new ThongBaoDAO(getContext());
         transactionDAO.open();
         budgetDAO.open();
+        notificationDAO.open();
 
         TextView tvTotalBalance = view.findViewById(R.id.tvTongSoDu);
         TextView tvTongThuNhap = view.findViewById(R.id.tvThuNhap);
@@ -67,7 +77,7 @@ public class TrangChuFragment extends Fragment {
             // Lấy dữ liệu từ DB
             List<GiaoDich> transactions = transactionDAO.getAllTransactions();
             
-            // Tính toán tổng thu chi
+            // Tính toán tổng thu chi từ tất cả giao dịch
             double totalIncome = 0;
             double totalExpense = 0;
             for (GiaoDich t : transactions) {
@@ -76,8 +86,11 @@ public class TrangChuFragment extends Fragment {
             }
             double balance = totalIncome - totalExpense;
 
+            // Lấy 5 giao dịch gần đây nhất để hiển thị
+            List<GiaoDich> recentTransactions = transactionDAO.getRecentTransactions(5);
+
             // Hiển thị danh sách
-            GiaoDichAdapter adapter = new GiaoDichAdapter(getContext(), transactions);
+            GiaoDichAdapter adapter = new GiaoDichAdapter(getContext(), recentTransactions);
             rvTransactions.setAdapter(adapter);
 
             // Cập nhật text tổng quan
@@ -98,12 +111,49 @@ public class TrangChuFragment extends Fragment {
             tvUserName.setText(username);
         }
 
-        // View tvSeeAll = view.findViewById(R.id.tvSeeAll);
-        // if (tvSeeAll != null) {
-        //     tvSeeAll.setOnClickListener(v -> {
-        //         // TODO: Chuyển sang màn hình tất cả giao dịch
-        //     });
-        // }
+        // Ánh xạ nút Thông báo
+        View layoutNotification = view.findViewById(R.id.layoutNotification);
+        tvNotificationBadge = view.findViewById(R.id.tvNotificationBadge);
+
+        if (layoutNotification != null) {
+            layoutNotification.setOnClickListener(v -> {
+                startActivity(new Intent(getContext(), ThongBaoActivity.class));
+            });
+        }
+
+        // Nút Nạp tiền
+        View cardNapTien = view.findViewById(R.id.cardNapTien);
+        if (cardNapTien != null) {
+            cardNapTien.setOnClickListener(v ->
+                    startActivity(new Intent(getContext(), NapTienActivity.class)));
+        }
+
+        // Nút Chuyển tiền
+        View cardChuyenTien = view.findViewById(R.id.cardChuyenTien);
+        if (cardChuyenTien != null) {
+            cardChuyenTien.setOnClickListener(v ->
+                    startActivity(new Intent(getContext(), ChuyenTienActivity.class)));
+        }
+
+        // Nút xem khoản đến hạn
+        View tvXemDuKien = view.findViewById(R.id.tvXemDuKien);
+        if (tvXemDuKien != null) {
+            tvXemDuKien.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.fragmentContainer, new GiaoDichDuKienFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Cập nhật số lượng thông báo chưa đọc khi quay lại màn hình
+        updateNotificationBadge();
     }
 
     @Override
@@ -111,6 +161,26 @@ public class TrangChuFragment extends Fragment {
         super.onDestroyView();
         if (transactionDAO != null) transactionDAO.close();
         if (budgetDAO != null) budgetDAO.close();
+        if (notificationDAO != null) notificationDAO.close();
+    }
+
+    private void updateNotificationBadge() {
+        if (tvNotificationBadge == null || notificationDAO == null) return;
+        try {
+            int unreadCount = notificationDAO.getUnreadCount();
+            if (unreadCount > 0) {
+                if (unreadCount > 9) {
+                    tvNotificationBadge.setText("9+");
+                } else {
+                    tvNotificationBadge.setText(String.valueOf(unreadCount));
+                }
+                tvNotificationBadge.setVisibility(View.VISIBLE);
+            } else {
+                tvNotificationBadge.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void tinhToanNganSachThang(TextView tvUsed, TextView tvTotal, TextView tvStatus, ProgressBar pb) {

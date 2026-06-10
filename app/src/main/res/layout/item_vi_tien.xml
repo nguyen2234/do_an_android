@@ -22,7 +22,7 @@
             android:layout_centerVertical="true"
             android:background="@drawable/bg_icon_income"
             android:padding="12dp"
-            android:src="@android:drawable/ic_menu_myplaces"
+            android:src="@drawable/ic_wallet_modern"
             android:tint="@color/colorIncome"/>
 
         <!-- ViTien Info -->
@@ -82,7 +82,7 @@
                 android:layout_marginEnd="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
-                android:src="@android:drawable/ic_menu_edit"
+                android:src="@drawable/ic_edit"
                 app:tint="@color/colorPrimary"/>
 
             <ImageView
@@ -91,7 +91,7 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
-                android:src="@android:drawable/ic_menu_delete"
+                android:src="@drawable/ic_delete"
                 app:tint="#E74C3C"/>
         </LinearLayout>
 

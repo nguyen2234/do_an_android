@@ -30,6 +30,11 @@
           <theme>@style/Theme.Android_app</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_header.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/bg_icon_expense.xml">
         <config>
           <theme>@style/Theme.Android_app</theme>
@@ -65,6 +70,31 @@
           <theme>@style/Theme.Android_app</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_avatar_blue.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_avatar_green.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_avatar_orange.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_avatar_pink.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_bank_modern.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml">
         <config>
           <theme>@style/Theme.Android_app</theme>
@@ -75,12 +105,37 @@
           <theme>@style/Theme.Android_app</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_piggy_bank.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_topup_modern.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_transfer_modern.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_wallet_modern.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/progress_budget.xml">
         <config>
           <theme>@style/Theme.Android_app</theme>
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_chao_mung.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_chuyen_tien.xml">
         <config>
           <theme>@style/Theme.Android_app</theme>
         </config>
@@ -176,23 +231,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4738d2a4-f23a-4095-a584-7980e95e4bac" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/MainActivity.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/MainActivity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/database/DatabaseHelper.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/database/DatabaseHelper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/DanhMucDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/DanhMucDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/DatabaseHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/database/DatabaseHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/HoSoFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/HoSoFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/ThemGiaoDichFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/ThemGiaoDichFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/TrangChuFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/android_app/fragment/TrangChuFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_ho_so.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_ho_so.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/bottom_nav_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/bottom_nav_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
-    </list>
+    <list default="true" id="4738d2a4-f23a-4095-a584-7980e95e4bac" name="Changes" comment="Fix một số lỗi cơ bản." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -201,7 +240,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=C:\Users\nguyen\.android\avd\Pixel_6a.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=IVRSPN6DOR69KZLZ]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -217,7 +256,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev" />
+        <entry key="$PROJECT_DIR$" value="feature/profile" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -230,11 +269,11 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/nguyen2234/do_an_android.git&quot;,
-    &quot;accountId&quot;: &quot;ab3c6578-31d0-4e62-8cd0-502edf9f801f&quot;
+    &quot;url&quot;: &quot;https://github.com/nguyen2234/do_an_android&quot;,
+    &quot;accountId&quot;: &quot;9455158a-2b64-411a-adc3-d816db992f71&quot;
   }
 }</component>
-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\nguyen\.gradle\wrapper\dists\gradle-9.3.1-bin\23ovyewtku6u96viwx3xl3oks\gradle-9.3.1" javaHome="C:\Program Files\Android\Android Studio\jbr" gradleVersion="9.3.1" />
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\Lucci\.gradle\wrapper\dists\gradle-9.3.1-bin\23ovyewtku6u96viwx3xl3oks\gradle-9.3.1" javaHome="C:\Program Files\Android\Android Studio\jbr" gradleVersion="9.3.1" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -244,31 +283,32 @@
 }</component>
   <component name="ProjectId" id="3DXTBZ24K38YJiwcfNiOEQ7Ggds" />
   <component name="ProjectLevelVcsManager">
+    <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.ChaoMungActivity.executor": "Run",
-    "Android App.app.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feature/budget",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/HocKi_4.2/ANDROID/doan/do_an_android",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.ChaoMungActivity.executor&quot;: &quot;Run&quot;,
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#16 on feature/profile&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/HocKi_4.2/ANDROID/doan/do_an_android&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Android App.ChaoMungActivity">
     <configuration name="ChaoMungActivity" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false" temporary="true">
       <module name="android_app.app" />
@@ -291,6 +331,8 @@
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
       <option name="DEBUGGER_TYPE" value="Auto" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -361,6 +403,8 @@
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
       <option name="DEBUGGER_TYPE" value="Auto" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -424,19 +468,64 @@
       <option name="presentableId" value="Default" />
       <updated>1778427287878</updated>
     </task>
+    <task id="LOCAL-00001" summary="Thay đổi tổng thể dự án.">
+      <option name="closed" value="true" />
+      <created>1779105533740</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1779105533740</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Thay đổi tổng thể dự án.">
+      <option name="closed" value="true" />
+      <created>1779105656146</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1779105656146</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fix một số lỗi cơ bản.">
+      <option name="closed" value="true" />
+      <created>1779107593750</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1779107593750</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Thay đổi tổng thể ứng dụng" />
+    <MESSAGE value="Thêm chức năng Chuyển tiền và Chỉnh sửa profile" />
+    <MESSAGE value="Tính năng: Thêm cảnh báo số dư thấp và giao dịch theo kế hoạch&#10;&#10;- Thêm phụ thuộc `androidx.work:work-runtime` và triển khai `DailyReminderWork` cho các tác vụ định kỳ.&#10;&#10;- Triển khai thông báo số dư thấp khi số dư ví giảm xuống dưới ngưỡng do người dùng định nghĩa.&#10;&#10;- Cập nhật `DatabaseHelper` (v7) để bao gồm `min_balance` trong bảng `wallets` và tạo bảng `planned_transactions` mới.&#10;&#10;- Nâng cấp mô hình `ViTien` và DAO để hỗ trợ cài đặt số dư tối thiểu và truy xuất theo ID.&#10;&#10;- Thêm các thao tác nhanh &quot;Nạp tiền&quot; và &quot;Chuyển tiền&quot; và phím tắt &quot;Ngày đến hạn&quot; vào `TrangChuFragment`.&#10;&#10;- Giới thiệu `NapTienActivity`, `ChuyenTienActivity` và `CaiDatActivity`.&#10;&#10;- Cập nhật chủ đề giao diện người dùng từ màu tím sang màu xanh ngọc lục bảo và làm mới một số biểu tượng theo phong cách hiện đại.&#10;&#10;- Tái cấu trúc `TrangChuFragment` để hiển thị 5 giao dịch gần đây nhất thay vì tất cả.&#10;- Yêu cầu quyền `POST_NOTIFICATIONS` cho Android 13 trở lên." />
+    <MESSAGE value="Thay đỏio tổng thể dự án." />
+    <MESSAGE value="Thay đổi tổng thể dự án." />
+    <MESSAGE value="Fix một số lỗi cơ bản." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix một số lỗi cơ bản." />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
       <map>
         <entry key="com.example.android_app">
           <value>
-            <CheckInfo lastCheckTimestamp="1778940580139" />
+            <CheckInfo lastCheckTimestamp="1779071845296" />
           </value>
         </entry>
         <entry key="com.example.android_app.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1778940580140" />
+            <CheckInfo lastCheckTimestamp="1779071845277" />
           </value>
         </entry>
       </map>

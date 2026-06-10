@@ -17,9 +17,11 @@ public class ViTienDAO {
 
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
+    private Context context;
 
     public ViTienDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
+        this.context = context;
     }
 
     // Mở kết nối cơ sở dữ liệu
@@ -30,6 +32,13 @@ public class ViTienDAO {
     // Đóng kết nối
     public void close() {
         dbHelper.close();
+    }
+
+    // Lấy ID người dùng hiện tại từ SharedPreferences
+    private long getCurrentUserId() {
+        if (context == null) return 1;
+        android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        return prefs.getLong("user_id", 1);
     }
 
     /**
@@ -43,6 +52,8 @@ public class ViTienDAO {
         values.put(DatabaseHelper.COL_WALLET_CURRENCY, wallet.getCurrency());
         values.put(DatabaseHelper.COL_WALLET_ICON, wallet.getIcon());
         values.put(DatabaseHelper.COL_WALLET_COLOR, wallet.getColor());
+        values.put(DatabaseHelper.COL_WALLET_MIN_BALANCE, wallet.getMinBalance());
+        values.put(DatabaseHelper.COL_USER_ID_FK, getCurrentUserId());
 
         return db.insert(DatabaseHelper.TABLE_WALLETS, null, values);
     }
@@ -58,10 +69,11 @@ public class ViTienDAO {
         values.put(DatabaseHelper.COL_WALLET_CURRENCY, wallet.getCurrency());
         values.put(DatabaseHelper.COL_WALLET_ICON, wallet.getIcon());
         values.put(DatabaseHelper.COL_WALLET_COLOR, wallet.getColor());
+        values.put(DatabaseHelper.COL_WALLET_MIN_BALANCE, wallet.getMinBalance());
 
         return db.update(DatabaseHelper.TABLE_WALLETS, values,
-                DatabaseHelper.COL_WALLET_ID + " = ?",
-                new String[]{String.valueOf(wallet.getId())});
+                DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(wallet.getId()), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -69,8 +81,8 @@ public class ViTienDAO {
      */
     public int deleteWallet(long id) {
         return db.delete(DatabaseHelper.TABLE_WALLETS,
-                DatabaseHelper.COL_WALLET_ID + " = ?",
-                new String[]{String.valueOf(id)});
+                DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -78,8 +90,10 @@ public class ViTienDAO {
      */
     public List<ViTien> getAllWallets() {
         List<ViTien> wallets = new ArrayList<>();
-        // Truy vấn tất cả dữ liệu từ bảng ví
-        Cursor cursor = db.query(DatabaseHelper.TABLE_WALLETS, null, null, null, null, null, null);
+        // Truy vấn tất cả dữ liệu từ bảng ví của người dùng hiện tại
+        Cursor cursor = db.query(DatabaseHelper.TABLE_WALLETS, null,
+                DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(getCurrentUserId())}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -103,12 +117,55 @@ public class ViTienDAO {
                 } else {
                     wallet.setColor("#4CAF50");
                 }
-                
+
+                int minBalIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_MIN_BALANCE);
+                if (minBalIdx != -1) {
+                    wallet.setMinBalance(cursor.getDouble(minBalIdx));
+                }
+
                 wallets.add(wallet);
             } while (cursor.moveToNext());
             cursor.close();
         }
         return wallets;
+    }
+
+    /**
+     * Lấy thông tin một ví theo ID.
+     */
+    public ViTien getWalletById(long id) {
+        Cursor cursor = db.query(DatabaseHelper.TABLE_WALLETS, null,
+                DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            ViTien wallet = new ViTien();
+            wallet.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_ID)));
+            wallet.setName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_NAME)));
+            wallet.setBalance(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_BALANCE)));
+            wallet.setLoai(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_TYPE)));
+            wallet.setCurrency(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_WALLET_CURRENCY)));
+            int iconIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_ICON);
+            if (iconIdx != -1) wallet.setIcon(cursor.getString(iconIdx));
+            int colorIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_COLOR);
+            if (colorIdx != -1) wallet.setColor(cursor.getString(colorIdx));
+            int minBalIdx = cursor.getColumnIndex(DatabaseHelper.COL_WALLET_MIN_BALANCE);
+            if (minBalIdx != -1) wallet.setMinBalance(cursor.getDouble(minBalIdx));
+            cursor.close();
+            return wallet;
+        }
+        if (cursor != null) cursor.close();
+        return null;
+    }
+
+    /**
+     * Cập nhật hạn mức số dư tối thiểu của ví.
+     */
+    public int updateMinBalance(long walletId, double minBalance) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_WALLET_MIN_BALANCE, minBalance);
+        return db.update(DatabaseHelper.TABLE_WALLETS, values,
+                DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(walletId), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -118,7 +175,7 @@ public class ViTienDAO {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_WALLET_BALANCE, newBalance);
         return db.update(DatabaseHelper.TABLE_WALLETS, values, 
-                DatabaseHelper.COL_WALLET_ID + " = ?", 
-                new String[]{String.valueOf(walletId)});
+                DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?", 
+                new String[]{String.valueOf(walletId), String.valueOf(getCurrentUserId())});
     }
 }
