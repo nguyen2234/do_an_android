@@ -17,9 +17,11 @@ public class GiaoDichDuKienDAO {
 
     private SQLiteDatabase db;
     private final DatabaseHelper dbHelper;
+    private Context context;
 
     public GiaoDichDuKienDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
+        this.context = context;
     }
 
     public void open() {
@@ -28,6 +30,13 @@ public class GiaoDichDuKienDAO {
 
     public void close() {
         dbHelper.close();
+    }
+
+    // Lấy ID người dùng hiện tại từ SharedPreferences
+    private long getCurrentUserId() {
+        if (context == null) return 1;
+        android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        return prefs.getLong("user_id", 1);
     }
 
     /**
@@ -43,6 +52,7 @@ public class GiaoDichDuKienDAO {
         values.put(DatabaseHelper.COL_PLANNED_STATUS, item.getStatus() != null ? item.getStatus() : "pending");
         values.put(DatabaseHelper.COL_PLANNED_NOTE, item.getNote());
         values.put(DatabaseHelper.COL_PLANNED_WALLET_ID, item.getWalletId());
+        values.put(DatabaseHelper.COL_USER_ID_FK, getCurrentUserId());
         return db.insert(DatabaseHelper.TABLE_PLANNED, null, values);
     }
 
@@ -60,8 +70,8 @@ public class GiaoDichDuKienDAO {
         values.put(DatabaseHelper.COL_PLANNED_NOTE, item.getNote());
         values.put(DatabaseHelper.COL_PLANNED_WALLET_ID, item.getWalletId());
         return db.update(DatabaseHelper.TABLE_PLANNED, values,
-                DatabaseHelper.COL_PLANNED_ID + " = ?",
-                new String[]{String.valueOf(item.getId())});
+                DatabaseHelper.COL_PLANNED_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(item.getId()), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -69,8 +79,8 @@ public class GiaoDichDuKienDAO {
      */
     public int deletePlanned(long id) {
         return db.delete(DatabaseHelper.TABLE_PLANNED,
-                DatabaseHelper.COL_PLANNED_ID + " = ?",
-                new String[]{String.valueOf(id)});
+                DatabaseHelper.COL_PLANNED_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -80,8 +90,8 @@ public class GiaoDichDuKienDAO {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_PLANNED_STATUS, "completed");
         return db.update(DatabaseHelper.TABLE_PLANNED, values,
-                DatabaseHelper.COL_PLANNED_ID + " = ?",
-                new String[]{String.valueOf(id)});
+                DatabaseHelper.COL_PLANNED_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -90,8 +100,8 @@ public class GiaoDichDuKienDAO {
     public List<GiaoDichDuKien> getAllPending() {
         List<GiaoDichDuKien> list = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.TABLE_PLANNED, null,
-                DatabaseHelper.COL_PLANNED_STATUS + " = ?",
-                new String[]{"pending"}, null, null,
+                DatabaseHelper.COL_PLANNED_STATUS + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{"pending", String.valueOf(getCurrentUserId())}, null, null,
                 DatabaseHelper.COL_PLANNED_DUE_DATE + " ASC");
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -107,7 +117,9 @@ public class GiaoDichDuKienDAO {
      */
     public List<GiaoDichDuKien> getAll() {
         List<GiaoDichDuKien> list = new ArrayList<>();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_PLANNED, null, null, null, null, null,
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PLANNED, null,
+                DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(getCurrentUserId())}, null, null,
                 DatabaseHelper.COL_PLANNED_DUE_DATE + " ASC");
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -127,9 +139,10 @@ public class GiaoDichDuKienDAO {
         List<GiaoDichDuKien> list = new ArrayList<>();
         String where = DatabaseHelper.COL_PLANNED_STATUS + " = 'pending' AND (" +
                 DatabaseHelper.COL_PLANNED_DUE_DATE + " = ? OR " +
-                DatabaseHelper.COL_PLANNED_DUE_DATE + " = ?)";
+                DatabaseHelper.COL_PLANNED_DUE_DATE + " = ?) AND " +
+                DatabaseHelper.COL_USER_ID_FK + " = ?";
         Cursor cursor = db.query(DatabaseHelper.TABLE_PLANNED, null, where,
-                new String[]{today, tomorrow}, null, null, null);
+                new String[]{today, tomorrow, String.valueOf(getCurrentUserId())}, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 list.add(cursorToItem(cursor));

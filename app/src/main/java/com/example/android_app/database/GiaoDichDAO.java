@@ -17,9 +17,11 @@ public class GiaoDichDAO {
 
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
+    private Context context;
 
     public GiaoDichDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
+        this.context = context;
     }
 
     public void open() {
@@ -28,6 +30,13 @@ public class GiaoDichDAO {
 
     public void close() {
         dbHelper.close();
+    }
+
+    // Lấy ID người dùng hiện tại từ SharedPreferences
+    private long getCurrentUserId() {
+        if (context == null) return 1;
+        android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        return prefs.getLong("user_id", 1);
     }
 
     /**
@@ -44,6 +53,7 @@ public class GiaoDichDAO {
         values.put(DatabaseHelper.COL_TRANS_DATE, transaction.getNgay());
         values.put(DatabaseHelper.COL_TRANS_NOTE, transaction.getNote());
         values.put(DatabaseHelper.COL_TRANS_WALLET_ID, transaction.getWalletId());
+        values.put(DatabaseHelper.COL_USER_ID_FK, getCurrentUserId());
 
         return db.insert(DatabaseHelper.TABLE_TRANSACTIONS, null, values);
     }
@@ -55,7 +65,9 @@ public class GiaoDichDAO {
     public List<GiaoDich> getAllTransactions() {
         List<GiaoDich> transactions = new ArrayList<>();
         // Truy vấn sắp xếp theo ID giảm dần (mới nhất lên trên) - Thực tế nên sắp xếp theo DATE
-        Cursor cursor = db.query(DatabaseHelper.TABLE_TRANSACTIONS, null, null, null, null, null, DatabaseHelper.COL_TRANS_ID + " DESC");
+        Cursor cursor = db.query(DatabaseHelper.TABLE_TRANSACTIONS, null,
+                DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(getCurrentUserId())}, null, null, DatabaseHelper.COL_TRANS_ID + " DESC");
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -82,22 +94,15 @@ public class GiaoDichDAO {
     public List<GiaoDich> getTransactionsByFilter(String keyword, String startDate, String endDate) {
         List<GiaoDich> transactions = new ArrayList<>();
         
-        StringBuilder selection = new StringBuilder("1=1");
+        StringBuilder selection = new StringBuilder(DatabaseHelper.COL_USER_ID_FK + " = ?");
         List<String> selectionArgs = new ArrayList<>();
+        selectionArgs.add(String.valueOf(getCurrentUserId()));
 
         if (keyword != null && !keyword.trim().isEmpty()) {
             selection.append(" AND (").append(DatabaseHelper.COL_TRANS_NOTE).append(" LIKE ? OR ")
                      .append(DatabaseHelper.COL_TRANS_TITLE).append(" LIKE ?)");
             selectionArgs.add("%" + keyword.trim() + "%");
             selectionArgs.add("%" + keyword.trim() + "%");
-        }
-
-        if (startDate != null && endDate != null) {
-            // Lưu ý: So sánh chuỗi ngày tháng theo định dạng dd/MM/yyyy trong SQLite có thể không chính xác
-            // Nhưng để đơn giản, ta sẽ dùng cách lọc thô (nếu muốn chuẩn cần đổi sang yyyy-MM-dd)
-            // Tuy nhiên, vì CSDL hiện tại dùng TEXT, ta lọc tạm theo keyword hoặc trả về tất cả
-            // Tốt nhất là dùng Date để so sánh.
-            // Ở đây tạm bỏ qua lọc thời gian phức tạp trong SQLite, hoặc phải xử lý ở Java
         }
 
         Cursor cursor = db.query(DatabaseHelper.TABLE_TRANSACTIONS, null, 
@@ -128,7 +133,9 @@ public class GiaoDichDAO {
      */
     public List<GiaoDich> getRecentTransactions(int limit) {
         List<GiaoDich> transactions = new ArrayList<>();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_TRANSACTIONS, null, null, null, null, null, DatabaseHelper.COL_TRANS_ID + " DESC", String.valueOf(limit));
+        Cursor cursor = db.query(DatabaseHelper.TABLE_TRANSACTIONS, null,
+                DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(getCurrentUserId())}, null, null, DatabaseHelper.COL_TRANS_ID + " DESC", String.valueOf(limit));
 
         if (cursor != null && cursor.moveToFirst()) {
             do {

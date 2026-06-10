@@ -101,6 +101,7 @@ public class NguoiDungDAO {
      */
     public int updateUser(NguoiDung user) {
         ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_USER_USERNAME, user.getUsername());
         values.put(DatabaseHelper.COL_USER_PASSWORD, user.getPassword());
         values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());

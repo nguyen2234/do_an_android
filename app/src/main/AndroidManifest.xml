@@ -50,12 +50,7 @@
             android:exported="false"
             android:theme="@style/Theme.Android_app"/>
 
-        <!-- Profile Edit -->
-        <activity
-            android:name=".ChinhSuaHoSoActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Android_app"
-            android:windowSoftInputMode="adjustResize"/>
+
 
         <!-- Budget Activity -->
         <activity
@@ -79,6 +74,12 @@
         <!-- Cài đặt -->
         <activity
             android:name=".CaiDatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Thông báo -->
+        <activity
+            android:name=".ThongBaoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 

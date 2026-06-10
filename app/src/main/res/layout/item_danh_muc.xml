@@ -22,7 +22,7 @@
             android:layout_height="40dp"
             android:background="@drawable/bg_icon_primary"
             android:padding="8dp"
-            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:src="@drawable/ic_category"
             android:tint="@color/white"/>
 
         <LinearLayout
@@ -60,7 +60,7 @@
                 android:id="@+id/btnEditCategory"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@android:drawable/ic_menu_edit"
+                android:src="@drawable/ic_edit"
                 android:tint="@color/colorPrimary"
                 android:padding="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"/>
@@ -70,7 +70,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="8dp"
-                android:src="@android:drawable/ic_menu_delete"
+                android:src="@drawable/ic_delete"
                 android:tint="#E74C3C"
                 android:padding="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"/>

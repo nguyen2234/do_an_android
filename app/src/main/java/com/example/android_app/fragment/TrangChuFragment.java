@@ -21,6 +21,8 @@ import com.example.android_app.database.NganSachDAO;
 import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.NganSach;
 import com.example.android_app.fragment.GiaoDichDuKienFragment;
+import com.example.android_app.database.ThongBaoDAO;
+import com.example.android_app.ThongBaoActivity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +33,8 @@ public class TrangChuFragment extends Fragment {
 
     private GiaoDichDAO transactionDAO;
     private NganSachDAO budgetDAO;
+    private ThongBaoDAO notificationDAO;
+    private TextView tvNotificationBadge;
 
     @Nullable
     @Override
@@ -47,8 +51,10 @@ public class TrangChuFragment extends Fragment {
         // Khởi tạo DAO
         transactionDAO = new GiaoDichDAO(getContext());
         budgetDAO = new NganSachDAO(getContext());
+        notificationDAO = new ThongBaoDAO(getContext());
         transactionDAO.open();
         budgetDAO.open();
+        notificationDAO.open();
 
         TextView tvTotalBalance = view.findViewById(R.id.tvTongSoDu);
         TextView tvTongThuNhap = view.findViewById(R.id.tvThuNhap);
@@ -105,6 +111,16 @@ public class TrangChuFragment extends Fragment {
             tvUserName.setText(username);
         }
 
+        // Ánh xạ nút Thông báo
+        View layoutNotification = view.findViewById(R.id.layoutNotification);
+        tvNotificationBadge = view.findViewById(R.id.tvNotificationBadge);
+
+        if (layoutNotification != null) {
+            layoutNotification.setOnClickListener(v -> {
+                startActivity(new Intent(getContext(), ThongBaoActivity.class));
+            });
+        }
+
         // Nút Nạp tiền
         View cardNapTien = view.findViewById(R.id.cardNapTien);
         if (cardNapTien != null) {
@@ -134,10 +150,37 @@ public class TrangChuFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        // Cập nhật số lượng thông báo chưa đọc khi quay lại màn hình
+        updateNotificationBadge();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (transactionDAO != null) transactionDAO.close();
         if (budgetDAO != null) budgetDAO.close();
+        if (notificationDAO != null) notificationDAO.close();
+    }
+
+    private void updateNotificationBadge() {
+        if (tvNotificationBadge == null || notificationDAO == null) return;
+        try {
+            int unreadCount = notificationDAO.getUnreadCount();
+            if (unreadCount > 0) {
+                if (unreadCount > 9) {
+                    tvNotificationBadge.setText("9+");
+                } else {
+                    tvNotificationBadge.setText(String.valueOf(unreadCount));
+                }
+                tvNotificationBadge.setVisibility(View.VISIBLE);
+            } else {
+                tvNotificationBadge.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void tinhToanNganSachThang(TextView tvUsed, TextView tvTotal, TextView tvStatus, ProgressBar pb) {

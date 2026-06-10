@@ -114,4 +114,13 @@ public class MainActivity extends AppCompatActivity {
     public void openDuKienFragment() {
         loadFragment(new GiaoDichDuKienFragment());
     }
+
+    /**
+     * Chọn mục trên thanh điều hướng dưới.
+     */
+    public void setSelectedItemId(int itemId) {
+        if (bottomNavigation != null) {
+            bottomNavigation.setSelectedItemId(itemId);
+        }
+    }
 }

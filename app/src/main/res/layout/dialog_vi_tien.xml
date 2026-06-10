@@ -143,8 +143,7 @@
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/colorDivider"
             android:text="Hủy"
-            android:textColor="@color/colorTextPrimary"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:textColor="@color/colorTextPrimary" />
 
         <Button
             android:id="@+id/btnSaveWallet"
@@ -154,8 +153,7 @@
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/colorPrimary"
             android:text="Lưu"
-            android:textColor="@color/white"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

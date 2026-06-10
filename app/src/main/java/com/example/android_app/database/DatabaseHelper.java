@@ -12,7 +12,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
+
+    // Khóa ngoại trỏ tới người dùng
+    public static final String COL_USER_ID_FK = "user_id";
 
     // --- BẢNG NGƯỜI DÙNG (USERS) ---
     public static final String TABLE_USERS = "users";
@@ -53,7 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_WALLET_CURRENCY + " TEXT, " +
                     COL_WALLET_ICON + " TEXT, " +
                     COL_WALLET_COLOR + " TEXT, " +
-                    COL_WALLET_MIN_BALANCE + " REAL DEFAULT 0" +
+                    COL_WALLET_MIN_BALANCE + " REAL DEFAULT 0, " +
+                    COL_USER_ID_FK + " INTEGER" +
                     ");";
 
     // --- BẢNG DANH MỤC (CATEGORIES) ---
@@ -72,7 +76,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_CATEGORY_ICON + " TEXT, " +
                     COL_CATEGORY_TYPE + " TEXT, " +
                     COL_CATEGORY_COLOR + " INTEGER, " +
-                    COL_CATEGORY_NOTE + " TEXT" +
+                    COL_CATEGORY_NOTE + " TEXT, " +
+                    COL_USER_ID_FK + " INTEGER" +
                     ");";
 
     // --- BẢNG GIAO DỊCH (TRANSACTIONS) ---
@@ -96,6 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_TRANS_DATE + " TEXT, " +
                     COL_TRANS_NOTE + " TEXT, " +
                     COL_TRANS_WALLET_ID + " INTEGER, " +
+                    COL_USER_ID_FK + " INTEGER, " +
                     "FOREIGN KEY(" + COL_TRANS_WALLET_ID + ") REFERENCES " + TABLE_WALLETS + "(" + COL_WALLET_ID + ")" +
                     ");";
 
@@ -117,7 +123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_BUDGET_SPENT + " REAL DEFAULT 0, " +
                     COL_BUDGET_START + " TEXT, " +
                     COL_BUDGET_END + " TEXT, " +
-                    COL_BUDGET_CATEGORIES + " TEXT" +
+                    COL_BUDGET_CATEGORIES + " TEXT, " +
+                    COL_USER_ID_FK + " INTEGER" +
                     ");";
 
     // --- BẢNG GIAO DỊCH DỰ KIẾN (PLANNED TRANSACTIONS) [MỚI] ---
@@ -142,7 +149,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_PLANNED_DUE_DATE + " TEXT, " +
                     COL_PLANNED_STATUS + " TEXT DEFAULT 'pending', " +
                     COL_PLANNED_NOTE + " TEXT, " +
-                    COL_PLANNED_WALLET_ID + " INTEGER" +
+                    COL_PLANNED_WALLET_ID + " INTEGER, " +
+                    COL_USER_ID_FK + " INTEGER" +
+                    ");";
+
+    // --- BẢNG THÔNG BÁO (NOTIFICATIONS) [MỚI] ---
+    public static final String TABLE_NOTIFICATIONS = "notifications";
+    public static final String COL_NOTIFICATION_ID = "id";
+    public static final String COL_NOTIFICATION_TITLE = "title";
+    public static final String COL_NOTIFICATION_CONTENT = "content";
+    public static final String COL_NOTIFICATION_DATE = "date";
+    public static final String COL_NOTIFICATION_IS_READ = "is_read"; // 0: chưa đọc, 1: đã đọc
+    public static final String COL_NOTIFICATION_TYPE = "type";       // system, warning, transaction, reminder
+
+    private static final String CREATE_TABLE_NOTIFICATIONS =
+            "CREATE TABLE " + TABLE_NOTIFICATIONS + " (" +
+                    COL_NOTIFICATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_NOTIFICATION_TITLE + " TEXT NOT NULL, " +
+                    COL_NOTIFICATION_CONTENT + " TEXT NOT NULL, " +
+                    COL_NOTIFICATION_DATE + " TEXT NOT NULL, " +
+                    COL_NOTIFICATION_IS_READ + " INTEGER DEFAULT 0, " +
+                    COL_NOTIFICATION_TYPE + " TEXT, " +
+                    COL_USER_ID_FK + " INTEGER" +
                     ");";
 
     public DatabaseHelper(Context context) {
@@ -157,6 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TRANSACTIONS);
         db.execSQL(CREATE_TABLE_BUDGETS);
         db.execSQL(CREATE_TABLE_PLANNED);
+        db.execSQL(CREATE_TABLE_NOTIFICATIONS);
     }
 
     @Override
@@ -182,6 +211,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_TABLE_BUDGETS);
         } catch (Exception e) {
             // Bảng đã tồn tại, bỏ qua
+        }
+
+        // Thực hiện nâng cấp từ v7 lên v8 để thêm user_id vào tất cả các bảng tài chính
+        if (oldVersion < 8) {
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_WALLETS + " ADD COLUMN " + COL_USER_ID_FK + " INTEGER DEFAULT 1");
+                db.execSQL("ALTER TABLE " + TABLE_CATEGORIES + " ADD COLUMN " + COL_USER_ID_FK + " INTEGER DEFAULT 1");
+                db.execSQL("ALTER TABLE " + TABLE_TRANSACTIONS + " ADD COLUMN " + COL_USER_ID_FK + " INTEGER DEFAULT 1");
+                db.execSQL("ALTER TABLE " + TABLE_BUDGETS + " ADD COLUMN " + COL_USER_ID_FK + " INTEGER DEFAULT 1");
+                db.execSQL("ALTER TABLE " + TABLE_PLANNED + " ADD COLUMN " + COL_USER_ID_FK + " INTEGER DEFAULT 1");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Thực hiện nâng cấp lên v9 để tạo bảng notifications
+        if (oldVersion < 9) {
+            try {
+                db.execSQL(CREATE_TABLE_NOTIFICATIONS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

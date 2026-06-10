@@ -12,6 +12,11 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.android_app.MainActivity;
 import com.example.android_app.R;
+import com.example.android_app.database.ThongBaoDAO;
+import com.example.android_app.model.ThongBao;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Lớp tiện ích để tạo và hiển thị thông báo (Notification).
@@ -72,6 +77,9 @@ public class NotificationHelper {
      */
     public static void showReminderNotification(Context context, int notifId,
                                                  String title, String content) {
+        // Tự động lưu thông báo vào cơ sở dữ liệu
+        saveNotificationToDatabase(context, notifId, title, content);
+
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notifId, intent,
@@ -127,6 +135,9 @@ public class NotificationHelper {
     // Helper nội bộ cho thông báo giao dịch
     private static void showTransactionNotification(Context context, int notifId,
                                                      String title, String content) {
+        // Tự động lưu thông báo vào cơ sở dữ liệu
+        saveNotificationToDatabase(context, notifId, title, content);
+
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notifId, intent,
@@ -145,6 +156,40 @@ public class NotificationHelper {
             NotificationManagerCompat.from(context).notify(notifId, builder.build());
         } catch (SecurityException e) {
             // Quyền POST_NOTIFICATIONS chưa được cấp (Android 13+)
+        }
+    }
+
+    /**
+     * Tự động lưu thông báo vào SQLite Database để quản lý trong Trung tâm thông báo.
+     */
+    private static void saveNotificationToDatabase(Context context, int notifId, String title, String content) {
+        try {
+            ThongBaoDAO dao = new ThongBaoDAO(context);
+            dao.open();
+
+            ThongBao tb = new ThongBao();
+            tb.setTitle(title);
+            tb.setContent(content);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+            tb.setDate(sdf.format(new Date()));
+            tb.setRead(false);
+
+            // Xác định loại thông báo
+            if (notifId == NOTIF_ID_LOW_BALANCE) {
+                tb.setType("warning");
+            } else if (notifId == NOTIF_ID_TRANSFER || notifId == NOTIF_ID_TOP_UP) {
+                tb.setType("transaction");
+            } else {
+                tb.setType("reminder");
+            }
+
+            tb.setUserId(0); // Để tự động nhận user_id từ Session SharedPreferences ở DAO
+
+            dao.addNotification(tb);
+            dao.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -45,6 +45,41 @@
                         android:textStyle="bold"/>
                 </LinearLayout>
 
+                <!-- Nút Thông báo (Quả chuông & Badge) -->
+                <FrameLayout
+                    android:id="@+id/layoutNotification"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_notification"
+                        android:tint="@color/white"
+                        android:contentDescription="Thông báo"/>
+
+                    <TextView
+                        android:id="@+id/tvNotificationBadge"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/bg_badge_red"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+                </FrameLayout>
+
                 <TextView
                     android:id="@+id/tvLabelBal"
                     android:layout_width="wrap_content"
@@ -93,7 +128,7 @@
                             android:layout_height="40dp"
                             android:background="@drawable/bg_icon_income"
                             android:padding="8dp"
-                            android:src="@android:drawable/arrow_up_float"
+                            android:src="@drawable/ic_arrow_up_green"
                             android:tint="@color/colorIncome"/>
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -116,7 +151,7 @@
                             android:layout_height="40dp"
                             android:background="@drawable/bg_icon_expense"
                             android:padding="8dp"
-                            android:src="@android:drawable/arrow_down_float"
+                            android:src="@drawable/ic_arrow_down_red"
                             android:tint="@color/colorExpense"/>
                         <LinearLayout
                             android:layout_width="wrap_content"

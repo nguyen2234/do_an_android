@@ -20,7 +20,7 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="4dp"
-            android:src="@android:drawable/ic_menu_revert"
+            android:src="@drawable/ic_arrow_back"
             android:tint="@color/white" />
 
         <TextView
@@ -78,8 +78,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:rotation="90"
-                    android:src="@android:drawable/ic_media_play"
+                    android:src="@drawable/ic_chevron_right"
                     android:tint="@color/colorTextSecondary" />
             </LinearLayout>
 
@@ -119,8 +118,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:rotation="90"
-                    android:src="@android:drawable/ic_media_play"
+                    android:src="@drawable/ic_chevron_right"
                     android:tint="@color/colorTextSecondary" />
             </LinearLayout>
 

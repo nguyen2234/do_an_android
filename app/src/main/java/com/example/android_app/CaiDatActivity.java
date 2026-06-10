@@ -44,17 +44,14 @@ public class CaiDatActivity extends AppCompatActivity {
         userDAO = new NguoiDungDAO(this);
         userDAO.open();
 
-        // Khởi tạo ActivityResultLauncher để chọn ảnh
+        // Khởi tạo ActivityResultLauncher để chọn ảnh tạm thời trong cache
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             if (uri != null && ivPreviewAvatar != null) {
                 try {
-                    // Copy ảnh vào thư mục bộ nhớ trong của ứng dụng
+                    // Copy ảnh vào thư mục cache trước
                     InputStream is = getContentResolver().openInputStream(uri);
-                    File avatarDir = new File(getFilesDir(), "avatars");
-                    if (!avatarDir.exists()) avatarDir.mkdir();
-                    
-                    File avatarFile = new File(avatarDir, "avatar_" + System.currentTimeMillis() + ".jpg");
-                    FileOutputStream fos = new FileOutputStream(avatarFile);
+                    File tempFile = new File(getCacheDir(), "temp_avatar_" + System.currentTimeMillis() + ".jpg");
+                    FileOutputStream fos = new FileOutputStream(tempFile);
                     byte[] buffer = new byte[1024];
                     int length;
                     while ((length = is.read(buffer)) > 0) {
@@ -64,8 +61,8 @@ public class CaiDatActivity extends AppCompatActivity {
                     fos.close();
                     if (is != null) is.close();
 
-                    currentSelectedAvatarPath = avatarFile.getAbsolutePath();
-                    ivPreviewAvatar.setImageURI(Uri.fromFile(avatarFile));
+                    currentSelectedAvatarPath = tempFile.getAbsolutePath();
+                    ivPreviewAvatar.setImageURI(Uri.fromFile(tempFile));
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this, "Lỗi khi tải ảnh từ thiết bị", Toast.LENGTH_SHORT).show();
@@ -78,6 +75,33 @@ public class CaiDatActivity extends AppCompatActivity {
         findViewById(R.id.btnEditProfile).setOnClickListener(v -> showEditProfileDialog());
         findViewById(R.id.btnChangePassword).setOnClickListener(v -> showChangePasswordDialog());
         findViewById(R.id.btnLogout).setOnClickListener(v -> logout());
+
+        // Xử lý action từ Intent chuyển hướng
+        String action = getIntent().getStringExtra("action");
+        if ("change_password".equals(action)) {
+            showChangePasswordDialog();
+        }
+    }
+
+    private void cleanupTempAvatar() {
+        if (currentSelectedAvatarPath != null && currentSelectedAvatarPath.contains("temp_avatar_")) {
+            try {
+                File tempFile = new File(currentSelectedAvatarPath);
+                if (tempFile.exists()) {
+                    tempFile.delete();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // Khôi phục lại đường dẫn avatar cũ
+            long userId = prefs.getLong("user_id", -1);
+            if (userId != -1) {
+                NguoiDung user = userDAO.getUserById(userId);
+                if (user != null) {
+                    currentSelectedAvatarPath = user.getAvatar();
+                }
+            }
+        }
     }
 
     private void showEditProfileDialog() {
@@ -97,6 +121,9 @@ public class CaiDatActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
+        // Tự động dọn dẹp ảnh tạm trong cache khi đóng dialog mà không lưu
+        dialog.setOnDismissListener(d -> cleanupTempAvatar());
+
         EditText etName = dialogView.findViewById(R.id.etEditName);
         EditText etEmail = dialogView.findViewById(R.id.etEditEmail);
         ivPreviewAvatar = dialogView.findViewById(R.id.ivPreviewAvatar);
@@ -110,10 +137,8 @@ public class CaiDatActivity extends AppCompatActivity {
         // Hiển thị avatar hiện tại
         if (currentSelectedAvatarPath != null && !currentSelectedAvatarPath.isEmpty()) {
             if (currentSelectedAvatarPath.startsWith("/")) {
-                // Đây là đường dẫn file tuyệt đối
                 ivPreviewAvatar.setImageBitmap(BitmapFactory.decodeFile(currentSelectedAvatarPath));
             } else {
-                // Đây là file drawable mặc định
                 int resId = getResources().getIdentifier(currentSelectedAvatarPath, "drawable", getPackageName());
                 if (resId != 0) ivPreviewAvatar.setImageResource(resId);
             }
@@ -129,7 +154,10 @@ public class CaiDatActivity extends AppCompatActivity {
         Button btnCancel = dialogView.findViewById(R.id.btnCancelEdit);
         Button btnSave = dialogView.findViewById(R.id.btnSaveEdit);
 
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        btnCancel.setOnClickListener(v -> {
+            cleanupTempAvatar();
+            dialog.dismiss();
+        });
 
         btnSave.setOnClickListener(v -> {
             String newName = etName.getText().toString().trim();
@@ -140,9 +168,53 @@ public class CaiDatActivity extends AppCompatActivity {
                 return;
             }
 
+            if (newName.length() < 4 || newName.contains(" ")) {
+                Toast.makeText(this, "Tên đăng nhập tối thiểu 4 ký tự và không chứa dấu cách", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!newEmail.isEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
+                Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Kiểm tra trùng tên đăng nhập
+            if (!newName.equals(user.getUsername()) && userDAO.checkUsernameExist(newName)) {
+                Toast.makeText(this, "Tên đăng nhập đã tồn tại, vui lòng chọn tên khác", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Di chuyển ảnh từ cache sang bộ nhớ chính thức nếu được lưu
+            if (currentSelectedAvatarPath != null && currentSelectedAvatarPath.contains("temp_avatar_")) {
+                try {
+                    File tempFile = new File(currentSelectedAvatarPath);
+                    if (tempFile.exists()) {
+                        File avatarDir = new File(getFilesDir(), "avatars");
+                        if (!avatarDir.exists()) avatarDir.mkdir();
+                        File finalFile = new File(avatarDir, "avatar_" + System.currentTimeMillis() + ".jpg");
+                        
+                        InputStream is = new java.io.FileInputStream(tempFile);
+                        FileOutputStream fos = new FileOutputStream(finalFile);
+                        byte[] buffer = new byte[1024];
+                        int length;
+                        while ((length = is.read(buffer)) > 0) {
+                            fos.write(buffer, 0, length);
+                        }
+                        fos.flush();
+                        fos.close();
+                        is.close();
+                        
+                        tempFile.delete(); // xóa ảnh tạm
+                        currentSelectedAvatarPath = finalFile.getAbsolutePath();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             user.setUsername(newName);
             user.setEmail(newEmail);
-            user.setAvatar(currentSelectedAvatarPath); // Cập nhật đường dẫn file (hoặc tên drawable)
+            user.setAvatar(currentSelectedAvatarPath);
 
             int result = userDAO.updateUser(user);
             if (result > 0) {

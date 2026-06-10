@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_input_add"
+            android:src="@drawable/ic_add"
             app:backgroundTint="@color/white"
             app:tint="@color/colorPrimary"
             app:fabSize="mini"
@@ -58,7 +58,7 @@
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@android:drawable/ic_dialog_info"
+            android:src="@drawable/ic_info"
             android:tint="@color/colorTextSecondary"
             android:alpha="0.4"
             android:contentDescription="Trống"/>

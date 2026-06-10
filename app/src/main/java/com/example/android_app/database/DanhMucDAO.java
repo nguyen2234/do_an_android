@@ -17,9 +17,11 @@ public class DanhMucDAO {
 
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
+    private Context context;
 
     public DanhMucDAO(Context context) {
         dbHelper = new DatabaseHelper(context);
+        this.context = context;
     }
 
     public void open() {
@@ -28,6 +30,13 @@ public class DanhMucDAO {
 
     public void close() {
         dbHelper.close();
+    }
+
+    // Lấy ID người dùng hiện tại từ SharedPreferences
+    private long getCurrentUserId() {
+        if (context == null) return 1;
+        android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        return prefs.getLong("user_id", 1);
     }
 
     /**
@@ -41,6 +50,7 @@ public class DanhMucDAO {
         values.put(DatabaseHelper.COL_CATEGORY_ICON, category.getIcon());
         values.put(DatabaseHelper.COL_CATEGORY_TYPE, category.getLoai());
         values.put(DatabaseHelper.COL_CATEGORY_COLOR, category.getColor());
+        values.put(DatabaseHelper.COL_USER_ID_FK, getCurrentUserId());
 
         return db.insert(DatabaseHelper.TABLE_CATEGORIES, null, values);
     }
@@ -56,8 +66,8 @@ public class DanhMucDAO {
         values.put(DatabaseHelper.COL_CATEGORY_COLOR, category.getColor());
 
         return db.update(DatabaseHelper.TABLE_CATEGORIES, values,
-                DatabaseHelper.COL_CATEGORY_ID + " = ?",
-                new String[]{String.valueOf(category.getId())});
+                DatabaseHelper.COL_CATEGORY_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(category.getId()), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -65,8 +75,8 @@ public class DanhMucDAO {
      */
     public int deleteCategory(long id) {
         return db.delete(DatabaseHelper.TABLE_CATEGORIES,
-                DatabaseHelper.COL_CATEGORY_ID + " = ?",
-                new String[]{String.valueOf(id)});
+                DatabaseHelper.COL_CATEGORY_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
     /**
@@ -77,8 +87,8 @@ public class DanhMucDAO {
     public List<DanhMuc> getCategoriesByType(String type) {
         List<DanhMuc> categories = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.TABLE_CATEGORIES, null, 
-                DatabaseHelper.COL_CATEGORY_TYPE + " = ?", 
-                new String[]{type}, null, null, null);
+                DatabaseHelper.COL_CATEGORY_TYPE + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?", 
+                new String[]{type, String.valueOf(getCurrentUserId())}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -103,7 +113,8 @@ public class DanhMucDAO {
     public List<DanhMuc> getAllCategories() {
         List<DanhMuc> categories = new ArrayList<>();
         Cursor cursor = db.query(DatabaseHelper.TABLE_CATEGORIES, null, 
-                null, null, null, null, null);
+                DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(getCurrentUserId())}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {

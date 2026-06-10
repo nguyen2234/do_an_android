@@ -131,43 +131,48 @@ public class GiaoDichDuKienFragment extends Fragment {
             dp.show();
         });
 
-        new AlertDialog.Builder(getContext())
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setView(dialogView)
-                .setPositiveButton("Thêm", (d, w) -> {
-                    String title = etTieu.getText().toString().trim();
-                    String soTienStr = etSoTien.getText().toString().trim();
-                    String ngayHan = etNgayHan.getText().toString().trim();
-
-                    if (title.isEmpty() || soTienStr.isEmpty() || ngayHan.isEmpty()) {
-                        Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    double soTien;
-                    try {
-                        soTien = Double.parseDouble(soTienStr);
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(getContext(), "Số tiền không hợp lệ", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    String type = (rgLoai.getCheckedRadioButtonId() == R.id.rbThuDuKien) ? "income" : "expense";
-                    GiaoDichDuKien item = new GiaoDichDuKien(
-                            0, title, soTien, "Khác", type, ngayHan,
-                            "pending", etGhiChu.getText().toString().trim(), 0
-                    );
-                    long id = dao.addPlanned(item);
-                    if (id > 0) {
-                        item.setId(id);
-                        dataList.add(0, item);
-                        adapter.notifyItemInserted(0);
-                        rv.smoothScrollToPosition(0);
-                        updateEmptyState();
-                        Toast.makeText(getContext(), "✅ Đã thêm khoản mới!", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setPositiveButton("Thêm", null)
                 .setNegativeButton("Hủy", null)
-                .show();
+                .create();
+
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String title = etTieu.getText().toString().trim();
+            String soTienStr = etSoTien.getText().toString().trim();
+            String ngayHan = etNgayHan.getText().toString().trim();
+
+            if (title.isEmpty() || soTienStr.isEmpty() || ngayHan.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double soTien;
+            try {
+                soTien = Double.parseDouble(soTienStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(getContext(), "Số tiền không hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String type = (rgLoai.getCheckedRadioButtonId() == R.id.rbThuDuKien) ? "income" : "expense";
+            GiaoDichDuKien item = new GiaoDichDuKien(
+                    0, title, soTien, "Khác", type, ngayHan,
+                    "pending", etGhiChu.getText().toString().trim(), 0
+            );
+            long id = dao.addPlanned(item);
+            if (id > 0) {
+                item.setId(id);
+                dataList.add(0, item);
+                adapter.notifyItemInserted(0);
+                rv.smoothScrollToPosition(0);
+                updateEmptyState();
+                Toast.makeText(getContext(), "✅ Đã thêm khoản mới!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
     }
 
     private void updateEmptyState() {

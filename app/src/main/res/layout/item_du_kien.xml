@@ -44,7 +44,7 @@
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:src="@android:drawable/ic_menu_my_calendar"
+                    android:src="@drawable/ic_calendar"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="Ngày hạn"/>
                 <TextView
@@ -97,7 +97,7 @@
                 android:id="@+id/btnXoa"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_delete"
+                android:src="@drawable/ic_delete"
                 android:tint="@color/colorExpense"
                 android:layout_marginTop="6dp"
                 android:background="?attr/selectableItemBackgroundBorderless"

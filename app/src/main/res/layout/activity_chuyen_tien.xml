@@ -1,379 +1,531 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    android:orientation="vertical">
+    android:background="@color/colorBackground">
 
-    <!-- Header Bar -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:paddingHorizontal="16dp">
+    <!-- Background Pattern (circles) -->
+    <View
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-80dp"
+        android:layout_marginEnd="-80dp"
+        android:alpha="0.06"
+        android:background="@drawable/bg_icon_primary"/>
 
-        <ImageView
-            android:id="@+id/btnBackTransfer"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="8dp"
-            android:src="@android:drawable/ic_menu_revert"
-            android:tint="@color/white" />
+    <View
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="-60dp"
+        android:layout_marginStart="-60dp"
+        android:alpha="0.05"
+        android:background="@drawable/bg_icon_primary"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Chuyển tiền"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
-    <!-- Custom Modern Sliding Tab Toggle -->
+    <!-- Main Container -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_input_bold"
-        android:orientation="horizontal"
-        android:padding="4dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tabInternal"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_card_primary"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="Ví nội bộ"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+        <!-- Header Bar -->
+        <RelativeLayout
+            android:id="@+id/headerLayoutTransfer"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:paddingHorizontal="16dp">
 
-        <TextView
-            android:id="@+id/tabBank"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="Ngân hàng"
-            android:textColor="@color/colorTextSecondary"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/btnBackTransfer"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/white"
+                android:contentDescription="Quay lại"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Chuyển tiền"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"/>
+        </RelativeLayout>
+
+        <!-- Custom Modern Sliding Tab Toggle -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input_bold"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            android:elevation="2dp">
+
+            <TextView
+                android:id="@+id/tabInternal"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_card_primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="Ví nội bộ"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabBank"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="Ngân hàng"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="24dp">
+
+                <!-- ================= INTERNAL TRANSFER CONTAINER ================= -->
+                <LinearLayout
+                    android:id="@+id/containerInternal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/colorSurface"
+                        android:layout_margin="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="24dp">
+
+                            <!-- Title Header inside Card -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_transfer_modern"
+                                    android:tint="@color/colorPrimary"
+                                    android:layout_marginEnd="8dp"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Chuyển ví nội bộ"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textStyle="bold"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"/>
+                            </LinearLayout>
+
+                            <!-- Sender Wallet Selection -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Từ ví (Nguồn tiền)"
+                                android:textColor="@color/colorTextSecondary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="54dp"
+                                android:background="@drawable/bg_input_bold"
+                                android:paddingHorizontal="16dp"
+                                android:layout_marginBottom="20dp">
+
+                                <Spinner
+                                    android:id="@+id/spinnerSenderWallet"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@null"/>
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/colorTextSecondary"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:rotation="90"/>
+                            </RelativeLayout>
+
+                            <!-- Receiver Wallet Selection -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Đến ví (Thụ hưởng)"
+                                android:textColor="@color/colorTextSecondary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="54dp"
+                                android:background="@drawable/bg_input_bold"
+                                android:paddingHorizontal="16dp"
+                                android:layout_marginBottom="20dp">
+
+                                <Spinner
+                                    android:id="@+id/spinnerReceiverWallet"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@null"/>
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/colorTextSecondary"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:rotation="90"/>
+                            </RelativeLayout>
+
+                            <!-- Amount -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                app:startIconDrawable="@drawable/ic_transfer_modern"
+                                app:startIconTint="@color/colorPrimary"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etInternalAmount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Số tiền chuyển (VND)"
+                                    android:inputType="number"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="15sp"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- Note -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                app:startIconDrawable="@drawable/ic_edit"
+                                app:startIconTint="@color/colorPrimary"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etInternalNote"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Lời nhắn / Ghi chú"
+                                    android:inputType="text"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="15sp"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Save Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnConfirmInternal"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="Chuyển khoản nội bộ"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:cornerRadius="14dp"
+                        app:elevation="4dp"/>
+
+                </LinearLayout>
+
+                <!-- ================= BANK TRANSFER CONTAINER ================= -->
+                <LinearLayout
+                    android:id="@+id/containerBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/colorSurface"
+                        android:layout_margin="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="24dp">
+
+                            <!-- Title Header inside Card -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="16dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_bank_modern"
+                                    android:tint="@color/colorPrimary"
+                                    android:layout_marginEnd="8dp"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Chuyển khoản liên ngân hàng"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textStyle="bold"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"/>
+                            </LinearLayout>
+
+                            <!-- Source Wallet selection -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nguồn tiền (Ví của bạn)"
+                                android:textColor="@color/colorTextSecondary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="54dp"
+                                android:background="@drawable/bg_input_bold"
+                                android:paddingHorizontal="16dp"
+                                android:layout_marginBottom="20dp">
+
+                                <Spinner
+                                    android:id="@+id/spinnerBankSourceWallet"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@null"/>
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/colorTextSecondary"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:rotation="90"/>
+                            </RelativeLayout>
+
+                            <!-- Beneficiary Bank Selection -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ngân hàng thụ hưởng"
+                                android:textColor="@color/colorTextSecondary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="6dp"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="54dp"
+                                android:background="@drawable/bg_input_bold"
+                                android:paddingHorizontal="16dp"
+                                android:layout_marginBottom="20dp">
+
+                                <Spinner
+                                    android:id="@+id/spinnerBeneficiaryBank"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@null"/>
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/colorTextSecondary"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:rotation="90"/>
+                            </RelativeLayout>
+
+                            <!-- Beneficiary Account Number -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                app:startIconDrawable="@drawable/ic_bank_modern"
+                                app:startIconTint="@color/colorPrimary"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBeneficiaryAccount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Số tài khoản thụ hưởng"
+                                    android:inputType="number"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="15sp"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- Beneficiary Name -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                app:startIconDrawable="@drawable/ic_person"
+                                app:startIconTint="@color/colorPrimary"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBeneficiaryName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Tên người thụ hưởng"
+                                    android:inputType="textCapCharacters"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="15sp"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- Amount -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                app:startIconDrawable="@drawable/ic_transfer_modern"
+                                app:startIconTint="@color/colorPrimary"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBankAmount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Số tiền chuyển (VND)"
+                                    android:inputType="number"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="15sp"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- Note -->
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                app:startIconDrawable="@drawable/ic_edit"
+                                app:startIconTint="@color/colorPrimary"
+                                app:boxCornerRadiusBottomEnd="12dp"
+                                app:boxCornerRadiusBottomStart="12dp"
+                                app:boxCornerRadiusTopEnd="12dp"
+                                app:boxCornerRadiusTopStart="12dp"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etBankNote"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Lời nhắn / Ghi chú"
+                                    android:inputType="text"
+                                    android:textColor="@color/colorTextPrimary"
+                                    android:textSize="15sp"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Save Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnConfirmBank"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginHorizontal="4dp"
+                        android:text="Chuyển khoản ngân hàng"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:cornerRadius="14dp"
+                        app:elevation="4dp"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:paddingBottom="24dp">
-
-            <!-- ================= INTERNAL TRANSFER CONTAINER ================= -->
-            <LinearLayout
-                android:id="@+id/containerInternal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/colorSurface">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <!-- Sender Wallet -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Từ ví (Nguồn tiền)"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <Spinner
-                            android:id="@+id/spinnerSenderWallet"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:layout_marginBottom="20dp"
-                            android:paddingHorizontal="16dp"/>
-
-                        <!-- Receiver Wallet -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Đến ví (Thụ hưởng)"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <Spinner
-                            android:id="@+id/spinnerReceiverWallet"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:layout_marginBottom="20dp"
-                            android:paddingHorizontal="16dp"/>
-
-                        <!-- Amount -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Số tiền chuyển (VND)"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <EditText
-                            android:id="@+id/etInternalAmount"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:hint="0 ₫"
-                            android:inputType="number"
-                            android:paddingHorizontal="16dp"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginBottom="20dp"/>
-
-                        <!-- Note -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Lời nhắn / Ghi chú"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <EditText
-                            android:id="@+id/etInternalNote"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:hint="Chuyển tiền nội bộ"
-                            android:inputType="text"
-                            android:paddingHorizontal="16dp"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="16sp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Save Button -->
-                <Button
-                    android:id="@+id/btnConfirmInternal"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="24dp"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:text="Chuyển khoản nội bộ"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:background="@drawable/bg_button_rounded"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <!-- ================= BANK TRANSFER CONTAINER ================= -->
-            <LinearLayout
-                android:id="@+id/containerBank"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/colorSurface">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <!-- Source Wallet -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nguồn tiền (Ví của bạn)"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <Spinner
-                            android:id="@+id/spinnerBankSourceWallet"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:layout_marginBottom="20dp"
-                            android:paddingHorizontal="16dp"/>
-
-                        <!-- Beneficiary Bank -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Ngân hàng thụ hưởng"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <Spinner
-                            android:id="@+id/spinnerBeneficiaryBank"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:layout_marginBottom="20dp"
-                            android:paddingHorizontal="16dp"/>
-
-                        <!-- Beneficiary Account Number -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Số tài khoản thụ hưởng"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <EditText
-                            android:id="@+id/etBeneficiaryAccount"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:hint="Nhập số tài khoản"
-                            android:inputType="number"
-                            android:paddingHorizontal="16dp"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginBottom="20dp"/>
-
-                        <!-- Beneficiary Name -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tên người thụ hưởng"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <EditText
-                            android:id="@+id/etBeneficiaryName"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:hint="Nhập tên người nhận"
-                            android:inputType="textCapCharacters"
-                            android:paddingHorizontal="16dp"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginBottom="20dp"/>
-
-                        <!-- Amount -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Số tiền chuyển (VND)"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <EditText
-                            android:id="@+id/etBankAmount"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:hint="0 ₫"
-                            android:inputType="number"
-                            android:paddingHorizontal="16dp"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginBottom="20dp"/>
-
-                        <!-- Note -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Lời nhắn / Ghi chú"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="8dp"/>
-
-                        <EditText
-                            android:id="@+id/etBankNote"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:background="@drawable/bg_input_bold"
-                            android:hint="Chuyen tien nhanh"
-                            android:inputType="text"
-                            android:paddingHorizontal="16dp"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="16sp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Save Button -->
-                <Button
-                    android:id="@+id/btnConfirmBank"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="24dp"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:text="Chuyển khoản ngân hàng"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:background="@drawable/bg_button_rounded"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </ScrollView>
-
-</LinearLayout>
+</RelativeLayout>

@@ -38,7 +38,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_search"
+                android:src="@drawable/ic_search"
                 android:tint="@color/colorTextSecondary" />
 
             <EditText
@@ -96,7 +96,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/bg_card_primary"
                 android:padding="8dp"
-                android:src="@android:drawable/ic_menu_sort_by_size"
+                android:src="@drawable/ic_category"
                 android:tint="@color/white" />
         </LinearLayout>
 
@@ -179,7 +179,7 @@
                             android:layout_height="36dp"
                             android:background="@drawable/bg_icon_income"
                             android:padding="8dp"
-                            android:src="@android:drawable/arrow_up_float"
+                            android:src="@drawable/ic_arrow_up_green"
                             android:tint="@color/colorIncome"/>
 
                         <TextView
@@ -224,7 +224,7 @@
                             android:layout_height="36dp"
                             android:background="@drawable/bg_icon_expense"
                             android:padding="8dp"
-                            android:src="@android:drawable/arrow_down_float"
+                            android:src="@drawable/ic_arrow_down_red"
                             android:tint="@color/colorExpense"/>
 
                         <TextView

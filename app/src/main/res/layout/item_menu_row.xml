@@ -10,7 +10,7 @@
         android:id="@+id/ivMenuIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@android:drawable/ic_menu_manage"
+        android:src="@drawable/ic_settings"
         android:tint="@color/colorPrimary"/>
 
     <TextView
@@ -26,7 +26,7 @@
     <ImageView
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:src="@android:drawable/arrow_up_float"
+        android:src="@drawable/ic_chevron_right"
         android:tint="@color/colorTextSecondary"/>
 
 </LinearLayout>
