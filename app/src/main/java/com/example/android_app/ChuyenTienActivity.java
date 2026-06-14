@@ -19,6 +19,7 @@ import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.database.ViTienDAO;
 import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.ViTien;
+import com.example.android_app.utils.NotificationHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -210,6 +211,12 @@ public class ChuyenTienActivity extends AppCompatActivity {
             GiaoDich incomeTrans = new GiaoDich(0, "Nhận tiền nội bộ", amount, "Chuyển tiền", "income", dateStr, "Nhận từ ví " + senderWallet.getName() + ": " + note, receiverWallet.getId());
             transactionDAO.addTransaction(incomeTrans);
 
+            // Gửi thông báo chuyển tiền và kiểm tra cảnh báo số dư thấp của ví gửi
+            NotificationHelper.showTransferNotification(this, senderWallet.getName(), receiverWallet.getName(), amount);
+            if (newSenderBalance < senderWallet.getMinBalance() && senderWallet.getMinBalance() > 0) {
+                NotificationHelper.showLowBalanceNotification(this, senderWallet.getName(), newSenderBalance);
+            }
+
             Toast.makeText(this, "Chuyển tiền nội bộ thành công!", Toast.LENGTH_SHORT).show();
 
             // Redirect to KetQuaGiaoDichActivity
@@ -277,6 +284,12 @@ public class ChuyenTienActivity extends AppCompatActivity {
             // Log single expense transaction representing the bank transfer
             GiaoDich bankTrans = new GiaoDich(0, "CK Ngân hàng (" + bank + ")", amount, "Chuyển tiền", "expense", dateStr, fullNote, sourceWallet.getId());
             transactionDAO.addTransaction(bankTrans);
+
+            // Gửi thông báo chuyển tiền và kiểm tra cảnh báo số dư thấp của ví gửi
+            NotificationHelper.showTransferNotification(this, sourceWallet.getName(), beneficiaryName + " (" + bank + ")", amount);
+            if (newBalance < sourceWallet.getMinBalance() && sourceWallet.getMinBalance() > 0) {
+                NotificationHelper.showLowBalanceNotification(this, sourceWallet.getName(), newBalance);
+            }
 
             Toast.makeText(this, "Chuyển khoản liên ngân hàng thành công!", Toast.LENGTH_SHORT).show();
 

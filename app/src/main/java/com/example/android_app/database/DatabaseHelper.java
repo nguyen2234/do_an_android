@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // Khóa ngoại trỏ tới người dùng
     public static final String COL_USER_ID_FK = "user_id";
@@ -244,6 +244,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        // Thực hiện nâng cấp lên v11 (hệ thống danh mục chung mới)
+        if (oldVersion < 11) {
+            // Không thay đổi cấu trúc bảng để duy trì tương thích dữ liệu cũ.
+            // Danh mục chung sẽ sử dụng type = 'general' hoặc kế thừa dữ liệu cũ.
         }
     }
 }

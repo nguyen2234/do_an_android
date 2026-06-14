@@ -22,6 +22,18 @@ public class DanhMuc {
         this.color = color;
     }
 
+    /**
+     * Constructor cho danh mục chung (không phân biệt thu/chi).
+     * Mặc định trường type sẽ là "general".
+     */
+    public DanhMuc(long id, String name, String icon, int color) {
+        this.id = id;
+        this.name = name;
+        this.icon = icon;
+        this.type = "general";
+        this.color = color;
+    }
+
     // Các hàm Getter và Setter (Lấy và Gán giá trị)
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }

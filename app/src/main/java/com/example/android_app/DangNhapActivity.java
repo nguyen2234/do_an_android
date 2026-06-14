@@ -60,7 +60,22 @@ public class DangNhapActivity extends AppCompatActivity {
             editor.apply();
 
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(DangNhapActivity.this, MainActivity.class));
+
+            /*
+             * KIỂM TRA ONBOARDING:
+             * - Nếu "isOnboardingDone" chưa được set (lần đầu đăng nhập sau khi cài đặt / reset dữ liệu)
+             *   → Điều hướng sang SetupCategoryActivity (Đọc hướng dẫn tạo DM + Ví)
+             * - Nếu "isOnboardingDone" = true (người dùng cũ)
+             *   → Vào thẳng MainActivity
+             */
+            boolean onboardingDone = prefs.getBoolean("isOnboardingDone", false);
+            if (!onboardingDone) {
+                // Lần đầu → bắt đầu Onboarding
+                startActivity(new Intent(this, SetupCategoryActivity.class));
+            } else {
+                // Người dùng cũ → vào thẳng Main
+                startActivity(new Intent(this, MainActivity.class));
+            }
             finish();
         } else {
             Toast.makeText(this, "Tên đăng nhập hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();

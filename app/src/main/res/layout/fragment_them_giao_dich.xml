@@ -119,22 +119,29 @@
                         android:textColorHint="@color/colorTextHint"
                         android:textSize="16sp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/category"
-                        android:textColor="@color/colorTextSecondary"
-                        android:textSize="12sp"/>
-
-                    <Spinner
-                        android:id="@+id/spinnerCategory"
+                    <LinearLayout
+                        android:id="@+id/layoutCategoryInput"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="6dp"
-                        android:background="@drawable/bg_input"
-                        android:paddingHorizontal="16dp"
-                        android:spinnerMode="dropdown"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/category"
+                            android:textColor="@color/colorTextSecondary"
+                            android:textSize="12sp"/>
+
+                        <Spinner
+                            android:id="@+id/spinnerCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:layout_marginTop="6dp"
+                            android:background="@drawable/bg_input"
+                            android:paddingHorizontal="16dp"
+                            android:spinnerMode="dropdown"/>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -153,40 +160,48 @@
                         android:paddingHorizontal="16dp"
                         android:spinnerMode="dropdown"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/date"
-                        android:textColor="@color/colorTextSecondary"
-                        android:textSize="12sp"/>
-
-                    <RelativeLayout
-                        android:id="@+id/btnDate"
+                    <LinearLayout
+                        android:id="@+id/layoutDateInput"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="6dp"
-                        android:background="@drawable/bg_input"
-                        android:paddingHorizontal="16dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/tvNgayThang"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentStart="true"
-                            android:text="Hôm nay"
-                            android:textColor="@color/colorTextPrimary"
-                            android:textSize="14sp"/>
+                            android:layout_marginTop="16dp"
+                            android:text="@string/date"
+                            android:textColor="@color/colorTextSecondary"
+                            android:textSize="12sp"/>
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentEnd="true"
-                            android:src="@drawable/ic_calendar"
-                            android:tint="@color/colorPrimary"/>
-                    </RelativeLayout>
+                        <RelativeLayout
+                            android:id="@+id/btnDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:layout_marginTop="6dp"
+                            android:background="@drawable/bg_input"
+                            android:paddingHorizontal="16dp">
+
+                            <TextView
+                                android:id="@+id/tvNgayThang"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentStart="true"
+                                android:text="Hôm nay"
+                                android:textColor="@color/colorTextPrimary"
+                                android:textSize="14sp"/>
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/ic_calendar"
+                                android:tint="@color/colorPrimary"/>
+                        </RelativeLayout>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -213,27 +228,6 @@
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
-            <!-- DanhMuc Quick Select -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Chọn nhanh danh mục"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="15sp"
-                android:textStyle="bold"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCategories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginHorizontal="16dp"
-                android:orientation="horizontal"
-                android:nestedScrollingEnabled="false"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLuu"

@@ -73,9 +73,11 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHo
             holder.viewIconBg.setBackgroundResource(R.drawable.bg_badge_red);
             holder.viewIconBg.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorExpenseLight));
         } else if ("transaction".equalsIgnoreCase(type)) {
-            // Xem tiêu đề có chứa chữ Nạp tiền không để chọn icon phù hợp
+            // Xem tiêu đề có chứa chữ Nạp tiền hoặc Chi tiêu không để chọn icon phù hợp
             if (tb.getTitle().contains("Nạp")) {
                 holder.imgIcon.setImageResource(R.drawable.ic_topup_modern);
+            } else if (tb.getTitle().contains("Chi")) {
+                holder.imgIcon.setImageResource(R.drawable.ic_expense_modern);
             } else {
                 holder.imgIcon.setImageResource(R.drawable.ic_transfer_modern);
             }

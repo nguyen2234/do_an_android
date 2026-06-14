@@ -121,7 +121,8 @@ public class NapTienActivity extends AppCompatActivity {
         double newBalance = selectedWallet.getBalance() + soTien;
         walletDAO.updateBalance(selectedWallet.getId(), newBalance);
 
-        // Ghi nhận lịch sử giao dịch
+        // Ghi nhận lịch sử giao dịch. Tự động lấy ngày/giờ hiện tại của hệ thống (timestamp)
+        // thay vì yêu cầu người dùng chọn thủ công để đơn giản hóa giao diện nạp tiền.
         String date = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
         String note = etGhiChu.getText().toString().trim();
         GiaoDich giaoDich = new GiaoDich(

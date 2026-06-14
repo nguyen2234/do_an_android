@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.widget.LinearLayout;
 
 public class TrangChuFragment extends Fragment {
 
@@ -56,18 +59,97 @@ public class TrangChuFragment extends Fragment {
         budgetDAO.open();
         notificationDAO.open();
 
+        // Nạp dữ liệu lần đầu
+        loadHomeData();
+
+        // Ánh xạ nút Thông báo
+        View layoutNotification = view.findViewById(R.id.layoutNotification);
+        tvNotificationBadge = view.findViewById(R.id.tvNotificationBadge);
+
+        if (layoutNotification != null) {
+            layoutNotification.setOnClickListener(v -> {
+                startActivity(new Intent(getContext(), ThongBaoActivity.class));
+            });
+        }
+
+        // Nút Nạp tiền
+        View cardNapTien = view.findViewById(R.id.cardNapTien);
+        if (cardNapTien != null) {
+            cardNapTien.setOnClickListener(v ->
+                    startActivity(new Intent(getContext(), NapTienActivity.class)));
+        }
+
+        // Nút Chuyển tiền
+        View cardChuyenTien = view.findViewById(R.id.cardChuyenTien);
+        if (cardChuyenTien != null) {
+            cardChuyenTien.setOnClickListener(v ->
+                    startActivity(new Intent(getContext(), ChuyenTienActivity.class)));
+        }
+
+        // Nút xem khoản đến hạn
+        View tvXemDuKien = view.findViewById(R.id.tvXemDuKien);
+        if (tvXemDuKien != null) {
+            tvXemDuKien.setOnClickListener(v -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.fragmentContainer, new GiaoDichDuKienFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Cập nhật số lượng thông báo chưa đọc khi quay lại màn hình
+        updateNotificationBadge();
+        // Cập nhật lại dữ liệu màn hình chính (số dư, giao dịch, ngân sách...)
+        loadHomeData();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (transactionDAO != null) transactionDAO.close();
+        if (budgetDAO != null) budgetDAO.close();
+        if (notificationDAO != null) notificationDAO.close();
+    }
+
+    private void updateNotificationBadge() {
+        if (tvNotificationBadge == null || notificationDAO == null) return;
+        try {
+            int unreadCount = notificationDAO.getUnreadCount();
+            if (unreadCount > 0) {
+                if (unreadCount > 9) {
+                    tvNotificationBadge.setText("9+");
+                } else {
+                    tvNotificationBadge.setText(String.valueOf(unreadCount));
+                }
+                tvNotificationBadge.setVisibility(View.VISIBLE);
+            } else {
+                tvNotificationBadge.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadHomeData() {
+        View view = getView();
+        if (view == null) return;
+
         TextView tvTotalBalance = view.findViewById(R.id.tvTongSoDu);
         TextView tvTongThuNhap = view.findViewById(R.id.tvThuNhap);
         TextView tvTongChiTieu = view.findViewById(R.id.tvChiTieu);
         TextView tvUserName = view.findViewById(R.id.tvTenNguoiDung);
         RecyclerView rvTransactions = view.findViewById(R.id.rvGiaoDich);
 
-        TextView tvBudgetUsedHome = view.findViewById(R.id.tvBudgetUsedHome);
-        TextView tvBudgetTotalHome = view.findViewById(R.id.tvBudgetTotalHome);
-        TextView tvBudgetStatusHome = view.findViewById(R.id.tvBudgetStatusHome);
-        ProgressBar pbBudgetHome = view.findViewById(R.id.pbBudgetHome);
+        LinearLayout layoutBudgetListHome = view.findViewById(R.id.layoutBudgetListHome);
+        TextView tvNoBudgetHome = view.findViewById(R.id.tvNoBudgetHome);
 
-        tinhToanNganSachThang(tvBudgetUsedHome, tvBudgetTotalHome, tvBudgetStatusHome, pbBudgetHome);
+        tinhToanNganSachThang(layoutBudgetListHome, tvNoBudgetHome);
 
         // Thiết lập RecyclerView
         if (rvTransactions != null) {
@@ -113,88 +195,18 @@ public class TrangChuFragment extends Fragment {
             }
             tvUserName.setText(displayName);
         }
-
-        // Ánh xạ nút Thông báo
-        View layoutNotification = view.findViewById(R.id.layoutNotification);
-        tvNotificationBadge = view.findViewById(R.id.tvNotificationBadge);
-
-        if (layoutNotification != null) {
-            layoutNotification.setOnClickListener(v -> {
-                startActivity(new Intent(getContext(), ThongBaoActivity.class));
-            });
-        }
-
-        // Nút Nạp tiền
-        View cardNapTien = view.findViewById(R.id.cardNapTien);
-        if (cardNapTien != null) {
-            cardNapTien.setOnClickListener(v ->
-                    startActivity(new Intent(getContext(), NapTienActivity.class)));
-        }
-
-        // Nút Chuyển tiền
-        View cardChuyenTien = view.findViewById(R.id.cardChuyenTien);
-        if (cardChuyenTien != null) {
-            cardChuyenTien.setOnClickListener(v ->
-                    startActivity(new Intent(getContext(), ChuyenTienActivity.class)));
-        }
-
-        // Nút xem khoản đến hạn
-        View tvXemDuKien = view.findViewById(R.id.tvXemDuKien);
-        if (tvXemDuKien != null) {
-            tvXemDuKien.setOnClickListener(v -> {
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                        .replace(R.id.fragmentContainer, new GiaoDichDuKienFragment())
-                        .addToBackStack(null)
-                        .commit();
-            });
-        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Cập nhật số lượng thông báo chưa đọc khi quay lại màn hình
-        updateNotificationBadge();
-    }
+    private void tinhToanNganSachThang(LinearLayout layoutBudgetList, TextView tvNoBudget) {
+        if (layoutBudgetList == null || tvNoBudget == null) return;
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (transactionDAO != null) transactionDAO.close();
-        if (budgetDAO != null) budgetDAO.close();
-        if (notificationDAO != null) notificationDAO.close();
-    }
-
-    private void updateNotificationBadge() {
-        if (tvNotificationBadge == null || notificationDAO == null) return;
-        try {
-            int unreadCount = notificationDAO.getUnreadCount();
-            if (unreadCount > 0) {
-                if (unreadCount > 9) {
-                    tvNotificationBadge.setText("9+");
-                } else {
-                    tvNotificationBadge.setText(String.valueOf(unreadCount));
-                }
-                tvNotificationBadge.setVisibility(View.VISIBLE);
-            } else {
-                tvNotificationBadge.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void tinhToanNganSachThang(TextView tvUsed, TextView tvTotal, TextView tvStatus, ProgressBar pb) {
-        if (tvUsed == null || tvTotal == null || tvStatus == null || pb == null) return;
-
-        double totalAmount = 0;
-        double totalSpent = 0;
+        layoutBudgetList.removeAllViews();
+        List<NganSach> activeBudgets = new ArrayList<>();
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
-            Date today = new Date();
+            // Loại bỏ giờ/phút/giây để so sánh chính xác mốc ngày bắt đầu và ngày kết thúc
+            Date today = sdf.parse(sdf.format(new Date()));
 
             List<NganSach> list = budgetDAO.getAllBudgets();
             for (NganSach b : list) {
@@ -202,25 +214,75 @@ public class TrangChuFragment extends Fragment {
                 Date end = sdf.parse(b.getEndDate());
 
                 if (!today.before(start) && !today.after(end)) {
-                    totalAmount += b.getAmount();
-                    totalSpent += b.getSpentAmount();
+                    activeBudgets.add(b);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        tvUsed.setText(dinhDangTien(totalSpent) + " ₫");
-        tvTotal.setText(dinhDangTien(totalAmount) + " ₫");
+        if (activeBudgets.isEmpty()) {
+            tvNoBudget.setVisibility(View.VISIBLE);
+            layoutBudgetList.setVisibility(View.GONE);
+        } else {
+            tvNoBudget.setVisibility(View.GONE);
+            layoutBudgetList.setVisibility(View.VISIBLE);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            for (int i = 0; i < activeBudgets.size(); i++) {
+                NganSach b = activeBudgets.get(i);
+                View itemView = inflater.inflate(R.layout.item_home_budget, layoutBudgetList, false);
 
-        int progress = 0;
-        if (totalAmount > 0) {
-            progress = (int) ((totalSpent / totalAmount) * 100);
+                TextView tvBudgetName = itemView.findViewById(R.id.tvBudgetName);
+                TextView tvBudgetLimit = itemView.findViewById(R.id.tvBudgetLimit);
+                ProgressBar pbBudget = itemView.findViewById(R.id.pbBudget);
+                TextView tvBudgetPercent = itemView.findViewById(R.id.tvBudgetPercent);
+
+                if (tvBudgetName != null) {
+                    tvBudgetName.setText(b.getName());
+                }
+                if (tvBudgetLimit != null) {
+                    tvBudgetLimit.setText("Đã chi " + dinhDangTien(b.getSpentAmount()) + " ₫ / " + dinhDangTien(b.getAmount()) + " ₫");
+                }
+
+                int progress = 0;
+                if (b.getAmount() > 0) {
+                    progress = (int) ((b.getSpentAmount() / b.getAmount()) * 100);
+                }
+
+                if (pbBudget != null) {
+                    pbBudget.setProgress(Math.min(progress, 100));
+                    if (progress >= 100) {
+                        pbBudget.setProgressTintList(ColorStateList.valueOf(Color.RED));
+                    } else {
+                        pbBudget.setProgressTintList(null);
+                    }
+                }
+
+                if (tvBudgetPercent != null) {
+                    tvBudgetPercent.setText(progress + "%");
+                    if (progress >= 100) {
+                        tvBudgetPercent.setTextColor(Color.RED);
+                    } else {
+                        tvBudgetPercent.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    }
+                }
+
+                layoutBudgetList.addView(itemView);
+
+                // Thêm đường kẻ phân cách nếu chưa phải phần tử cuối
+                if (i < activeBudgets.size() - 1) {
+                    View divider = new View(getContext());
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            1
+                    );
+                    lp.setMargins(0, 4, 0, 4);
+                    divider.setLayoutParams(lp);
+                    divider.setBackgroundColor(getResources().getColor(R.color.colorDivider));
+                    layoutBudgetList.addView(divider);
+                }
+            }
         }
-        if (progress > 100) progress = 100;
-        pb.setProgress(progress);
-
-        tvStatus.setText("Đã dùng " + progress + "% ngân sách");
     }
 
     private String dinhDangTien(double amount) {

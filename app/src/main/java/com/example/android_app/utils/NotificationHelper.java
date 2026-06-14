@@ -33,6 +33,7 @@ public class NotificationHelper {
     public static final int NOTIF_ID_TRANSFER = 2001;
     public static final int NOTIF_ID_TOP_UP = 2002;
     public static final int NOTIF_ID_LOW_BALANCE = 3001;
+    public static final int NOTIF_ID_EXPENSE = 2003;
 
     /**
      * Khởi tạo tất cả NotificationChannel (gọi một lần khi app khởi động).
@@ -112,6 +113,16 @@ public class NotificationHelper {
     }
 
     /**
+     * Hiển thị thông báo khi chi tiêu thành công.
+     */
+    public static void showExpenseNotification(Context context, String walletName, double amount, String category) {
+        String amountStr = String.format("%,.0f", amount).replace(",", ".") + " ₫";
+        showTransactionNotification(context, NOTIF_ID_EXPENSE,
+                "Chi tiêu thành công",
+                "Đã chi " + amountStr + " từ ví " + walletName + " cho \"" + category + "\"");
+    }
+
+    /**
      * Hiển thị thông báo khi chuyển tiền thành công.
      */
     public static void showTransferNotification(Context context, String fromWallet,
@@ -178,7 +189,7 @@ public class NotificationHelper {
             // Xác định loại thông báo
             if (notifId == NOTIF_ID_LOW_BALANCE) {
                 tb.setType("warning");
-            } else if (notifId == NOTIF_ID_TRANSFER || notifId == NOTIF_ID_TOP_UP) {
+            } else if (notifId == NOTIF_ID_TRANSFER || notifId == NOTIF_ID_TOP_UP || notifId == NOTIF_ID_EXPENSE) {
                 tb.setType("transaction");
             } else {
                 tb.setType("reminder");
