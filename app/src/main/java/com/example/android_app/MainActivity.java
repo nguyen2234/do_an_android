@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigation.setSelectedItemId(R.id.nav_home);
         }
 
-        bottomNavigation.setOnItemSelectedListener(item -> {
+            bottomNavigation.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) {
                 loadFragment(new TrangChuFragment());
