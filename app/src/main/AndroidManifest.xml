@@ -89,6 +89,18 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
+        <!-- Setup Category (Onboarding 1) -->
+        <activity
+            android:name=".SetupCategoryActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Setup Wallet (Onboarding 2) -->
+        <activity
+            android:name=".SetupWalletActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
     </application>
 
 </manifest>

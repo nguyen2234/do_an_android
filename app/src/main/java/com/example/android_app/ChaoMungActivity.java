@@ -25,7 +25,12 @@ public class ChaoMungActivity extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             long userId = prefs.getLong("user_id", -1);
             if (userId != -1) {
-                startActivity(new Intent(ChaoMungActivity.this, MainActivity.class));
+                boolean onboardingDone = prefs.getBoolean("isOnboardingDone", false);
+                if (!onboardingDone) {
+                    startActivity(new Intent(ChaoMungActivity.this, SetupCategoryActivity.class));
+                } else {
+                    startActivity(new Intent(ChaoMungActivity.this, MainActivity.class));
+                }
             } else {
                 startActivity(new Intent(ChaoMungActivity.this, DangNhapActivity.class));
             }

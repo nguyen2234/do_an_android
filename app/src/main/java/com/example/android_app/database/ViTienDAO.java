@@ -174,8 +174,28 @@ public class ViTienDAO {
     public int updateBalance(long walletId, double newBalance) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_WALLET_BALANCE, newBalance);
-        return db.update(DatabaseHelper.TABLE_WALLETS, values, 
-                DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?", 
+        return db.update(DatabaseHelper.TABLE_WALLETS, values,
+                DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
                 new String[]{String.valueOf(walletId), String.valueOf(getCurrentUserId())});
     }
+
+    /**
+     * Lấy số lượng ví hiện có của người dùng.
+     * Dùng trong Onboarding để kiểm tra điều kiện enable nút "Hoàn thành".
+     * @return Số lượng ví (>= 0)
+     */
+    public int getWalletCount() {
+        Cursor cursor = db.rawQuery(
+                "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_WALLETS +
+                " WHERE " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                new String[]{String.valueOf(getCurrentUserId())});
+        int count = 0;
+        if (cursor != null && cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+            cursor.close();
+        }
+        return count;
+    }
 }
+
+

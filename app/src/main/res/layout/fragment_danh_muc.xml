@@ -25,56 +25,12 @@
             android:textStyle="bold"/>
     </RelativeLayout>
 
-    <!-- Filters -->
-    <LinearLayout
-        android:id="@+id/llFilters"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/headerCategory"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="12dp">
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleGroupType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            app:checkedButton="@+id/btnFilterAll">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFilterAll"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Tất cả"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFilterExpense"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Chi"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFilterIncome"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Thu"/>
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-    </LinearLayout>
-
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/llFilters"
+        android:layout_below="@id/headerCategory"
         android:layout_marginTop="12dp"
         android:clipToPadding="false"
         android:paddingBottom="80dp"/>

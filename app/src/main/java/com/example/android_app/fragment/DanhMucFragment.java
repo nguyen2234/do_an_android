@@ -34,10 +34,7 @@ public class DanhMucFragment extends Fragment {
     private RecyclerView rvCategories;
     private DanhMucAdapter adapter;
     private DanhMucDAO categoryDAO;
-    private MaterialButtonToggleGroup toggleGroupType;
     private FloatingActionButton fabAddCategory;
-
-    private String currentFilter = "all"; // all, expense, income
 
     @Nullable
     @Override
@@ -51,7 +48,6 @@ public class DanhMucFragment extends Fragment {
 
         rvCategories = view.findViewById(R.id.rvCategories);
         rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
-        toggleGroupType = view.findViewById(R.id.toggleGroupType);
         fabAddCategory = view.findViewById(R.id.fabAddCategory);
 
         categoryDAO = new DanhMucDAO(getContext());
@@ -59,37 +55,17 @@ public class DanhMucFragment extends Fragment {
 
         loadCategories();
 
-        toggleGroupType.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                if (checkedId == R.id.btnFilterAll) {
-                    currentFilter = "all";
-                } else if (checkedId == R.id.btnFilterExpense) {
-                    currentFilter = "expense";
-                } else if (checkedId == R.id.btnFilterIncome) {
-                    currentFilter = "income";
-                }
-                loadCategories();
-            }
-        });
-
         fabAddCategory.setOnClickListener(v -> showCategoryDialog(null));
     }
 
     private void loadCategories() {
-        List<DanhMuc> list;
-        if (currentFilter.equals("expense")) {
-            list = categoryDAO.getCategoriesByType("expense");
-        } else if (currentFilter.equals("income")) {
-            list = categoryDAO.getCategoriesByType("income");
-        } else {
-            list = categoryDAO.getAllCategories();
-        }
+        List<DanhMuc> list = categoryDAO.getAllCategories();
 
-        // Thêm danh mục mặc định nếu chưa có (chỉ check khi all)
-        if (currentFilter.equals("all") && list.isEmpty()) {
-            categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "expense", Color.parseColor("#E74C3C")));
-            categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "expense", Color.parseColor("#3498DB")));
-            categoryDAO.addCategory(new DanhMuc(0, "Lương", "ic_salary", "income", Color.parseColor("#2ECC71")));
+        // Thêm danh mục mặc định nếu chưa có
+        if (list.isEmpty()) {
+            categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "general", Color.parseColor("#E74C3C")));
+            categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "general", Color.parseColor("#3498DB")));
+            categoryDAO.addCategory(new DanhMuc(0, "Lương", "ic_salary", "general", Color.parseColor("#2ECC71")));
             list = categoryDAO.getAllCategories();
         }
 
@@ -128,9 +104,6 @@ public class DanhMucFragment extends Fragment {
 
         TextView tvTitle = dialogView.findViewById(R.id.tvDialogTitle);
         EditText etName = dialogView.findViewById(R.id.etCategoryName);
-        RadioGroup rgType = dialogView.findViewById(R.id.rgCategoryType);
-        RadioButton rbExpense = dialogView.findViewById(R.id.rbExpense);
-        RadioButton rbIncome = dialogView.findViewById(R.id.rbIncome);
         Button btnCancel = dialogView.findViewById(R.id.btnCancelCategory);
         Button btnSave = dialogView.findViewById(R.id.btnSaveCategory);
 
@@ -161,11 +134,6 @@ public class DanhMucFragment extends Fragment {
         if (existingCategory != null) {
             tvTitle.setText("Sửa Danh mục");
             etName.setText(existingCategory.getName());
-            if (existingCategory.getLoai().equals("income")) {
-                rbIncome.setChecked(true);
-            } else {
-                rbExpense.setChecked(true);
-            }
             selectedColor[0] = existingCategory.getColor();
         }
 
@@ -178,7 +146,7 @@ public class DanhMucFragment extends Fragment {
                 return;
             }
 
-            String type = rbExpense.isChecked() ? "expense" : "income";
+            String type = "general";
 
             if (existingCategory == null) {
                 DanhMuc newCat = new DanhMuc(0, name, "ic_menu_sort_by_size", type, selectedColor[0]);

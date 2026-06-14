@@ -39,6 +39,7 @@ public class ThemGiaoDichFragment extends Fragment {
     private TextView btnExpenseTab, btnIncomeTab, tvNgayThang, tvAmountDisplay;
     private EditText etSoTien, etGhiChu;
     private Spinner spinnerCategory, spinnerWallet;
+    private View layoutCategoryInput;
     private Calendar selectedDate = Calendar.getInstance();
 
     private GiaoDichDAO transactionDAO;
@@ -76,6 +77,7 @@ public class ThemGiaoDichFragment extends Fragment {
         etGhiChu = view.findViewById(R.id.etGhiChu);
         spinnerCategory = view.findViewById(R.id.spinnerCategory);
         spinnerWallet = view.findViewById(R.id.spinnerWallet);
+        layoutCategoryInput = view.findViewById(R.id.layoutCategoryInput);
 
         // Set current date
         updateDateDisplay();
@@ -121,30 +123,30 @@ public class ThemGiaoDichFragment extends Fragment {
             btnExpenseTab.setTextColor(Color.WHITE);
             btnIncomeTab.setBackgroundResource(android.R.color.transparent);
             btnIncomeTab.setTextColor(Color.parseColor("#634832"));
+            if (layoutCategoryInput != null) {
+                layoutCategoryInput.setVisibility(View.VISIBLE);
+            }
         } else {
             btnIncomeTab.setBackgroundResource(R.drawable.bg_card_primary);
             btnIncomeTab.setTextColor(Color.WHITE);
             btnExpenseTab.setBackgroundResource(android.R.color.transparent);
             btnExpenseTab.setTextColor(Color.parseColor("#634832"));
+            if (layoutCategoryInput != null) {
+                layoutCategoryInput.setVisibility(View.GONE);
+            }
         }
         setupCategorySpinner();
     }
 
     private void setupCategorySpinner() {
-        String type = isExpense ? "expense" : "income";
-        List<DanhMuc> categories = categoryDAO.getCategoriesByType(type);
+        List<DanhMuc> categories = categoryDAO.getAllCategories();
         List<String> categoryNames = new ArrayList<>();
         
         if (categories.isEmpty()) {
-            if (isExpense) {
-                categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "expense", Color.parseColor("#E74C3C")));
-                categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "expense", Color.parseColor("#3498DB")));
-                categoryDAO.addCategory(new DanhMuc(0, "Khác", "ic_other", "expense", Color.parseColor("#95A5A6")));
-            } else {
-                categoryDAO.addCategory(new DanhMuc(0, "Lương", "ic_salary", "income", Color.parseColor("#2ECC71")));
-                categoryDAO.addCategory(new DanhMuc(0, "Khác", "ic_other", "income", Color.parseColor("#95A5A6")));
-            }
-            categories = categoryDAO.getCategoriesByType(type);
+            categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "general", Color.parseColor("#E74C3C")));
+            categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "general", Color.parseColor("#3498DB")));
+            categoryDAO.addCategory(new DanhMuc(0, "Lương", "ic_salary", "general", Color.parseColor("#2ECC71")));
+            categories = categoryDAO.getAllCategories();
         }
 
         for (DanhMuc c : categories) {
@@ -204,14 +206,29 @@ public class ThemGiaoDichFragment extends Fragment {
         }
 
         double amount = Double.parseDouble(amountStr);
-        String category = spinnerCategory.getSelectedItem().toString();
+        String category = isExpense ? (spinnerCategory.getSelectedItem() != null ? spinnerCategory.getSelectedItem().toString() : "Chi tiêu") : "Nạp tiền";
         String note = etGhiChu.getText().toString();
-        String date = tvNgayThang.getText().toString();
+        // Tự động lấy ngày hiện tại của hệ thống thay vì hiển thị và cho người dùng chọn
+        String date = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
         String type = isExpense ? "expense" : "income";
         
         // Lấy ID ví được chọn
         int selectedWalletIndex = spinnerWallet.getSelectedItemPosition();
         ViTien selectedWallet = walletList.get(selectedWalletIndex);
+
+        // Chặn chi tiêu nếu không đủ số dư ví
+        if (isExpense) {
+            ViTien currentWallet = walletDAO.getWalletById(selectedWallet.getId());
+            double currentBalance = (currentWallet != null) ? currentWallet.getBalance() : 0;
+            if (amount > currentBalance) {
+                new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Số dư không đủ")
+                        .setMessage("Số dư ví không đủ. Vui lòng nạp thêm tiền vào ví này để tiếp tục!")
+                        .setPositiveButton("OK", null)
+                        .show();
+                return;
+            }
+        }
 
         // Tạo đối tượng GiaoDich
         GiaoDich transaction = new GiaoDich(0, category, amount, category, type, date, note, selectedWallet.getId());
@@ -223,8 +240,9 @@ public class ThemGiaoDichFragment extends Fragment {
             double newBalance = isExpense ? selectedWallet.getBalance() - amount : selectedWallet.getBalance() + amount;
             walletDAO.updateBalance(selectedWallet.getId(), newBalance);
 
-            // Kiểm tra cảnh báo số dư thấp (chỉ khi chi tiêu)
+            // Gửi thông báo tương ứng với loại giao dịch
             if (isExpense) {
+                NotificationHelper.showExpenseNotification(getContext(), selectedWallet.getName(), amount, category);
                 capNhatNganSach(date, category, amount);
                 ViTien updatedWallet = walletDAO.getWalletById(selectedWallet.getId());
                 if (updatedWallet != null && updatedWallet.getMinBalance() > 0
@@ -232,6 +250,8 @@ public class ThemGiaoDichFragment extends Fragment {
                     NotificationHelper.showLowBalanceNotification(
                             getContext(), selectedWallet.getName(), newBalance);
                 }
+            } else {
+                NotificationHelper.showTopUpNotification(getContext(), selectedWallet.getName(), amount);
             }
             
             // Reset form

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Màn hình Onboarding Bước 1: Thiết lập Danh mục
+    Người dùng phải thêm ÍT NHẤT 1 danh mục trước khi được tiếp tục.
+    Nút "Tiếp tục" sẽ bị vô hiệu hóa (disabled) cho đến khi categoryCount >= 1.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:fitsSystemWindows="true">
+
+    <!-- ===== HEADER ===== -->
+    <LinearLayout
+        android:id="@+id/headerSetupCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Step Indicator -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <!-- Step 1 (active) -->
+            <View
+                android:layout_width="36dp"
+                android:layout_height="6dp"
+                android:background="#FFFFFF"
+                android:layout_marginEnd="4dp"/>
+            <!-- Step 2 (inactive) -->
+            <View
+                android:layout_width="36dp"
+                android:layout_height="6dp"
+                android:background="#80FFFFFF"
+                android:layout_marginEnd="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Bước 1 / 2"
+                android:textColor="#CCFFFFFF"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tạo danh mục"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Thêm ít nhất 1 danh mục để phân loại giao dịch của bạn"
+            android:textColor="#CCFFFFFF"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+    <!-- ===== NÚT "TIẾP TỤC" (cố định dưới cùng) ===== -->
+    <!--
+        Ban đầu alpha=0.5 và enabled=false.
+        Java code sẽ bật lên khi categoryCount >= 1.
+    -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinueSetupCategory"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:text="Tiếp tục →"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:enabled="false"
+        android:alpha="0.5"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="14dp"
+        app:elevation="4dp"/>
+
+    <!-- ===== THÂN TRANG ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerSetupCategory"
+        android:layout_above="@id/btnContinueSetupCategory"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Card thêm danh mục nhanh -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/colorSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thêm danh mục mới"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Tên danh mục -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCategoryNameSetup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tên danh mục (VD: Ăn uống, Lương...)"
+                        android:inputType="text"
+                        android:textSize="15sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Chọn màu nhanh -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chọn màu"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextSecondary"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <View android:id="@+id/colorSetup1" android:layout_width="36dp" android:layout_height="36dp"
+                        android:background="@drawable/bg_color_chip" android:layout_marginEnd="8dp"
+                        android:backgroundTint="#8B5CF6"/>
+                    <View android:id="@+id/colorSetup2" android:layout_width="36dp" android:layout_height="36dp"
+                        android:background="@drawable/bg_color_chip" android:layout_marginEnd="8dp"
+                        android:backgroundTint="#E74C3C"/>
+                    <View android:id="@+id/colorSetup3" android:layout_width="36dp" android:layout_height="36dp"
+                        android:background="@drawable/bg_color_chip" android:layout_marginEnd="8dp"
+                        android:backgroundTint="#2ECC71"/>
+                    <View android:id="@+id/colorSetup4" android:layout_width="36dp" android:layout_height="36dp"
+                        android:background="@drawable/bg_color_chip" android:layout_marginEnd="8dp"
+                        android:backgroundTint="#F1C40F"/>
+                    <View android:id="@+id/colorSetup5" android:layout_width="36dp" android:layout_height="36dp"
+                        android:background="@drawable/bg_color_chip"
+                        android:backgroundTint="#3498DB"/>
+                </LinearLayout>
+
+                <!-- Nút Thêm -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddCategorySetup"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="+ Thêm danh mục này"
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:cornerRadius="10dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Tiêu đề danh sách đã thêm -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Danh mục đã tạo"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextPrimary"/>
+
+            <TextView
+                android:id="@+id/tvCategoryCountSetup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 danh mục"
+                android:textSize="12sp"
+                android:textColor="@color/colorTextSecondary"/>
+        </LinearLayout>
+
+        <!-- Danh sách danh mục đã thêm (RecyclerView) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategoriesSetup"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:nestedScrollingEnabled="false"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

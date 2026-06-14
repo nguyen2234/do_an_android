@@ -132,14 +132,14 @@ public class ThemNganSachActivity extends AppCompatActivity {
                 ? budgetDAO.getUsedCategoryNamesExcluding(editBudgetId)
                 : budgetDAO.getUsedCategoryNames();
 
-        List<DanhMuc> expenseCategories = categoryDAO.getCategoriesByType("expense");
+        List<DanhMuc> expenseCategories = categoryDAO.getAllCategories();
 
         // Dự phòng: thêm một số danh mục mặc định nếu DB trống
         if (expenseCategories.isEmpty()) {
-            expenseCategories.add(new DanhMuc(0, "Ăn uống", "", "expense", 0));
-            expenseCategories.add(new DanhMuc(0, "Di chuyển", "", "expense", 0));
-            expenseCategories.add(new DanhMuc(0, "Mua sắm", "", "expense", 0));
-            expenseCategories.add(new DanhMuc(0, "Khác", "", "expense", 0));
+            expenseCategories.add(new DanhMuc(0, "Ăn uống", "", "general", 0));
+            expenseCategories.add(new DanhMuc(0, "Di chuyển", "", "general", 0));
+            expenseCategories.add(new DanhMuc(0, "Mua sắm", "", "general", 0));
+            expenseCategories.add(new DanhMuc(0, "Khác", "", "general", 0));
         }
 
         containerCategories.removeAllViews(); // Xóa view cũ nếu có

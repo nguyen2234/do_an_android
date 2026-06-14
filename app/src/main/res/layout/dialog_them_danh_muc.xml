@@ -25,35 +25,7 @@
         android:background="@drawable/bg_input"
         android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loại danh mục:"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp"/>
 
-    <RadioGroup
-        android:id="@+id/rgCategoryType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
-        
-        <RadioButton
-            android:id="@+id/rbExpense"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Chi tiêu"
-            android:checked="true"/>
-            
-        <RadioButton
-            android:id="@+id/rbIncome"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Thu nhập"/>
-    </RadioGroup>
 
     <TextView
         android:layout_width="wrap_content"

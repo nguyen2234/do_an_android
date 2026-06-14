@@ -88,8 +88,30 @@ public class DangKyActivity extends AppCompatActivity {
         long result = userDAO.registerUser(newUser);
 
         if (result > 0) {
-            Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-            finish(); // Quay lại trang Login
+            /*
+             * SAU KHI ĐĂNG KÝ THÀNH CÔNG:
+             * 1. Lưu session vào SharedPreferences (user_id, username, fullname)
+             *    để các DAO có thể lấy getCurrentUserId() ngay lập tức
+             * 2. Điều hướng sang Onboarding (SetupCategoryActivity)
+             *    → Người dùng mới LUÔN đi qua Onboarding
+             */
+            // Lấy user vừa tạo để lấy ID
+            NguoiDung createdUser = userDAO.checkLogin(username, hashedPassword);
+            if (createdUser != null) {
+                android.content.SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                prefs.edit()
+                        .putLong("user_id", createdUser.getId())
+                        .putString("username", createdUser.getUsername())
+                        .putString("fullname", createdUser.getFullname())
+                        .putBoolean("isOnboardingDone", false) // Đảm bảo onboarding chưa done
+                        .apply();
+            }
+
+            Toast.makeText(this, "Đăng ký thành công! Hãy thiết lập ban đầu.", Toast.LENGTH_SHORT).show();
+            // Bắt đầu Onboarding
+            Intent intent = new Intent(this, SetupCategoryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         } else {
             Toast.makeText(this, "Có lỗi hệ thống xảy ra khi đăng ký", Toast.LENGTH_SHORT).show();
         }
