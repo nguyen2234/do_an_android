@@ -107,8 +107,11 @@ public class TrangChuFragment extends Fragment {
 
         if (tvUserName != null) {
             android.content.SharedPreferences prefs = requireContext().getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE);
-            String username = prefs.getString("username", "Người dùng");
-            tvUserName.setText(username);
+            String displayName = prefs.getString("fullname", "");
+            if (displayName.isEmpty()) {
+                displayName = prefs.getString("username", "Người dùng");
+            }
+            tvUserName.setText(displayName);
         }
 
         // Ánh xạ nút Thông báo

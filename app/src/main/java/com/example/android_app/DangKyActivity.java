@@ -13,7 +13,7 @@ import com.example.android_app.utils.SecurityUtils;
 
 public class DangKyActivity extends AppCompatActivity {
 
-    private EditText etUsername, etEmail, etPassword, etConfirmPassword;
+    private EditText etUsername, etEmail, etPassword, etConfirmPassword, etFullname;
     private Button btnRegister;
     private TextView tvGoToLogin;
     private NguoiDungDAO userDAO;
@@ -26,6 +26,7 @@ public class DangKyActivity extends AppCompatActivity {
         userDAO = new NguoiDungDAO(this);
         userDAO.open();
 
+        etFullname = findViewById(R.id.etRegisterFullname);
         etUsername = findViewById(R.id.etRegisterUsername);
         etEmail = findViewById(R.id.etRegisterEmail);
         etPassword = findViewById(R.id.etRegisterPassword);
@@ -41,10 +42,16 @@ public class DangKyActivity extends AppCompatActivity {
     }
 
     private void handleRegister() {
+        String fullname = etFullname.getText().toString().trim();
         String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
+
+        if (fullname.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập Họ và tên (bắt buộc)", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
@@ -77,7 +84,7 @@ public class DangKyActivity extends AppCompatActivity {
         }
 
         String hashedPassword = SecurityUtils.hashPasswordSHA256(password);
-        NguoiDung newUser = new NguoiDung(0, username, hashedPassword, email, null, 0);
+        NguoiDung newUser = new NguoiDung(0, username, hashedPassword, email, null, 0, fullname);
         long result = userDAO.registerUser(newUser);
 
         if (result > 0) {

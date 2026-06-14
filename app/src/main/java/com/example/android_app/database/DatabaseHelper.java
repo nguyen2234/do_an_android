@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     // Khóa ngoại trỏ tới người dùng
     public static final String COL_USER_ID_FK = "user_id";
@@ -25,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_USER_EMAIL = "email";
     public static final String COL_USER_AVATAR = "avatar";
     public static final String COL_USER_THEME = "theme_mode";
+    public static final String COL_USER_FULLNAME = "fullname";
 
     private static final String CREATE_TABLE_USERS =
             "CREATE TABLE " + TABLE_USERS + " (" +
@@ -33,7 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_PASSWORD + " TEXT NOT NULL, " +
                     COL_USER_EMAIL + " TEXT, " +
                     COL_USER_AVATAR + " TEXT, " +
-                    COL_USER_THEME + " INTEGER DEFAULT 0" +
+                    COL_USER_THEME + " INTEGER DEFAULT 0, " +
+                    COL_USER_FULLNAME + " TEXT" +
                     ");";
 
     // --- BẢNG VÍ (WALLETS) ---
@@ -230,6 +232,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 9) {
             try {
                 db.execSQL(CREATE_TABLE_NOTIFICATIONS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Thực hiện nâng cấp lên v10 để thêm cột fullname vào bảng users
+        if (oldVersion < 10) {
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_USERS + " ADD COLUMN " + COL_USER_FULLNAME + " TEXT");
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -32,6 +32,7 @@ public class NguoiDungDAO {
         values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
+        values.put(DatabaseHelper.COL_USER_FULLNAME, user.getFullname());
         return db.insert(DatabaseHelper.TABLE_USERS, null, values);
     }
 
@@ -66,6 +67,7 @@ public class NguoiDungDAO {
             user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_EMAIL)));
             user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
             user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
+            user.setFullname(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_FULLNAME)));
             cursor.close();
             return user;
         }
@@ -89,6 +91,7 @@ public class NguoiDungDAO {
             user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_EMAIL)));
             user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
             user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
+            user.setFullname(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_FULLNAME)));
             cursor.close();
             return user;
         }
@@ -106,6 +109,7 @@ public class NguoiDungDAO {
         values.put(DatabaseHelper.COL_USER_EMAIL, user.getEmail());
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
+        values.put(DatabaseHelper.COL_USER_FULLNAME, user.getFullname());
 
         return db.update(DatabaseHelper.TABLE_USERS, values,
                 DatabaseHelper.COL_USER_ID + "=?",

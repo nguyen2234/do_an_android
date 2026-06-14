@@ -287,18 +287,18 @@
                     android:text="Giao dịch gần đây"
                     android:textStyle="bold"
                     android:textSize="16sp"/>
+
                 <TextView
                     android:id="@+id/tvXemDuKien"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="📅 Đến hạn"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    android:text="Đến hạn"
                     android:textColor="@color/colorPrimary"
                     android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:padding="4dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"/>
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView

@@ -56,6 +56,7 @@ public class DangNhapActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putLong("user_id", user.getId());
             editor.putString("username", user.getUsername());
+            editor.putString("fullname", user.getFullname());
             editor.apply();
 
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
