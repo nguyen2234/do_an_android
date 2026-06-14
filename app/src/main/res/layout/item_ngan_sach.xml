@@ -47,12 +47,33 @@
                 android:textSize="14sp"/>
 
             <TextView
+                android:id="@+id/tvBudgetSeparator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/tvBudgetSpentItem"
+                android:layout_marginStart="4dp"
+                android:text="/"
+                android:textColor="#888888"
+                android:textSize="14sp"/>
+
+            <TextView
                 android:id="@+id/tvBudgetAmountItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@id/tvBudgetSeparator"
+                android:layout_marginStart="4dp"
                 android:text="10.000.000 ₫"
                 android:textColor="#666666"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvBudgetPercentItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="0%"
+                android:textColor="#333333"
+                android:textStyle="bold"
                 android:textSize="14sp"/>
         </RelativeLayout>
 
