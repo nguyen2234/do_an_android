@@ -10,6 +10,7 @@ public class NguoiDung {
     private String email;
     private String avatar;
     private int themeMode; // 0: Auto, 1: Light, 2: Dark
+    private String fullname;
 
     public NguoiDung() {
     }
@@ -21,6 +22,16 @@ public class NguoiDung {
         this.email = email;
         this.avatar = avatar;
         this.themeMode = themeMode;
+    }
+
+    public NguoiDung(long id, String username, String password, String email, String avatar, int themeMode, String fullname) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.avatar = avatar;
+        this.themeMode = themeMode;
+        this.fullname = fullname;
     }
 
     public long getId() { return id; }
@@ -40,4 +51,7 @@ public class NguoiDung {
 
     public int getThemeMode() { return themeMode; }
     public void setThemeMode(int themeMode) { this.themeMode = themeMode; }
+
+    public String getFullname() { return fullname; }
+    public void setFullname(String fullname) { this.fullname = fullname; }
 }

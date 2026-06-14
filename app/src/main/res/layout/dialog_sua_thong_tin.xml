@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Tên hiển thị"
+        android:text="Họ và tên"
         android:textColor="@color/colorTextSecondary"
         android:textSize="12sp" />
 
@@ -31,27 +31,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/bg_input"
-        android:hint="Nhập tên của bạn"
-        android:paddingHorizontal="16dp"
-        android:textColor="@color/colorTextPrimary"
-        android:textColorHint="@color/colorTextHint" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Địa chỉ Email"
-        android:textColor="@color/colorTextSecondary"
-        android:textSize="12sp" />
-
-    <EditText
-        android:id="@+id/etEditEmail"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/bg_input"
-        android:hint="example@email.com"
-        android:inputType="textEmailAddress"
+        android:hint="Nhập họ và tên của bạn"
         android:paddingHorizontal="16dp"
         android:textColor="@color/colorTextPrimary"
         android:textColorHint="@color/colorTextHint" />

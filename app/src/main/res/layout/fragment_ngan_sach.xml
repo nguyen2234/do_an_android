@@ -33,7 +33,7 @@
         android:layout_below="@id/headerBudget"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="16dp"
-        android:text="(+) Tạo ngân sách mới"
+        android:text="Tạo mới"
         app:cornerRadius="12dp"
         android:backgroundTint="@color/colorPrimary"/>
 

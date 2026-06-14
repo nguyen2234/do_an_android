@@ -52,7 +52,7 @@ public class HoSoFragment extends Fragment {
         tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
         ivAvatar = view.findViewById(R.id.ivAvatar);
 
-        btnStatistics = view.findViewById(R.id.btnStatistics);
+//        btnStatistics = view.findViewById(R.id.btnStatistics);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
         btnTransferMoney = view.findViewById(R.id.btnTransferMoney);
 
@@ -73,6 +73,21 @@ public class HoSoFragment extends Fragment {
             btnTransferMoney.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), com.example.android_app.ChuyenTienActivity.class);
                 startActivity(intent);
+            });
+        }
+
+        // Xử lý Đăng xuất
+        View btnLogoutProfile = view.findViewById(R.id.btnLogoutProfile);
+        if (btnLogoutProfile != null) {
+            btnLogoutProfile.setOnClickListener(v -> {
+                prefs.edit().clear().apply();
+                Toast.makeText(getContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DangNhapActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             });
         }
         
@@ -127,7 +142,11 @@ public class HoSoFragment extends Fragment {
         if (userId != -1) {
             NguoiDung user = userDAO.getUserById(userId);
             if (user != null) {
-                tvProfileName.setText(user.getUsername());
+                if (user.getFullname() != null && !user.getFullname().isEmpty()) {
+                    tvProfileName.setText(user.getFullname());
+                } else {
+                    tvProfileName.setText("Chưa cập nhật Họ tên");
+                }
                 if (user.getEmail() != null && !user.getEmail().isEmpty()) {
                     tvProfileEmail.setText(user.getEmail());
                 } else {

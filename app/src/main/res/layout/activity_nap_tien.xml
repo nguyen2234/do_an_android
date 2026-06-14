@@ -27,10 +27,12 @@
         android:background="@drawable/bg_icon_primary"/>
 
     <!-- Header Bar -->
+
+    <!-- Scrollable Form Content -->
     <RelativeLayout
         android:id="@+id/headerLayoutNap"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="100dp"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
         android:paddingHorizontal="16dp">
@@ -43,24 +45,23 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:contentDescription="Quay lại"
             android:focusable="true"
             android:padding="8dp"
             android:src="@drawable/ic_close"
-            android:tint="@color/white"
-            android:contentDescription="Quay lại"/>
+            android:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:fontFamily="sans-serif-medium"
             android:text="Nạp tiền vào ví"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- Scrollable Form Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -230,7 +231,7 @@
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:text="✅  Xác nhận nạp tiền"
+        android:text="Xác nhận"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"

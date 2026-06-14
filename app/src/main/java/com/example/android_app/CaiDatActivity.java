@@ -74,7 +74,6 @@ public class CaiDatActivity extends AppCompatActivity {
 
         findViewById(R.id.btnEditProfile).setOnClickListener(v -> showEditProfileDialog());
         findViewById(R.id.btnChangePassword).setOnClickListener(v -> showChangePasswordDialog());
-        findViewById(R.id.btnLogout).setOnClickListener(v -> logout());
 
         // Xử lý action từ Intent chuyển hướng
         String action = getIntent().getStringExtra("action");
@@ -125,14 +124,10 @@ public class CaiDatActivity extends AppCompatActivity {
         dialog.setOnDismissListener(d -> cleanupTempAvatar());
 
         EditText etName = dialogView.findViewById(R.id.etEditName);
-        EditText etEmail = dialogView.findViewById(R.id.etEditEmail);
         ivPreviewAvatar = dialogView.findViewById(R.id.ivPreviewAvatar);
         Button btnChooseImage = dialogView.findViewById(R.id.btnChooseImage);
 
-        etName.setText(user.getUsername());
-        if (user.getEmail() != null) {
-            etEmail.setText(user.getEmail());
-        }
+        etName.setText(user.getFullname() != null ? user.getFullname() : "");
 
         // Hiển thị avatar hiện tại
         if (currentSelectedAvatarPath != null && !currentSelectedAvatarPath.isEmpty()) {
@@ -160,27 +155,10 @@ public class CaiDatActivity extends AppCompatActivity {
         });
 
         btnSave.setOnClickListener(v -> {
-            String newName = etName.getText().toString().trim();
-            String newEmail = etEmail.getText().toString().trim();
+            String newFullName = etName.getText().toString().trim();
 
-            if (newName.isEmpty()) {
-                Toast.makeText(this, "Tên không được để trống", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (newName.length() < 4 || newName.contains(" ")) {
-                Toast.makeText(this, "Tên đăng nhập tối thiểu 4 ký tự và không chứa dấu cách", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!newEmail.isEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
-                Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Kiểm tra trùng tên đăng nhập
-            if (!newName.equals(user.getUsername()) && userDAO.checkUsernameExist(newName)) {
-                Toast.makeText(this, "Tên đăng nhập đã tồn tại, vui lòng chọn tên khác", Toast.LENGTH_SHORT).show();
+            if (newFullName.isEmpty()) {
+                Toast.makeText(this, "Họ và tên không được để trống", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -212,15 +190,14 @@ public class CaiDatActivity extends AppCompatActivity {
                 }
             }
 
-            user.setUsername(newName);
-            user.setEmail(newEmail);
+            user.setFullname(newFullName);
             user.setAvatar(currentSelectedAvatarPath);
 
             int result = userDAO.updateUser(user);
             if (result > 0) {
-                // Update SharedPreferences
+                // Cập nhật SharedPreferences
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("username", newName);
+                editor.putString("fullname", newFullName);
                 editor.apply();
 
                 Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
