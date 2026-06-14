@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.android_app.ChiTietNganSachActivity;
 import com.example.android_app.R;
 import com.example.android_app.ThemNganSachActivity;
 import com.example.android_app.adapter.NganSachAdapter;
@@ -56,7 +57,16 @@ public class NganSachFragment extends Fragment {
         budgetDAO.open();
         List<NganSach> list = budgetDAO.getAllBudgets();
         adapter = new NganSachAdapter(getContext(), list);
+
+        // Wire click listener: mở màn hình Chi tiết khi bấm vào một thẻ ngân sách
+        adapter.setOnItemClickListener(budget -> {
+            Intent intent = new Intent(getContext(), ChiTietNganSachActivity.class);
+            intent.putExtra(ChiTietNganSachActivity.EXTRA_BUDGET_ID, budget.getId());
+            startActivity(intent);
+        });
+
         rvBudgets.setAdapter(adapter);
         budgetDAO.close();
     }
 }
+

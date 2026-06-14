@@ -52,9 +52,15 @@
 
 
 
-        <!-- Budget Activity -->
+        <!-- Budget Activities -->
         <activity
             android:name=".ThemNganSachActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <!-- Chi tiết ngân sách (xem, sửa, xóa) -->
+        <activity
+            android:name=".ChiTietNganSachActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 

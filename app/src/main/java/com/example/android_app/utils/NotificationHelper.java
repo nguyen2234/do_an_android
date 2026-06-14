@@ -107,7 +107,7 @@ public class NotificationHelper {
     public static void showTopUpNotification(Context context, String walletName, double amount) {
         String amountStr = String.format("%,.0f", amount).replace(",", ".") + " ₫";
         showTransactionNotification(context, NOTIF_ID_TOP_UP,
-                "✅ Nạp tiền thành công",
+                "Nạp tiền thành công",
                 "Đã nạp " + amountStr + " vào ví " + walletName);
     }
 
@@ -118,7 +118,7 @@ public class NotificationHelper {
                                                   String toWallet, double amount) {
         String amountStr = String.format("%,.0f", amount).replace(",", ".") + " ₫";
         showTransactionNotification(context, NOTIF_ID_TRANSFER,
-                "💸 Chuyển tiền thành công",
+                "Chuyển tiền thành công",
                 "Đã chuyển " + amountStr + " từ " + fromWallet + " sang " + toWallet);
     }
 
@@ -128,7 +128,7 @@ public class NotificationHelper {
     public static void showLowBalanceNotification(Context context, String walletName, double balance) {
         String balanceStr = String.format("%,.0f", balance).replace(",", ".") + " ₫";
         showTransactionNotification(context, NOTIF_ID_LOW_BALANCE,
-                "⚠️ Số dư ví sắp hết",
+                "Số dư ví sắp hết",
                 "Ví \"" + walletName + "\" chỉ còn " + balanceStr + ". Vui lòng nạp thêm tiền!");
     }
 
@@ -171,7 +171,7 @@ public class NotificationHelper {
             tb.setTitle(title);
             tb.setContent(content);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", new Locale("vi"));
             tb.setDate(sdf.format(new Date()));
             tb.setRead(false);
 

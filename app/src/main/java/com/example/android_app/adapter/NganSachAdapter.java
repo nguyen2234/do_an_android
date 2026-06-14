@@ -17,6 +17,17 @@ public class NganSachAdapter extends RecyclerView.Adapter<NganSachAdapter.ViewHo
     private Context context;
     private List<NganSach> budgetList;
 
+    /** Interface để xử lý sự kiện click vào một ngân sách */
+    public interface OnItemClickListener {
+        void onItemClick(NganSach budget);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public NganSachAdapter(Context context, List<NganSach> budgetList) {
         this.context = context;
         this.budgetList = budgetList;
@@ -40,12 +51,37 @@ public class NganSachAdapter extends RecyclerView.Adapter<NganSachAdapter.ViewHo
         holder.tvBudgetSpentItem.setText(dinhDangTien(budget.getSpentAmount()) + " ₫");
         holder.tvBudgetAmountItem.setText(dinhDangTien(budget.getAmount()) + " ₫");
 
-        int progress = 0;
+        double percentage = 0;
         if (budget.getAmount() > 0) {
-            progress = (int) ((budget.getSpentAmount() / budget.getAmount()) * 100);
+            percentage = (budget.getSpentAmount() / budget.getAmount()) * 100.0;
+        }
+        int progress = (int) percentage;
+        if (holder.tvBudgetPercentItem != null) {
+            holder.tvBudgetPercentItem.setText(progress + "%");
         }
         if (progress > 100) progress = 100;
         holder.pbBudgetItem.setProgress(progress);
+
+        // Đổi màu ProgressBar tự động theo phần trăm ngân sách đã sử dụng
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            int color;
+            if (percentage < 80.0) {
+                color = android.graphics.Color.parseColor("#4CAF50"); // Xanh lá - An toàn
+            } else if (percentage < 100.0) {
+                color = android.graphics.Color.parseColor("#FFC107"); // Vàng - Cảnh báo
+            } else {
+                color = android.graphics.Color.parseColor("#F44336"); // Đỏ - Vượt hạn mức
+            }
+            holder.pbBudgetItem.setProgressTintList(android.content.res.ColorStateList.valueOf(color));
+            if (holder.tvBudgetPercentItem != null) {
+                holder.tvBudgetPercentItem.setTextColor(color);
+            }
+        }
+
+        // Mở màn hình Chi tiết khi click vào card
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onItemClick(budget);
+        });
     }
 
     @Override
@@ -58,7 +94,7 @@ public class NganSachAdapter extends RecyclerView.Adapter<NganSachAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBudgetNameItem, tvBudgetDatesItem, tvBudgetSpentItem, tvBudgetAmountItem, tvBudgetCategoryItem;
+        TextView tvBudgetNameItem, tvBudgetDatesItem, tvBudgetSpentItem, tvBudgetAmountItem, tvBudgetCategoryItem, tvBudgetPercentItem;
         ProgressBar pbBudgetItem;
 
         public ViewHolder(@NonNull View itemView) {
@@ -68,6 +104,7 @@ public class NganSachAdapter extends RecyclerView.Adapter<NganSachAdapter.ViewHo
             tvBudgetSpentItem = itemView.findViewById(R.id.tvBudgetSpentItem);
             tvBudgetAmountItem = itemView.findViewById(R.id.tvBudgetAmountItem);
             tvBudgetCategoryItem = itemView.findViewById(R.id.tvBudgetCategoryItem);
+            tvBudgetPercentItem = itemView.findViewById(R.id.tvBudgetPercentItem);
             pbBudgetItem = itemView.findViewById(R.id.pbBudgetItem);
         }
     }

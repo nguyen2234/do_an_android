@@ -109,7 +109,13 @@ Hệ thống được chia thành 8 module chức năng chính liên kết chặ
 ### 2.8. Báo Cáo & Thống Kê (Statistics)
 * **Xem biểu đồ phân tích (`ThongKeFragment`):** 
   - **Biểu đồ tròn (Pie Chart):** Thống kê tỷ lệ phần trăm phân bổ chi tiêu theo từng danh mục (Ăn uống chiếm bao nhiêu %, Mua sắm chiếm bao nhiêu %...), giúp người dùng nhận diện ngay khoản chi nào đang chiếm tỷ trọng lớn nhất.
-  - **Biểu đồ cột (Bar Chart):** So sánh trực quan tương quan giữa Tổng thu nhập và Tổng chi tiêu qua từng tháng hoặc từng ngày, giúp kiểm soát sức khỏe tài chính.
+  - **Biểu đồ cột (Bar Chart):** So sánh trực quan chi tiêu thực tế trong 7 ngày gần đây. 
+  - **Các tối ưu hóa và sửa lỗi hệ thống:**
+    - *Đồng bộ hóa Locale:* Sử dụng cố định `new Locale("vi")` để định dạng ngày/tháng đồng nhất. Tránh lỗi khi ứng dụng được chạy trên các thiết bị cài ngôn ngữ hệ thống khác (như tiếng Anh, tiếng Ả Rập...) làm lệch định dạng ngày trong cơ sở dữ liệu.
+    - *Sắp xếp biểu đồ theo thời gian thực tế:* Sử dụng `LinkedHashMap` thay thế cho `TreeMap` để bảo toàn thứ tự tuyến tính từ ngày xa nhất tới ngày gần nhất (tránh biểu đồ bị sắp xếp lộn xộn theo bảng chữ cái).
+    - *Chuẩn hóa so sánh ngày:* Thực hiện chuẩn hóa chuỗi ngày tháng trước khi so sánh (như thêm số 0 ở đầu) để biểu diễn dữ liệu chính xác trên biểu đồ.
+    - *Tìm kiếm thời gian thực:* Thêm bộ lắng nghe thay đổi văn bản (`TextWatcher`) cho ô tìm kiếm giúp tự động lọc và cập nhật dữ liệu thống kê trực tiếp khi người dùng đang nhập.
+    - *An toàn dữ liệu:* Bổ sung khối `try-catch` kiểm tra ngoại lệ khi xử lý/đọc ngày tháng từ database để tránh gây crash ứng dụng nếu gặp bản ghi lỗi ngày tháng.
 
 ---
 
