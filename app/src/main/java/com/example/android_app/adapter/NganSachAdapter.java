@@ -17,6 +17,17 @@ public class NganSachAdapter extends RecyclerView.Adapter<NganSachAdapter.ViewHo
     private Context context;
     private List<NganSach> budgetList;
 
+    /** Interface để xử lý sự kiện click vào một ngân sách */
+    public interface OnItemClickListener {
+        void onItemClick(NganSach budget);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public NganSachAdapter(Context context, List<NganSach> budgetList) {
         this.context = context;
         this.budgetList = budgetList;
@@ -66,6 +77,11 @@ public class NganSachAdapter extends RecyclerView.Adapter<NganSachAdapter.ViewHo
                 holder.tvBudgetPercentItem.setTextColor(color);
             }
         }
+
+        // Mở màn hình Chi tiết khi click vào card
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onItemClick(budget);
+        });
     }
 
     @Override

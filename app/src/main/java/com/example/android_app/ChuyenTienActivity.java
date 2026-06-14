@@ -197,7 +197,7 @@ public class ChuyenTienActivity extends AppCompatActivity {
 
         if (updateSender > 0 && updateReceiver > 0) {
             // Log expense transaction for sender wallet
-            String dateStr = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Calendar.getInstance().getTime());
+            String dateStr = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
             String note = etInternalNote.getText().toString().trim();
             if (note.isEmpty()) {
                 note = "Chuyển tiền nội bộ sang ví " + receiverWallet.getName();
@@ -268,7 +268,7 @@ public class ChuyenTienActivity extends AppCompatActivity {
         int updateResult = walletDAO.updateBalance(sourceWallet.getId(), newBalance);
 
         if (updateResult > 0) {
-            String dateStr = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Calendar.getInstance().getTime());
+            String dateStr = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
             if (note.isEmpty()) {
                 note = "Chuyển tiền nhanh 247";
             }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Item hiển thị một giao dịch trong màn hình Chi tiết Ngân sách -->
+<!-- Khác item_giao_dich.xml thông thường: bổ sung tên ví (wallet name) -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="5dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="center_vertical">
+
+        <!-- Icon bên trái (luôn là icon chi tiêu vì đây là danh sách chi của ngân sách) -->
+        <ImageView
+            android:id="@+id/ivBudgetTransIcon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_expense_modern"
+            android:background="@drawable/bg_icon_expense"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:contentDescription="Giao dịch chi tiêu"/>
+
+        <!-- Thông tin giao dịch ở giữa -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <!-- Tên tiêu đề giao dịch -->
+            <TextView
+                android:id="@+id/tvBudgetTransTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mua sắm tại siêu thị"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextPrimary"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <!-- Tên danh mục -->
+            <TextView
+                android:id="@+id/tvBudgetTransCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Ăn uống"
+                android:textSize="12sp"
+                android:textColor="@color/colorPrimary"/>
+
+            <!-- Dòng cuối: Tên ví | Ngày -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="3dp">
+
+                <!-- Icon ví nhỏ -->
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_wallet_modern"
+                    android:tint="@color/colorTextSecondary"
+                    android:contentDescription="Ví"/>
+
+                <!-- Tên ví -->
+                <TextView
+                    android:id="@+id/tvBudgetTransWallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="Tiền mặt"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorTextSecondary"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:text="·"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorTextSecondary"/>
+
+                <!-- Ngày giao dịch -->
+                <TextView
+                    android:id="@+id/tvBudgetTransDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="14/06/2026"
+                    android:textSize="11sp"
+                    android:textColor="@color/colorTextSecondary"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Số tiền bên phải (luôn hiển thị màu đỏ vì là chi tiêu) -->
+        <TextView
+            android:id="@+id/tvBudgetTransAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="-150.000 ₫"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorExpense"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

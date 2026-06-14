@@ -46,7 +46,7 @@ public class ThongKeFragment extends Fragment {
     
     private Calendar startCal = Calendar.getInstance();
     private Calendar endCal = Calendar.getInstance();
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
 
     @Nullable
     @Override
@@ -68,6 +68,17 @@ public class ThongKeFragment extends Fragment {
         startCal.add(Calendar.DAY_OF_MONTH, -30);
         tvNgayBatDau.setText(sdf.format(startCal.getTime()));
         tvNgayKetThuc.setText(sdf.format(endCal.getTime()));
+
+        // Tự động lọc khi nhập từ khóa tìm kiếm
+        if (etTimKiemThongKe != null) {
+            etTimKiemThongKe.addTextChangedListener(new android.text.TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    apDungBoLoc();
+                }
+                @Override public void afterTextChanged(android.text.Editable s) {}
+            });
+        }
 
         apDungBoLoc();
     }
@@ -132,23 +143,27 @@ public class ThongKeFragment extends Fragment {
 
         for (GiaoDich t : allTransactions) {
             try {
-                Date tDate = sdf.parse(t.getNgay());
-                if (tDate != null) {
-                    long transTime = tDate.getTime();
-                    
-                    if (transTime >= startTime && transTime <= endTime) {
-                        filteredList.add(t);
-                        if ("income".equalsIgnoreCase(t.getLoai())) {
-                            totalIncome += t.getSoTien();
-                        } else {
-                            totalExpense += t.getSoTien();
-                            String cat = t.getCategory() != null ? t.getCategory() : "Khác";
-                            categoryMap.put(cat, categoryMap.getOrDefault(cat, 0.0) + t.getSoTien());
+                if (t.getNgay() != null && !t.getNgay().trim().isEmpty()) {
+                    Date tDate = sdf.parse(t.getNgay().trim());
+                    if (tDate != null) {
+                        long transTime = tDate.getTime();
+                        
+                        if (transTime >= startTime && transTime <= endTime) {
+                            filteredList.add(t);
+                            if ("income".equalsIgnoreCase(t.getLoai())) {
+                                totalIncome += t.getSoTien();
+                            } else {
+                                totalExpense += t.getSoTien();
+                                String cat = t.getCategory() != null ? t.getCategory() : "Khác";
+                                categoryMap.put(cat, categoryMap.getOrDefault(cat, 0.0) + t.getSoTien());
+                            }
                         }
                     }
                 }
             } catch (ParseException e) {
                 Log.e("StatError", "Lỗi định dạng ngày: " + t.getNgay() + ". Mong đợi dd/MM/yyyy");
+            } catch (Exception e) {
+                Log.e("StatError", "Lỗi xử lý giao dịch ID " + t.getId() + ": " + e.getMessage());
             }
         }
 
@@ -164,7 +179,8 @@ public class ThongKeFragment extends Fragment {
     }
 
     private void updateChartData(List<GiaoDich> list) {
-        Map<String, Float> dailyData = new TreeMap<>();
+        // Sử dụng LinkedHashMap thay vì TreeMap để bảo toàn đúng thứ tự thời gian tuyến tính
+        Map<String, Float> dailyData = new java.util.LinkedHashMap<>();
         
         Calendar cal = (Calendar) endCal.clone();
         cal.add(Calendar.DAY_OF_MONTH, -6);
@@ -174,8 +190,20 @@ public class ThongKeFragment extends Fragment {
         }
 
         for (GiaoDich t : list) {
-            if (!"income".equalsIgnoreCase(t.getLoai()) && dailyData.containsKey(t.getNgay())) {
-                dailyData.put(t.getNgay(), dailyData.get(t.getNgay()) + (float) t.getSoTien());
+            if (!"income".equalsIgnoreCase(t.getLoai())) {
+                try {
+                    if (t.getNgay() != null && !t.getNgay().trim().isEmpty()) {
+                        Date parsedDate = sdf.parse(t.getNgay().trim());
+                        if (parsedDate != null) {
+                            String formattedDate = sdf.format(parsedDate);
+                            if (dailyData.containsKey(formattedDate)) {
+                                dailyData.put(formattedDate, dailyData.get(formattedDate) + (float) t.getSoTien());
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -184,7 +212,8 @@ public class ThongKeFragment extends Fragment {
         int idx = 0;
         for (Map.Entry<String, Float> entry : dailyData.entrySet()) {
             values[idx] = entry.getValue();
-            labels[idx] = entry.getKey().substring(0, 5);
+            String key = entry.getKey();
+            labels[idx] = key.length() >= 5 ? key.substring(0, 5) : key;
             idx++;
         }
 
