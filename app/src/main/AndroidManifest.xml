@@ -77,6 +77,13 @@
             android:theme="@style/Theme.Android_app"
             android:windowSoftInputMode="adjustResize"/>
 
+        <!-- Thanh toán nhắc hẹn -->
+        <activity
+            android:name=".ThanhToanReminderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Android_app"
+            android:windowSoftInputMode="adjustResize"/>
+
         <!-- Cài đặt -->
         <activity
             android:name=".CaiDatActivity"

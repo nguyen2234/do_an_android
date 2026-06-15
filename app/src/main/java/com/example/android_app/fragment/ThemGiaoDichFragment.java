@@ -19,10 +19,12 @@ import com.example.android_app.database.GiaoDichDAO;
 import com.example.android_app.database.NganSachDAO;
 import com.example.android_app.database.ViTienDAO;
 import com.example.android_app.database.DanhMucDAO;
+import com.example.android_app.database.NguoiDungDAO;
 import com.example.android_app.model.GiaoDich;
 import com.example.android_app.model.NganSach;
 import com.example.android_app.model.ViTien;
 import com.example.android_app.model.DanhMuc;
+import com.example.android_app.model.NguoiDung;
 import com.example.android_app.utils.NotificationHelper;
 import com.google.android.material.button.MaterialButton;
 import java.text.SimpleDateFormat;
@@ -41,6 +43,8 @@ public class ThemGiaoDichFragment extends Fragment {
     private Spinner spinnerCategory, spinnerWallet;
     private View layoutCategoryInput;
     private Calendar selectedDate = Calendar.getInstance();
+
+    private long prefilledReminderId = -1;
 
     private GiaoDichDAO transactionDAO;
     private ViTienDAO walletDAO;
@@ -79,6 +83,24 @@ public class ThemGiaoDichFragment extends Fragment {
         spinnerWallet = view.findViewById(R.id.spinnerWallet);
         layoutCategoryInput = view.findViewById(R.id.layoutCategoryInput);
 
+        // Xử lý điền sẵn dữ liệu từ màn hình quản lý nhắc hẹn chuyển qua (hành động Pay)
+        Bundle args = getArguments();
+        if (args != null) {
+            double prefilledAmount = args.getDouble("prefilled_amount", -1);
+            prefilledReminderId = args.getLong("reminder_id", -1);
+            String prefilledTitle = args.getString("prefilled_title", null);
+
+            if (prefilledAmount > 0 && etSoTien != null) {
+                etSoTien.setText(String.valueOf((int) prefilledAmount));
+                if (tvAmountDisplay != null) {
+                    tvAmountDisplay.setText(String.format("%,.0f", prefilledAmount).replace(",", ".") + " ₫");
+                }
+            }
+            if (prefilledTitle != null && etGhiChu != null) {
+                etGhiChu.setText("Thanh toán tiền " + prefilledTitle);
+            }
+        }
+
         // Set current date
         updateDateDisplay();
 
@@ -89,6 +111,9 @@ public class ThemGiaoDichFragment extends Fragment {
         // Tab switch
         btnExpenseTab.setOnClickListener(v -> setTransactionType(true));
         btnIncomeTab.setOnClickListener(v -> setTransactionType(false));
+
+        // Khởi tạo tab mặc định là Chi tiêu
+        setTransactionType(true);
 
         // Date picker
         view.findViewById(R.id.btnDate).setOnClickListener(v -> showDatePicker());
@@ -157,6 +182,18 @@ public class ThemGiaoDichFragment extends Fragment {
                 R.layout.item_spinner, categoryNames);
         adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerCategory.setAdapter(adapter);
+
+        // Thiết lập chọn danh mục nếu được truyền qua arguments
+        Bundle args = getArguments();
+        if (args != null) {
+            String prefilledCategory = args.getString("prefilled_category", null);
+            if (prefilledCategory != null) {
+                int index = categoryNames.indexOf(prefilledCategory);
+                if (index != -1) {
+                    spinnerCategory.setSelection(index);
+                }
+            }
+        }
     }
 
     private void setupWalletSpinner() {
@@ -208,12 +245,17 @@ public class ThemGiaoDichFragment extends Fragment {
         double amount = Double.parseDouble(amountStr);
         String category = isExpense ? (spinnerCategory.getSelectedItem() != null ? spinnerCategory.getSelectedItem().toString() : "Chi tiêu") : "Nạp tiền";
         String note = etGhiChu.getText().toString();
+
         // Tự động lấy ngày hiện tại của hệ thống thay vì hiển thị và cho người dùng chọn
         String date = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
         String type = isExpense ? "expense" : "income";
         
         // Lấy ID ví được chọn
         int selectedWalletIndex = spinnerWallet.getSelectedItemPosition();
+        if (selectedWalletIndex < 0 || walletList == null || walletList.isEmpty()) {
+            Toast.makeText(getContext(), "Vui lòng chọn ví", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ViTien selectedWallet = walletList.get(selectedWalletIndex);
 
         // Chặn chi tiêu nếu không đủ số dư ví
@@ -230,6 +272,58 @@ public class ThemGiaoDichFragment extends Fragment {
             }
         }
 
+        // Hiện Dialog xác thực PIN giao dịch trước khi lưu
+        showPinVerificationDialog(amount, category, note, date, type, selectedWallet);
+    }
+
+    private void showPinVerificationDialog(final double amount, final String category, final String note, final String date, final String type, final ViTien selectedWallet) {
+        if (getContext() == null) return;
+
+        android.content.SharedPreferences prefs = getContext().getSharedPreferences("UserPrefs", android.content.Context.MODE_PRIVATE);
+        long userId = prefs.getLong("user_id", -1);
+        if (userId == -1) {
+            Toast.makeText(getContext(), "Lỗi: Không tìm thấy người dùng hiện tại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        NguoiDungDAO uDAO = new NguoiDungDAO(getContext());
+        uDAO.open();
+        NguoiDung user = uDAO.getUserById(userId);
+        uDAO.close();
+
+        final String correctPin = (user != null) ? user.getTransactionPin() : "";
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_verify_pin, null);
+        final EditText etVerifyPin = dialogView.findViewById(R.id.etVerifyPin);
+        android.widget.Button btnCancelVerify = dialogView.findViewById(R.id.btnCancelVerify);
+        android.widget.Button btnConfirmVerify = dialogView.findViewById(R.id.btnConfirmVerify);
+
+        final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        btnCancelVerify.setOnClickListener(v -> dialog.dismiss());
+
+        btnConfirmVerify.setOnClickListener(v -> {
+            String enteredPin = etVerifyPin.getText().toString().trim();
+            if (enteredPin.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng nhập mã PIN", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (enteredPin.equals(correctPin)) {
+                dialog.dismiss();
+                executeSaveTransaction(amount, category, note, date, type, selectedWallet);
+            } else {
+                Toast.makeText(getContext(), "Mã PIN giao dịch không chính xác!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void executeSaveTransaction(double amount, String category, String note, String date, String type, ViTien selectedWallet) {
         // Tạo đối tượng GiaoDich
         GiaoDich transaction = new GiaoDich(0, category, amount, category, type, date, note, selectedWallet.getId());
         
@@ -252,6 +346,17 @@ public class ThemGiaoDichFragment extends Fragment {
                 }
             } else {
                 NotificationHelper.showTopUpNotification(getContext(), selectedWallet.getName(), amount);
+            }
+
+            // Đánh dấu nhắc hẹn đã hoàn tất thanh toán nếu bắt nguồn từ nút Pay
+            if (prefilledReminderId > 0) {
+                com.example.android_app.database.ReminderDAO rDAO = new com.example.android_app.database.ReminderDAO(getContext());
+                rDAO.open();
+                rDAO.markAsPaid(prefilledReminderId);
+                rDAO.close();
+
+                Toast.makeText(getContext(), "✅ Đã thanh toán nhắc hẹn thành công!", Toast.LENGTH_SHORT).show();
+                prefilledReminderId = -1; // Reset lại
             }
             
             // Reset form

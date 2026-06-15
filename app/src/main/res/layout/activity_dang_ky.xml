@@ -186,7 +186,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="24dp"
+                        android:layout_marginBottom="16dp"
                         app:startIconDrawable="@drawable/ic_password"
                         app:startIconTint="@color/colorPrimary"
                         app:passwordToggleEnabled="true"
@@ -203,6 +203,31 @@
                             android:layout_height="wrap_content"
                             android:hint="Nhập lại mật khẩu"
                             android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="15sp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Transaction PIN Input -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        app:startIconDrawable="@drawable/ic_password"
+                        app:startIconTint="@color/colorPrimary"
+                        app:boxCornerRadiusBottomEnd="10dp"
+                        app:boxCornerRadiusBottomStart="10dp"
+                        app:boxCornerRadiusTopEnd="10dp"
+                        app:boxCornerRadiusTopStart="10dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etRegisterPin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Mã PIN giao dịch (6 chữ số)"
+                            android:inputType="numberPassword"
+                            android:maxLength="6"
                             android:maxLines="1"
                             android:textColor="@color/colorTextPrimary"
                             android:textSize="15sp"/>
