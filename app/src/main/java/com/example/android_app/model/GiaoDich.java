@@ -7,7 +7,8 @@ public class GiaoDich {
     private long id;            // ID giao dịch trong cơ sở dữ liệu
     private String title;       // Tiêu đề/Tên giao dịch
     private double amount;      // Số tiền giao dịch
-    private String category;    // Tên danh mục của giao dịch
+    private long categoryId;    // ID danh mục của giao dịch
+    private String categoryName;// Tên danh mục của giao dịch (lấy từ JOIN)
     private String type;        // Loại: "income" (thu nhập) hoặc "expense" (chi tiêu)
     private String date;        // Ngày thực hiện giao dịch (định dạng dd/MM/yyyy)
     private String note;        // Ghi chú thêm
@@ -17,12 +18,26 @@ public class GiaoDich {
         // Constructor mặc định
     }
 
+    public GiaoDich(long id, String title, double amount, long categoryId, String categoryName,
+                       String type, String date, String note, long walletId) {
+        this.id = id;
+        this.title = title;
+        this.amount = amount;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.type = type;
+        this.date = date;
+        this.note = note;
+        this.walletId = walletId;
+    }
+
     public GiaoDich(long id, String title, double amount, String category,
                        String type, String date, String note, long walletId) {
         this.id = id;
         this.title = title;
         this.amount = amount;
-        this.category = category;
+        this.categoryName = category;
+        this.categoryId = 0;
         this.type = type;
         this.date = date;
         this.note = note;
@@ -39,8 +54,15 @@ public class GiaoDich {
     public double getSoTien() { return amount; }
     public void setSoTien(double amount) { this.amount = amount; }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public long getCategoryId() { return categoryId; }
+    public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
+
+    // Tương thích ngược với mã nguồn cũ gọi getCategory() để lấy tên hiển thị
+    public String getCategory() { return categoryName; }
+    public void setCategory(String categoryName) { this.categoryName = categoryName; }
+
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     public String getLoai() { return type; }
     public void setLoai(String type) { this.type = type; }

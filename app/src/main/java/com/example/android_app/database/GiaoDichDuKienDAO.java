@@ -39,14 +39,52 @@ public class GiaoDichDuKienDAO {
         return prefs.getLong("user_id", 1);
     }
 
+    private long getOrCreateCategoryId(String categoryName, String type) {
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            return 0;
+        }
+        String name = categoryName.trim();
+        long catId = 0;
+        Cursor catCursor = db.rawQuery(
+                "SELECT id FROM categories WHERE name = ? AND user_id = ?",
+                new String[]{name, String.valueOf(getCurrentUserId())});
+        if (catCursor != null && catCursor.moveToFirst()) {
+            catId = catCursor.getLong(0);
+        } else {
+            Cursor catCursorFallback = db.rawQuery(
+                    "SELECT id FROM categories WHERE name = ?",
+                    new String[]{name});
+            if (catCursorFallback != null && catCursorFallback.moveToFirst()) {
+                catId = catCursorFallback.getLong(0);
+            }
+            if (catCursorFallback != null) catCursorFallback.close();
+        }
+        if (catCursor != null) catCursor.close();
+
+        if (catId <= 0) {
+            ContentValues catValues = new ContentValues();
+            catValues.put("name", name);
+            catValues.put("type", type != null ? type : "expense");
+            catValues.put("user_id", getCurrentUserId());
+            catId = db.insert("categories", null, catValues);
+        }
+        return catId;
+    }
+
     /**
      * Thêm một giao dịch dự kiến mới.
      */
     public long addPlanned(GiaoDichDuKien item) {
+        long catId = item.getCategoryId();
+        if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
+            catId = getOrCreateCategoryId(item.getCategory(), item.getType());
+            item.setCategoryId(catId);
+        }
+
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_PLANNED_TITLE, item.getTitle());
         values.put(DatabaseHelper.COL_PLANNED_AMOUNT, item.getAmount());
-        values.put(DatabaseHelper.COL_PLANNED_CATEGORY, item.getCategory());
+        values.put(DatabaseHelper.COL_PLANNED_CATEGORY_ID, catId > 0 ? catId : null);
         values.put(DatabaseHelper.COL_PLANNED_TYPE, item.getType());
         values.put(DatabaseHelper.COL_PLANNED_DUE_DATE, item.getDueDate());
         values.put(DatabaseHelper.COL_PLANNED_STATUS, item.getStatus() != null ? item.getStatus() : "pending");
@@ -60,10 +98,16 @@ public class GiaoDichDuKienDAO {
      * Cập nhật giao dịch dự kiến.
      */
     public int updatePlanned(GiaoDichDuKien item) {
+        long catId = item.getCategoryId();
+        if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
+            catId = getOrCreateCategoryId(item.getCategory(), item.getType());
+            item.setCategoryId(catId);
+        }
+
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_PLANNED_TITLE, item.getTitle());
         values.put(DatabaseHelper.COL_PLANNED_AMOUNT, item.getAmount());
-        values.put(DatabaseHelper.COL_PLANNED_CATEGORY, item.getCategory());
+        values.put(DatabaseHelper.COL_PLANNED_CATEGORY_ID, catId > 0 ? catId : null);
         values.put(DatabaseHelper.COL_PLANNED_TYPE, item.getType());
         values.put(DatabaseHelper.COL_PLANNED_DUE_DATE, item.getDueDate());
         values.put(DatabaseHelper.COL_PLANNED_STATUS, item.getStatus());
@@ -99,10 +143,12 @@ public class GiaoDichDuKienDAO {
      */
     public List<GiaoDichDuKien> getAllPending() {
         List<GiaoDichDuKien> list = new ArrayList<>();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_PLANNED, null,
-                DatabaseHelper.COL_PLANNED_STATUS + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{"pending", String.valueOf(getCurrentUserId())}, null, null,
-                DatabaseHelper.COL_PLANNED_DUE_DATE + " ASC");
+        String sql = "SELECT p.id, p.title, p.amount, p.category_id, c.name AS category_name, p.type, p.due_date, p.status, p.note, p.wallet_id " +
+                "FROM planned_transactions p " +
+                "LEFT JOIN categories c ON p.category_id = c.id " +
+                "WHERE p.status = ? AND p.user_id = ? " +
+                "ORDER BY p.due_date ASC";
+        Cursor cursor = db.rawQuery(sql, new String[]{"pending", String.valueOf(getCurrentUserId())});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 list.add(cursorToItem(cursor));
@@ -117,10 +163,12 @@ public class GiaoDichDuKienDAO {
      */
     public List<GiaoDichDuKien> getAll() {
         List<GiaoDichDuKien> list = new ArrayList<>();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_PLANNED, null,
-                DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{String.valueOf(getCurrentUserId())}, null, null,
-                DatabaseHelper.COL_PLANNED_DUE_DATE + " ASC");
+        String sql = "SELECT p.id, p.title, p.amount, p.category_id, c.name AS category_name, p.type, p.due_date, p.status, p.note, p.wallet_id " +
+                "FROM planned_transactions p " +
+                "LEFT JOIN categories c ON p.category_id = c.id " +
+                "WHERE p.user_id = ? " +
+                "ORDER BY p.due_date ASC";
+        Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(getCurrentUserId())});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 list.add(cursorToItem(cursor));
@@ -137,12 +185,11 @@ public class GiaoDichDuKienDAO {
      */
     public List<GiaoDichDuKien> getDueSoon(String today, String tomorrow) {
         List<GiaoDichDuKien> list = new ArrayList<>();
-        String where = DatabaseHelper.COL_PLANNED_STATUS + " = 'pending' AND (" +
-                DatabaseHelper.COL_PLANNED_DUE_DATE + " = ? OR " +
-                DatabaseHelper.COL_PLANNED_DUE_DATE + " = ?) AND " +
-                DatabaseHelper.COL_USER_ID_FK + " = ?";
-        Cursor cursor = db.query(DatabaseHelper.TABLE_PLANNED, null, where,
-                new String[]{today, tomorrow, String.valueOf(getCurrentUserId())}, null, null, null);
+        String sql = "SELECT p.id, p.title, p.amount, p.category_id, c.name AS category_name, p.type, p.due_date, p.status, p.note, p.wallet_id " +
+                "FROM planned_transactions p " +
+                "LEFT JOIN categories c ON p.category_id = c.id " +
+                "WHERE p.status = 'pending' AND (p.due_date = ? OR p.due_date = ?) AND p.user_id = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{today, tomorrow, String.valueOf(getCurrentUserId())});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 list.add(cursorToItem(cursor));
@@ -154,16 +201,16 @@ public class GiaoDichDuKienDAO {
 
     private GiaoDichDuKien cursorToItem(Cursor cursor) {
         GiaoDichDuKien item = new GiaoDichDuKien();
-        item.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_ID)));
-        item.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_TITLE)));
-        item.setAmount(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_AMOUNT)));
-        item.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_CATEGORY)));
-        item.setType(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_TYPE)));
-        item.setDueDate(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_DUE_DATE)));
-        item.setStatus(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_STATUS)));
-        item.setNote(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PLANNED_NOTE)));
-        int walletIdx = cursor.getColumnIndex(DatabaseHelper.COL_PLANNED_WALLET_ID);
-        if (walletIdx != -1) item.setWalletId(cursor.getLong(walletIdx));
+        item.setId(cursor.getLong(0));
+        item.setTitle(cursor.getString(1));
+        item.setAmount(cursor.getDouble(2));
+        item.setCategoryId(cursor.getLong(3));
+        item.setCategory(cursor.getString(4) != null ? cursor.getString(4) : "Chưa phân loại");
+        item.setType(cursor.getString(5));
+        item.setDueDate(cursor.getString(6));
+        item.setStatus(cursor.getString(7));
+        item.setNote(cursor.getString(8));
+        item.setWalletId(cursor.getLong(9));
         return item;
     }
 }
