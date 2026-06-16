@@ -160,6 +160,11 @@
           <theme>@style/Theme.Android_app</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_them_ngan_sach.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_doi_mat_khau.xml">
         <config>
           <theme>@style/Theme.Android_app</theme>
@@ -205,6 +210,11 @@
           <theme>@style/Theme.Android_app</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_ngan_sach.xml">
+        <config>
+          <theme>@style/Theme.Android_app</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/item_profile_menu.xml">
         <config>
           <theme>@style/Theme.Android_app</theme>
@@ -231,7 +241,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4738d2a4-f23a-4095-a584-7980e95e4bac" name="Changes" comment="Fix một số lỗi cơ bản." />
+    <list default="true" id="4738d2a4-f23a-4095-a584-7980e95e4bac" name="Changes" comment="Fix một số lỗi cơ bản.">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/database/DatabaseHelper.class" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/example/android_app/database/DatabaseHelper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phan_tich_csdl.md" beforeDir="false" afterPath="$PROJECT_DIR$/phan_tich_csdl.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -240,7 +256,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=IVRSPN6DOR69KZLZ]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=C:\Users\nguyen\.android\avd\Pixel_6a.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -269,8 +285,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/nguyen2234/do_an_android&quot;,
-    &quot;accountId&quot;: &quot;9455158a-2b64-411a-adc3-d816db992f71&quot;
+    &quot;url&quot;: &quot;https://github.com/nguyen2234/do_an_android.git&quot;,
+    &quot;accountId&quot;: &quot;aa764df7-b6f4-461d-b173-ca9fbf50c0ab&quot;
   }
 }</component>
   <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\Lucci\.gradle\wrapper\dists\gradle-9.3.1-bin\23ovyewtku6u96viwx3xl3oks\gradle-9.3.1" javaHome="C:\Program Files\Android\Android Studio\jbr" gradleVersion="9.3.1" />
@@ -303,7 +319,7 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#16 on feature/profile&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/update-uxui&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/HocKi_4.2/ANDROID/doan/do_an_android&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
@@ -331,8 +347,6 @@
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
       <option name="DEBUGGER_TYPE" value="Auto" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -403,8 +417,6 @@
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
       <option name="DEBUGGER_TYPE" value="Auto" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -520,12 +532,12 @@
       <map>
         <entry key="com.example.android_app">
           <value>
-            <CheckInfo lastCheckTimestamp="1779071845296" />
+            <CheckInfo lastCheckTimestamp="1781638643711" />
           </value>
         </entry>
         <entry key="com.example.android_app.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1779071845277" />
+            <CheckInfo lastCheckTimestamp="1781638643711" />
           </value>
         </entry>
       </map>
