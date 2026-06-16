@@ -11,6 +11,7 @@ public class NguoiDung {
     private String avatar;
     private int themeMode; // 0: Auto, 1: Light, 2: Dark
     private String fullname;
+    private String transactionPin;
 
     public NguoiDung() {
     }
@@ -54,4 +55,7 @@ public class NguoiDung {
 
     public String getFullname() { return fullname; }
     public void setFullname(String fullname) { this.fullname = fullname; }
+
+    public String getTransactionPin() { return transactionPin; }
+    public void setTransactionPin(String transactionPin) { this.transactionPin = transactionPin; }
 }

@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.android_app.ChuyenTienActivity;
 import com.example.android_app.NapTienActivity;
+import com.example.android_app.MainActivity;
 import com.example.android_app.R;
 import com.example.android_app.adapter.GiaoDichAdapter;
 import com.example.android_app.database.GiaoDichDAO;
@@ -37,6 +38,7 @@ public class TrangChuFragment extends Fragment {
     private GiaoDichDAO transactionDAO;
     private NganSachDAO budgetDAO;
     private ThongBaoDAO notificationDAO;
+    private com.example.android_app.database.ReminderDAO reminderDAO;
     private TextView tvNotificationBadge;
 
     @Nullable
@@ -55,9 +57,11 @@ public class TrangChuFragment extends Fragment {
         transactionDAO = new GiaoDichDAO(getContext());
         budgetDAO = new NganSachDAO(getContext());
         notificationDAO = new ThongBaoDAO(getContext());
+        reminderDAO = new com.example.android_app.database.ReminderDAO(getContext());
         transactionDAO.open();
         budgetDAO.open();
         notificationDAO.open();
+        reminderDAO.open();
 
         // Nạp dữ liệu lần đầu
         loadHomeData();
@@ -86,16 +90,28 @@ public class TrangChuFragment extends Fragment {
                     startActivity(new Intent(getContext(), ChuyenTienActivity.class)));
         }
 
-        // Nút xem khoản đến hạn
-        View tvXemDuKien = view.findViewById(R.id.tvXemDuKien);
-        if (tvXemDuKien != null) {
-            tvXemDuKien.setOnClickListener(v -> {
+
+
+        // Click vào widget Nhắc hẹn thanh toán -> sang màn hình chính của nhắc hẹn
+        View cardPaymentReminderWidget = view.findViewById(R.id.cardPaymentReminderWidget);
+        if (cardPaymentReminderWidget != null) {
+            cardPaymentReminderWidget.setOnClickListener(v -> {
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                        .replace(R.id.fragmentContainer, new GiaoDichDuKienFragment())
+                        .replace(R.id.fragmentContainer, new com.example.android_app.fragment.PaymentReminderFragment())
                         .addToBackStack(null)
                         .commit();
+            });
+        }
+
+        // Click vào widget Giao dịch gần đây -> sang tab Thống kê
+        View cardGiaoDichGanDay = view.findViewById(R.id.cardGiaoDichGanDay);
+        if (cardGiaoDichGanDay != null) {
+            cardGiaoDichGanDay.setOnClickListener(v -> {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).setSelectedItemId(R.id.nav_stats);
+                }
             });
         }
     }
@@ -115,6 +131,7 @@ public class TrangChuFragment extends Fragment {
         if (transactionDAO != null) transactionDAO.close();
         if (budgetDAO != null) budgetDAO.close();
         if (notificationDAO != null) notificationDAO.close();
+        if (reminderDAO != null) reminderDAO.close();
     }
 
     private void updateNotificationBadge() {
@@ -150,6 +167,7 @@ public class TrangChuFragment extends Fragment {
         TextView tvNoBudgetHome = view.findViewById(R.id.tvNoBudgetHome);
 
         tinhToanNganSachThang(layoutBudgetListHome, tvNoBudgetHome);
+        loadReminderWidgetData(view);
 
         // Thiết lập RecyclerView
         if (rvTransactions != null) {
@@ -173,6 +191,11 @@ public class TrangChuFragment extends Fragment {
 
             // Hiển thị danh sách
             GiaoDichAdapter adapter = new GiaoDichAdapter(getContext(), recentTransactions);
+            adapter.setOnItemClickListener(transaction -> {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).setSelectedItemId(R.id.nav_stats);
+                }
+            });
             rvTransactions.setAdapter(adapter);
 
             // Cập nhật text tổng quan
@@ -287,5 +310,59 @@ public class TrangChuFragment extends Fragment {
 
     private String dinhDangTien(double amount) {
         return String.format("%,.0f", amount).replace(",", ".");
+    }
+
+    private void loadReminderWidgetData(View view) {
+        LinearLayout layoutReminderListHome = view.findViewById(R.id.layoutReminderListHome);
+        TextView tvNoReminderHome = view.findViewById(R.id.tvNoReminderHome);
+        if (layoutReminderListHome == null || tvNoReminderHome == null || reminderDAO == null) return;
+
+        layoutReminderListHome.removeAllViews();
+        List<com.example.android_app.model.Reminder> pendingReminders = reminderDAO.getPendingReminders(5);
+
+        if (pendingReminders.isEmpty()) {
+            tvNoReminderHome.setVisibility(View.VISIBLE);
+            layoutReminderListHome.setVisibility(View.GONE);
+        } else {
+            tvNoReminderHome.setVisibility(View.GONE);
+            layoutReminderListHome.setVisibility(View.VISIBLE);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+            for (int i = 0; i < pendingReminders.size(); i++) {
+                com.example.android_app.model.Reminder r = pendingReminders.get(i);
+                View itemView = inflater.inflate(R.layout.item_home_reminder, layoutReminderListHome, false);
+
+                TextView tvTitle = itemView.findViewById(R.id.tvReminderTitle);
+                TextView tvDue = itemView.findViewById(R.id.tvReminderDue);
+                TextView tvAmount = itemView.findViewById(R.id.tvReminderAmount);
+                TextView tvRecurrence = itemView.findViewById(R.id.tvReminderRecurrence);
+
+                if (tvTitle != null) tvTitle.setText(r.getTitle());
+                if (tvDue != null && r.getDueDate() != null) {
+                    tvDue.setText("Đến hạn: " + r.getDueDate().format(dtf));
+                }
+                if (tvAmount != null) {
+                    tvAmount.setText(dinhDangTien(r.getEstimatedAmount()) + " ₫");
+                }
+                if (tvRecurrence != null) {
+                    tvRecurrence.setText("Danh mục: " + (r.getCategory() != null ? r.getCategory() : "Khác"));
+                }
+
+                layoutReminderListHome.addView(itemView);
+
+                if (i < pendingReminders.size() - 1) {
+                    View divider = new View(getContext());
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            1
+                    );
+                    lp.setMargins(0, 4, 0, 4);
+                    divider.setLayoutParams(lp);
+                    divider.setBackgroundColor(getResources().getColor(R.color.colorDivider));
+                    layoutReminderListHome.addView(divider);
+                }
+            }
+        }
     }
 }

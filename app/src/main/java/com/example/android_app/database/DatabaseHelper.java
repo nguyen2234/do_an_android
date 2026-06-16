@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Tên database và phiên bản
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 13;
 
     // Khóa ngoại trỏ tới người dùng
     public static final String COL_USER_ID_FK = "user_id";
@@ -26,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_USER_AVATAR = "avatar";
     public static final String COL_USER_THEME = "theme_mode";
     public static final String COL_USER_FULLNAME = "fullname";
+    public static final String COL_USER_PIN = "transaction_pin";
 
     private static final String CREATE_TABLE_USERS =
             "CREATE TABLE " + TABLE_USERS + " (" +
@@ -35,7 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_EMAIL + " TEXT, " +
                     COL_USER_AVATAR + " TEXT, " +
                     COL_USER_THEME + " INTEGER DEFAULT 0, " +
-                    COL_USER_FULLNAME + " TEXT" +
+                    COL_USER_FULLNAME + " TEXT, " +
+                    COL_USER_PIN + " TEXT" +
                     ");";
 
     // --- BẢNG VÍ (WALLETS) ---
@@ -175,6 +177,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_ID_FK + " INTEGER" +
                     ");";
 
+    // --- BẢNG NHẮC HẸN THANH TOÁN (REMINDERS) ---
+    public static final String TABLE_REMINDERS = "reminders";
+    public static final String COL_REMINDER_ID = "id";
+    public static final String COL_REMINDER_TITLE = "title";
+    public static final String COL_REMINDER_AMOUNT = "estimated_amount";
+    public static final String COL_REMINDER_DUE_DATE = "due_date";
+    public static final String COL_REMINDER_RECURRENCE = "recurrence";
+    public static final String COL_REMINDER_OFFSET_DAYS = "offset_days";
+    public static final String COL_REMINDER_STATUS = "status";
+    public static final String COL_REMINDER_CATEGORY = "category";
+
+    private static final String CREATE_TABLE_REMINDERS =
+            "CREATE TABLE " + TABLE_REMINDERS + " (" +
+                    COL_REMINDER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_REMINDER_TITLE + " TEXT NOT NULL, " +
+                    COL_REMINDER_AMOUNT + " REAL NOT NULL, " +
+                    COL_REMINDER_DUE_DATE + " TEXT NOT NULL, " +
+                    COL_REMINDER_RECURRENCE + " TEXT NOT NULL, " +
+                    COL_REMINDER_OFFSET_DAYS + " INTEGER DEFAULT 0, " +
+                    COL_REMINDER_STATUS + " TEXT DEFAULT 'PENDING', " +
+                    COL_REMINDER_CATEGORY + " TEXT, " +
+                    COL_USER_ID_FK + " INTEGER" +
+                    ");";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -188,6 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_BUDGETS);
         db.execSQL(CREATE_TABLE_PLANNED);
         db.execSQL(CREATE_TABLE_NOTIFICATIONS);
+        db.execSQL(CREATE_TABLE_REMINDERS);
     }
 
     @Override
@@ -250,6 +277,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 11) {
             // Không thay đổi cấu trúc bảng để duy trì tương thích dữ liệu cũ.
             // Danh mục chung sẽ sử dụng type = 'general' hoặc kế thừa dữ liệu cũ.
+        }
+
+        // Thực hiện nâng cấp lên v12 để tạo bảng reminders
+        if (oldVersion < 12) {
+            try {
+                db.execSQL(CREATE_TABLE_REMINDERS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Thực hiện nâng cấp lên v13 để thêm transaction_pin vào bảng users
+        if (oldVersion < 13) {
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_USERS + " ADD COLUMN " + COL_USER_PIN + " TEXT");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

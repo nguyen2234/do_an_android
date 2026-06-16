@@ -13,7 +13,7 @@ import com.example.android_app.utils.SecurityUtils;
 
 public class DangKyActivity extends AppCompatActivity {
 
-    private EditText etUsername, etEmail, etPassword, etConfirmPassword, etFullname;
+    private EditText etUsername, etEmail, etPassword, etConfirmPassword, etFullname, etPin;
     private Button btnRegister;
     private TextView tvGoToLogin;
     private NguoiDungDAO userDAO;
@@ -31,6 +31,7 @@ public class DangKyActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etRegisterEmail);
         etPassword = findViewById(R.id.etRegisterPassword);
         etConfirmPassword = findViewById(R.id.etRegisterConfirmPassword);
+        etPin = findViewById(R.id.etRegisterPin);
         btnRegister = findViewById(R.id.btnRegister);
         tvGoToLogin = findViewById(R.id.tvGoToLogin);
 
@@ -47,6 +48,7 @@ public class DangKyActivity extends AppCompatActivity {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String confirmPassword = etConfirmPassword.getText().toString().trim();
+        String pin = etPin.getText().toString().trim();
 
         if (fullname.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập Họ và tên (bắt buộc)", Toast.LENGTH_SHORT).show();
@@ -83,8 +85,14 @@ public class DangKyActivity extends AppCompatActivity {
             return;
         }
 
+        if (pin.isEmpty() || pin.length() != 6 || !pin.matches("\\d{6}")) {
+            Toast.makeText(this, "Mã PIN giao dịch phải chứa đúng 6 chữ số", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String hashedPassword = SecurityUtils.hashPasswordSHA256(password);
         NguoiDung newUser = new NguoiDung(0, username, hashedPassword, email, null, 0, fullname);
+        newUser.setTransactionPin(pin);
         long result = userDAO.registerUser(newUser);
 
         if (result > 0) {

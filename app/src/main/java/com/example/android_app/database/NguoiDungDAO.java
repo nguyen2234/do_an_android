@@ -33,6 +33,7 @@ public class NguoiDungDAO {
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
         values.put(DatabaseHelper.COL_USER_FULLNAME, user.getFullname());
+        values.put(DatabaseHelper.COL_USER_PIN, user.getTransactionPin());
         return db.insert(DatabaseHelper.TABLE_USERS, null, values);
     }
 
@@ -68,6 +69,7 @@ public class NguoiDungDAO {
             user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
             user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
             user.setFullname(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_FULLNAME)));
+            user.setTransactionPin(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PIN)));
             cursor.close();
             return user;
         }
@@ -92,6 +94,7 @@ public class NguoiDungDAO {
             user.setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_AVATAR)));
             user.setThemeMode(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_THEME)));
             user.setFullname(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_FULLNAME)));
+            user.setTransactionPin(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_PIN)));
             cursor.close();
             return user;
         }
@@ -110,6 +113,7 @@ public class NguoiDungDAO {
         values.put(DatabaseHelper.COL_USER_AVATAR, user.getAvatar());
         values.put(DatabaseHelper.COL_USER_THEME, user.getThemeMode());
         values.put(DatabaseHelper.COL_USER_FULLNAME, user.getFullname());
+        values.put(DatabaseHelper.COL_USER_PIN, user.getTransactionPin());
 
         return db.update(DatabaseHelper.TABLE_USERS, values,
                 DatabaseHelper.COL_USER_ID + "=?",
@@ -126,6 +130,17 @@ public class NguoiDungDAO {
         if (avatar != null) {
             values.put(DatabaseHelper.COL_USER_AVATAR, avatar);
         }
+        return db.update(DatabaseHelper.TABLE_USERS, values,
+                DatabaseHelper.COL_USER_ID + "=?",
+                new String[]{String.valueOf(userId)});
+    }
+
+    /**
+     * Cập nhật mã PIN giao dịch
+     */
+    public int updateTransactionPin(long userId, String newPin) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_USER_PIN, newPin);
         return db.update(DatabaseHelper.TABLE_USERS, values,
                 DatabaseHelper.COL_USER_ID + "=?",
                 new String[]{String.valueOf(userId)});

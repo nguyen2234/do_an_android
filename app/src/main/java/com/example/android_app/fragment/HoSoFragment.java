@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,6 +75,12 @@ public class HoSoFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), com.example.android_app.ChuyenTienActivity.class);
                 startActivity(intent);
             });
+        }
+
+        // Xử lý Thay đổi mã PIN giao dịch
+        View btnChangePin = view.findViewById(R.id.btnChangePin);
+        if (btnChangePin != null) {
+            btnChangePin.setOnClickListener(v -> showVerifyPasswordDialog());
         }
 
         // Xử lý Đăng xuất
@@ -174,6 +181,98 @@ public class HoSoFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void showVerifyPasswordDialog() {
+        if (getContext() == null) return;
+
+        long userId = prefs.getLong("user_id", -1);
+        if (userId == -1) {
+            Toast.makeText(getContext(), "Không tìm thấy thông tin tài khoản", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_verify_password, null);
+        final EditText etVerifyPassword = dialogView.findViewById(R.id.etVerifyPassword);
+        android.widget.Button btnCancelVerifyPassword = dialogView.findViewById(R.id.btnCancelVerifyPassword);
+        android.widget.Button btnConfirmVerifyPassword = dialogView.findViewById(R.id.btnConfirmVerifyPassword);
+
+        final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        btnCancelVerifyPassword.setOnClickListener(v -> dialog.dismiss());
+
+        btnConfirmVerifyPassword.setOnClickListener(v -> {
+            String password = etVerifyPassword.getText().toString().trim();
+            if (password.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            NguoiDung user = userDAO.getUserById(userId);
+            if (user != null) {
+                String hashedInput = com.example.android_app.utils.SecurityUtils.hashPasswordSHA256(password);
+                if (hashedInput.equals(user.getPassword())) {
+                    dialog.dismiss();
+                    showChangePinDialog(userId);
+                } else {
+                    Toast.makeText(getContext(), "Mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Lỗi hệ thống khi tìm người dùng", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void showChangePinDialog(final long userId) {
+        if (getContext() == null) return;
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_change_pin, null);
+        final EditText etNewPin = dialogView.findViewById(R.id.etNewPin);
+        final EditText etConfirmPin = dialogView.findViewById(R.id.etConfirmPin);
+        android.widget.Button btnCancelChangePin = dialogView.findViewById(R.id.btnCancelChangePin);
+        android.widget.Button btnConfirmChangePin = dialogView.findViewById(R.id.btnConfirmChangePin);
+
+        final androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        btnCancelChangePin.setOnClickListener(v -> dialog.dismiss());
+
+        btnConfirmChangePin.setOnClickListener(v -> {
+            String newPin = etNewPin.getText().toString().trim();
+            String confirmPin = etConfirmPin.getText().toString().trim();
+
+            if (newPin.isEmpty() || confirmPin.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng nhập đầy đủ mã PIN", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (newPin.length() != 6 || !newPin.matches("\\d{6}")) {
+                Toast.makeText(getContext(), "Mã PIN phải gồm đúng 6 chữ số", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!newPin.equals(confirmPin)) {
+                Toast.makeText(getContext(), "Xác nhận mã PIN không khớp", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int result = userDAO.updateTransactionPin(userId, newPin);
+            if (result > 0) {
+                Toast.makeText(getContext(), "✅ Đổi mã PIN giao dịch thành công!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            } else {
+                Toast.makeText(getContext(), "Đã xảy ra lỗi khi đổi mã PIN", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
     }
 
 
