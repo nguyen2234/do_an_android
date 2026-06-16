@@ -41,10 +41,48 @@ public class ReminderDAO {
         return prefs.getLong("user_id", 1);
     }
 
+    private long getOrCreateCategoryId(String categoryName) {
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            return 0;
+        }
+        String name = categoryName.trim();
+        long catId = 0;
+        Cursor catCursor = db.rawQuery(
+                "SELECT id FROM categories WHERE name = ? AND user_id = ?",
+                new String[]{name, String.valueOf(getCurrentUserId())});
+        if (catCursor != null && catCursor.moveToFirst()) {
+            catId = catCursor.getLong(0);
+        } else {
+            Cursor catCursorFallback = db.rawQuery(
+                    "SELECT id FROM categories WHERE name = ?",
+                    new String[]{name});
+            if (catCursorFallback != null && catCursorFallback.moveToFirst()) {
+                catId = catCursorFallback.getLong(0);
+            }
+            if (catCursorFallback != null) catCursorFallback.close();
+        }
+        if (catCursor != null) catCursor.close();
+
+        if (catId <= 0) {
+            ContentValues catValues = new ContentValues();
+            catValues.put("name", name);
+            catValues.put("type", "expense"); // Reminders are generally expenses
+            catValues.put("user_id", getCurrentUserId());
+            catId = db.insert("categories", null, catValues);
+        }
+        return catId;
+    }
+
     /**
      * Thêm nhắc hẹn thanh toán mới.
      */
     public long addReminder(Reminder item) {
+        long catId = item.getCategoryId();
+        if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
+            catId = getOrCreateCategoryId(item.getCategory());
+            item.setCategoryId(catId);
+        }
+
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_REMINDER_TITLE, item.getTitle());
         values.put(DatabaseHelper.COL_REMINDER_AMOUNT, item.getEstimatedAmount());
@@ -52,7 +90,7 @@ public class ReminderDAO {
         values.put(DatabaseHelper.COL_REMINDER_RECURRENCE, item.getRecurrence() != null ? item.getRecurrence().name() : Recurrence.MONTHLY.name());
         values.put(DatabaseHelper.COL_REMINDER_OFFSET_DAYS, item.getReminderOffsetDays());
         values.put(DatabaseHelper.COL_REMINDER_STATUS, item.getStatus() != null ? item.getStatus().name() : ReminderStatus.PENDING.name());
-        values.put(DatabaseHelper.COL_REMINDER_CATEGORY, item.getCategory());
+        values.put(DatabaseHelper.COL_REMINDER_CATEGORY_ID, catId > 0 ? catId : null);
         values.put(DatabaseHelper.COL_USER_ID_FK, getCurrentUserId());
         return db.insert(DatabaseHelper.TABLE_REMINDERS, null, values);
     }
@@ -61,6 +99,12 @@ public class ReminderDAO {
      * Cập nhật nhắc hẹn thanh toán.
      */
     public int updateReminder(Reminder item) {
+        long catId = item.getCategoryId();
+        if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
+            catId = getOrCreateCategoryId(item.getCategory());
+            item.setCategoryId(catId);
+        }
+
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_REMINDER_TITLE, item.getTitle());
         values.put(DatabaseHelper.COL_REMINDER_AMOUNT, item.getEstimatedAmount());
@@ -68,7 +112,7 @@ public class ReminderDAO {
         values.put(DatabaseHelper.COL_REMINDER_RECURRENCE, item.getRecurrence() != null ? item.getRecurrence().name() : Recurrence.MONTHLY.name());
         values.put(DatabaseHelper.COL_REMINDER_OFFSET_DAYS, item.getReminderOffsetDays());
         values.put(DatabaseHelper.COL_REMINDER_STATUS, item.getStatus() != null ? item.getStatus().name() : ReminderStatus.PENDING.name());
-        values.put(DatabaseHelper.COL_REMINDER_CATEGORY, item.getCategory());
+        values.put(DatabaseHelper.COL_REMINDER_CATEGORY_ID, catId > 0 ? catId : null);
         return db.update(DatabaseHelper.TABLE_REMINDERS, values,
                 DatabaseHelper.COL_REMINDER_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
                 new String[]{String.valueOf(item.getId()), String.valueOf(getCurrentUserId())});
@@ -99,9 +143,11 @@ public class ReminderDAO {
      */
     public Reminder getReminderById(long id) {
         Reminder item = null;
-        Cursor cursor = db.query(DatabaseHelper.TABLE_REMINDERS, null,
-                DatabaseHelper.COL_REMINDER_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())}, null, null, null);
+        String sql = "SELECT r.id, r.title, r.estimated_amount, r.due_date, r.recurrence, r.offset_days, r.status, r.category_id, c.name AS category_name, r.user_id " +
+                "FROM reminders r " +
+                "LEFT JOIN categories c ON r.category_id = c.id " +
+                "WHERE r.id = ? AND r.user_id = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
         if (cursor != null && cursor.moveToFirst()) {
             item = cursorToItem(cursor);
             cursor.close();
@@ -114,10 +160,12 @@ public class ReminderDAO {
      */
     public List<Reminder> getAllReminders() {
         List<Reminder> list = new ArrayList<>();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_REMINDERS, null,
-                DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{String.valueOf(getCurrentUserId())}, null, null,
-                DatabaseHelper.COL_REMINDER_DUE_DATE + " ASC");
+        String sql = "SELECT r.id, r.title, r.estimated_amount, r.due_date, r.recurrence, r.offset_days, r.status, r.category_id, c.name AS category_name, r.user_id " +
+                "FROM reminders r " +
+                "LEFT JOIN categories c ON r.category_id = c.id " +
+                "WHERE r.user_id = ? " +
+                "ORDER BY r.due_date ASC";
+        Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(getCurrentUserId())});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 list.add(cursorToItem(cursor));
@@ -132,11 +180,13 @@ public class ReminderDAO {
      */
     public List<Reminder> getPendingReminders(int limit) {
         List<Reminder> list = new ArrayList<>();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_REMINDERS, null,
-                DatabaseHelper.COL_REMINDER_STATUS + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{ReminderStatus.PENDING.name(), String.valueOf(getCurrentUserId())}, null, null,
-                DatabaseHelper.COL_REMINDER_DUE_DATE + " ASC",
-                String.valueOf(limit));
+        String sql = "SELECT r.id, r.title, r.estimated_amount, r.due_date, r.recurrence, r.offset_days, r.status, r.category_id, c.name AS category_name, r.user_id " +
+                "FROM reminders r " +
+                "LEFT JOIN categories c ON r.category_id = c.id " +
+                "WHERE r.status = ? AND r.user_id = ? " +
+                "ORDER BY r.due_date ASC " +
+                "LIMIT ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{ReminderStatus.PENDING.name(), String.valueOf(getCurrentUserId()), String.valueOf(limit)});
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 list.add(cursorToItem(cursor));
@@ -148,29 +198,30 @@ public class ReminderDAO {
 
     private Reminder cursorToItem(Cursor cursor) {
         Reminder item = new Reminder();
-        item.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_ID)));
-        item.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_TITLE)));
-        item.setEstimatedAmount(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_AMOUNT)));
-        item.setDueDateFromString(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_DUE_DATE)));
+        item.setId(cursor.getLong(0));
+        item.setTitle(cursor.getString(1));
+        item.setEstimatedAmount(cursor.getDouble(2));
+        item.setDueDateFromString(cursor.getString(3));
         
-        String recStr = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_RECURRENCE));
+        String recStr = cursor.getString(4);
         try {
             item.setRecurrence(Recurrence.valueOf(recStr));
         } catch (IllegalArgumentException e) {
             item.setRecurrence(Recurrence.MONTHLY);
         }
 
-        item.setReminderOffsetDays(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_OFFSET_DAYS)));
+        item.setReminderOffsetDays(cursor.getInt(5));
 
-        String statusStr = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_STATUS));
+        String statusStr = cursor.getString(6);
         try {
             item.setStatus(ReminderStatus.valueOf(statusStr));
         } catch (IllegalArgumentException e) {
             item.setStatus(ReminderStatus.PENDING);
         }
 
-        item.setCategory(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_REMINDER_CATEGORY)));
-        item.setUserId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_USER_ID_FK)));
+        item.setCategoryId(cursor.getLong(7));
+        item.setCategory(cursor.getString(8) != null ? cursor.getString(8) : "Chưa phân loại");
+        item.setUserId(cursor.getLong(9));
         return item;
     }
 }

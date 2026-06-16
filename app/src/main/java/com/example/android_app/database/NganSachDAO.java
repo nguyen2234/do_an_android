@@ -44,15 +44,46 @@ public class NganSachDAO {
     // ──────────────────────────────────────────────────────────────────────────
 
     public long addNganSach(NganSach budget) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COL_BUDGET_NAME,       budget.getName());
-        values.put(DatabaseHelper.COL_BUDGET_AMOUNT,     budget.getAmount());
-        values.put(DatabaseHelper.COL_BUDGET_SPENT,      budget.getSpentAmount());
-        values.put(DatabaseHelper.COL_BUDGET_START,      budget.getStartDate());
-        values.put(DatabaseHelper.COL_BUDGET_END,        budget.getEndDate());
-        values.put(DatabaseHelper.COL_BUDGET_CATEGORIES, budget.getCategoryIds());
-        values.put(DatabaseHelper.COL_USER_ID_FK,        getCurrentUserId());
-        return db.insert(DatabaseHelper.TABLE_BUDGETS, null, values);
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHelper.COL_BUDGET_NAME,       budget.getName());
+            values.put(DatabaseHelper.COL_BUDGET_AMOUNT,     budget.getAmount());
+            values.put(DatabaseHelper.COL_BUDGET_SPENT,      budget.getSpentAmount());
+            values.put(DatabaseHelper.COL_BUDGET_START,      budget.getStartDate());
+            values.put(DatabaseHelper.COL_BUDGET_END,        budget.getEndDate());
+            values.put(DatabaseHelper.COL_USER_ID_FK,        getCurrentUserId());
+            
+            long budgetId = db.insert(DatabaseHelper.TABLE_BUDGETS, null, values);
+            if (budgetId > 0) {
+                // Thêm các bản ghi liên kết vào bảng budget_categories
+                for (com.example.android_app.model.DanhMuc c : budget.getCategories()) {
+                    long catId = c.getId();
+                    if (catId <= 0) {
+                        Cursor catCursor = db.rawQuery(
+                                "SELECT id FROM categories WHERE name = ? AND user_id = ?",
+                                new String[]{c.getName().trim(), String.valueOf(getCurrentUserId())});
+                        if (catCursor != null && catCursor.moveToFirst()) {
+                            catId = catCursor.getLong(0);
+                        }
+                        if (catCursor != null) catCursor.close();
+                    }
+                    if (catId > 0) {
+                        ContentValues bcValues = new ContentValues();
+                        bcValues.put(DatabaseHelper.COL_BC_BUDGET_ID, budgetId);
+                        bcValues.put(DatabaseHelper.COL_BC_CATEGORY_ID, catId);
+                        db.insert(DatabaseHelper.TABLE_BUDGET_CATEGORIES, null, bcValues);
+                    }
+                }
+            }
+            db.setTransactionSuccessful();
+            return budgetId;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        } finally {
+            db.endTransaction();
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
@@ -60,7 +91,7 @@ public class NganSachDAO {
     // ──────────────────────────────────────────────────────────────────────────
 
     /**
-     * Cập nhật số tiền đã chi của ngân sách (được gọi tự động khi thêm giao dịch).
+     * Cập nhật số tiền đã chi của ngân sách.
      */
     public int updateSpentAmount(int id, double newSpentAmount) {
         ContentValues values = new ContentValues();
@@ -73,54 +104,88 @@ public class NganSachDAO {
 
     /**
      * Cập nhật toàn bộ thông tin ngân sách (dùng cho chức năng Sửa).
-     * Lưu ý: KHÔNG cập nhật spent_amount để tránh mất dữ liệu đã chi.
-     *
-     * @param budget Đối tượng NganSach đã chỉnh sửa (id phải hợp lệ)
-     * @return Số hàng bị ảnh hưởng (> 0 là thành công)
      */
     public int updateNganSach(NganSach budget) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COL_BUDGET_NAME,       budget.getName());
-        values.put(DatabaseHelper.COL_BUDGET_AMOUNT,     budget.getAmount());
-        values.put(DatabaseHelper.COL_BUDGET_START,      budget.getStartDate());
-        values.put(DatabaseHelper.COL_BUDGET_END,        budget.getEndDate());
-        values.put(DatabaseHelper.COL_BUDGET_CATEGORIES, budget.getCategoryIds());
-        return db.update(
-                DatabaseHelper.TABLE_BUDGETS, values,
-                DatabaseHelper.COL_BUDGET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{String.valueOf(budget.getId()), String.valueOf(getCurrentUserId())});
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHelper.COL_BUDGET_NAME,       budget.getName());
+            values.put(DatabaseHelper.COL_BUDGET_AMOUNT,     budget.getAmount());
+            values.put(DatabaseHelper.COL_BUDGET_START,      budget.getStartDate());
+            values.put(DatabaseHelper.COL_BUDGET_END,        budget.getEndDate());
+            
+            int rows = db.update(
+                    DatabaseHelper.TABLE_BUDGETS, values,
+                    DatabaseHelper.COL_BUDGET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                    new String[]{String.valueOf(budget.getId()), String.valueOf(getCurrentUserId())});
+            
+            if (rows > 0) {
+                // Xóa liên kết cũ trong budget_categories
+                db.delete(DatabaseHelper.TABLE_BUDGET_CATEGORIES,
+                        DatabaseHelper.COL_BC_BUDGET_ID + " = ?",
+                        new String[]{String.valueOf(budget.getId())});
+                
+                // Thêm liên kết mới
+                for (com.example.android_app.model.DanhMuc c : budget.getCategories()) {
+                    long catId = c.getId();
+                    if (catId <= 0) {
+                        Cursor catCursor = db.rawQuery(
+                                "SELECT id FROM categories WHERE name = ? AND user_id = ?",
+                                new String[]{c.getName().trim(), String.valueOf(getCurrentUserId())});
+                        if (catCursor != null && catCursor.moveToFirst()) {
+                            catId = catCursor.getLong(0);
+                        }
+                        if (catCursor != null) catCursor.close();
+                    }
+                    if (catId > 0) {
+                        ContentValues bcValues = new ContentValues();
+                        bcValues.put(DatabaseHelper.COL_BC_BUDGET_ID, budget.getId());
+                        bcValues.put(DatabaseHelper.COL_BC_CATEGORY_ID, catId);
+                        db.insert(DatabaseHelper.TABLE_BUDGET_CATEGORIES, null, bcValues);
+                    }
+                }
+            }
+            db.setTransactionSuccessful();
+            return rows;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            db.endTransaction();
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
     //  XÓA
     // ──────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Xóa một ngân sách theo ID.
-     *
-     * ⚠ QUAN TRỌNG: Chỉ xóa bản ghi trong bảng 'budgets'.
-     * Tất cả giao dịch (bảng 'transactions') KHÔNG bị xóa theo.
-     *
-     * @param budgetId ID ngân sách cần xóa
-     * @return Số hàng bị ảnh hưởng (> 0 là thành công)
-     */
     public int deleteNganSach(int budgetId) {
-        return db.delete(
-                DatabaseHelper.TABLE_BUDGETS,
-                DatabaseHelper.COL_BUDGET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{String.valueOf(budgetId), String.valueOf(getCurrentUserId())});
+        db.beginTransaction();
+        try {
+            // Xóa liên kết trong budget_categories
+            db.delete(DatabaseHelper.TABLE_BUDGET_CATEGORIES,
+                    DatabaseHelper.COL_BC_BUDGET_ID + " = ?",
+                    new String[]{String.valueOf(budgetId)});
+            
+            int rows = db.delete(
+                    DatabaseHelper.TABLE_BUDGETS,
+                    DatabaseHelper.COL_BUDGET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                    new String[]{String.valueOf(budgetId), String.valueOf(getCurrentUserId())});
+            
+            db.setTransactionSuccessful();
+            return rows;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        } finally {
+            db.endTransaction();
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────────────
     //  TRUY VẤN
     // ──────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Lấy thông tin một ngân sách theo ID.
-     *
-     * @param budgetId ID ngân sách cần lấy
-     * @return Đối tượng NganSach, hoặc null nếu không tìm thấy
-     */
     public NganSach getBudgetById(int budgetId) {
         Cursor cursor = db.query(
                 DatabaseHelper.TABLE_BUDGETS, null,
@@ -129,17 +194,19 @@ public class NganSachDAO {
                 null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            NganSach b = mapCursorToBudget(cursor);
+            NganSach budget = mapCursorToBudget(cursor);
             cursor.close();
-            return b;
+            budget.setCategories(getCategoriesForBudget(budget.getId()));
+            
+            double calculatedSpent = calculateSpentAmountForBudget(budget.getId(), budget.getStartDate(), budget.getEndDate());
+            budget.setSpentAmount(calculatedSpent);
+            
+            return budget;
         }
         if (cursor != null) cursor.close();
         return null;
     }
 
-    /**
-     * Lấy danh sách tất cả ngân sách của người dùng, sắp xếp mới nhất lên trên.
-     */
     public List<NganSach> getAllBudgets() {
         List<NganSach> list = new ArrayList<>();
         Cursor cursor = db.query(
@@ -151,42 +218,84 @@ public class NganSachDAO {
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                list.add(mapCursorToBudget(cursor));
+                NganSach budget = mapCursorToBudget(cursor);
+                budget.setCategories(getCategoriesForBudget(budget.getId()));
+                
+                double calculatedSpent = calculateSpentAmountForBudget(budget.getId(), budget.getStartDate(), budget.getEndDate());
+                budget.setSpentAmount(calculatedSpent);
+                updateSpentAmount(budget.getId(), calculatedSpent);
+                
+                list.add(budget);
             } while (cursor.moveToNext());
             cursor.close();
         }
         return list;
     }
 
+    public List<com.example.android_app.model.DanhMuc> getCategoriesForBudget(int budgetId) {
+        List<com.example.android_app.model.DanhMuc> list = new ArrayList<>();
+        String sql = "SELECT c.id, c.name, c.icon, c.type, c.color " +
+                "FROM categories c " +
+                "INNER JOIN budget_categories bc ON c.id = bc.category_id " +
+                "WHERE bc.budget_id = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(budgetId)});
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                com.example.android_app.model.DanhMuc c = new com.example.android_app.model.DanhMuc();
+                c.setId(cursor.getInt(0));
+                c.setName(cursor.getString(1));
+                c.setIcon(cursor.getString(2));
+                c.setLoai(cursor.getString(3));
+                c.setColor(cursor.getInt(4));
+                list.add(c);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return list;
+    }
+
+    public double calculateSpentAmountForBudget(int budgetId, String startDate, String endDate) {
+        double spent = 0;
+        String sql = "SELECT SUM(t.amount) FROM transactions t " +
+                "INNER JOIN budget_categories bc ON t.category_id = bc.category_id " +
+                "WHERE bc.budget_id = ? " +
+                "AND t.type = 'expense' " +
+                "AND t.user_id = ? " +
+                "AND (substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2)) " +
+                "BETWEEN (substr(?, 7, 4) || '-' || substr(?, 4, 2) || '-' || substr(?, 1, 2)) " +
+                "AND (substr(?, 7, 4) || '-' || substr(?, 4, 2) || '-' || substr(?, 1, 2))";
+        
+        Cursor cursor = db.rawQuery(sql, new String[]{
+                String.valueOf(budgetId),
+                String.valueOf(getCurrentUserId()),
+                startDate, startDate,
+                endDate, endDate
+        });
+        
+        if (cursor != null && cursor.moveToFirst()) {
+            spent = cursor.getDouble(0);
+            cursor.close();
+        }
+        return spent;
+    }
+
     // ──────────────────────────────────────────────────────────────────────────
     //  UNIQUE CATEGORY – Kiểm tra danh mục độc quyền
     // ──────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Lấy tập hợp TÊN danh mục đã được sử dụng trong BẤT KỲ ngân sách nào của người dùng.
-     *
-     * Dùng khi THÊM MỚI: lọc bỏ tất cả danh mục đã có ngân sách,
-     * đảm bảo mỗi danh mục chỉ tồn tại trong đúng 1 ngân sách.
-     *
-     * @return Set tên danh mục đã được dùng
-     */
     public Set<String> getUsedCategoryNames() {
         Set<String> usedNames = new HashSet<>();
-        Cursor cursor = db.query(
-                DatabaseHelper.TABLE_BUDGETS,
-                new String[]{DatabaseHelper.COL_BUDGET_CATEGORIES},
-                DatabaseHelper.COL_USER_ID_FK + " = ?",
-                new String[]{String.valueOf(getCurrentUserId())},
-                null, null, null);
+        String sql = "SELECT c.name FROM categories c " +
+                "INNER JOIN budget_categories bc ON c.id = bc.category_id " +
+                "INNER JOIN budgets b ON bc.budget_id = b.id " +
+                "WHERE b.user_id = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(getCurrentUserId())});
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String catIds = cursor.getString(0);
-                if (catIds != null && !catIds.trim().isEmpty()) {
-                    // Tách chuỗi "Ăn uống, Di chuyển" thành từng tên riêng lẻ
-                    for (String name : catIds.split(",")) {
-                        usedNames.add(name.trim());
-                    }
+                String catName = cursor.getString(0);
+                if (catName != null) {
+                    usedNames.add(catName.trim());
                 }
             } while (cursor.moveToNext());
             cursor.close();
@@ -194,31 +303,22 @@ public class NganSachDAO {
         return usedNames;
     }
 
-    /**
-     * Lấy tập hợp tên danh mục đã dùng, loại trừ ngân sách có ID chỉ định.
-     *
-     * Dùng khi CHỈNH SỬA ngân sách: danh mục của chính ngân sách đang sửa
-     * sẽ KHÔNG bị lọc bỏ, nên người dùng vẫn có thể chọn lại chúng.
-     *
-     * @param excludeBudgetId ID ngân sách cần loại trừ khỏi kiểm tra
-     * @return Set tên danh mục đã dùng bởi ngân sách KHÁC
-     */
     public Set<String> getUsedCategoryNamesExcluding(int excludeBudgetId) {
         Set<String> usedNames = new HashSet<>();
-        Cursor cursor = db.query(
-                DatabaseHelper.TABLE_BUDGETS,
-                new String[]{DatabaseHelper.COL_BUDGET_CATEGORIES},
-                DatabaseHelper.COL_USER_ID_FK + " = ? AND " + DatabaseHelper.COL_BUDGET_ID + " != ?",
-                new String[]{String.valueOf(getCurrentUserId()), String.valueOf(excludeBudgetId)},
-                null, null, null);
+        String sql = "SELECT c.name FROM categories c " +
+                "INNER JOIN budget_categories bc ON c.id = bc.category_id " +
+                "INNER JOIN budgets b ON bc.budget_id = b.id " +
+                "WHERE b.user_id = ? AND b.id != ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{
+                String.valueOf(getCurrentUserId()),
+                String.valueOf(excludeBudgetId)
+        });
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                String catIds = cursor.getString(0);
-                if (catIds != null && !catIds.trim().isEmpty()) {
-                    for (String name : catIds.split(",")) {
-                        usedNames.add(name.trim());
-                    }
+                String catName = cursor.getString(0);
+                if (catName != null) {
+                    usedNames.add(catName.trim());
                 }
             } while (cursor.moveToNext());
             cursor.close();
@@ -230,13 +330,6 @@ public class NganSachDAO {
     //  HELPER NỘI BỘ
     // ──────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Ánh xạ một hàng Cursor thành đối tượng NganSach.
-     * Tập trung logic mapping tại một chỗ, tránh lặp code ở nhiều phương thức.
-     *
-     * @param cursor Con trỏ DB đã được moveToFirst() / moveToNext()
-     * @return Đối tượng NganSach tương ứng
-     */
     private NganSach mapCursorToBudget(Cursor cursor) {
         NganSach b = new NganSach();
         b.setId(cursor.getInt(
@@ -251,8 +344,6 @@ public class NganSachDAO {
                 cursor.getColumnIndexOrThrow(DatabaseHelper.COL_BUDGET_START)));
         b.setEndDate(cursor.getString(
                 cursor.getColumnIndexOrThrow(DatabaseHelper.COL_BUDGET_END)));
-        b.setCategoryIds(cursor.getString(
-                cursor.getColumnIndexOrThrow(DatabaseHelper.COL_BUDGET_CATEGORIES)));
         return b;
     }
 }

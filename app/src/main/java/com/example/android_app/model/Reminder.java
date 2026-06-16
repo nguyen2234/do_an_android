@@ -14,7 +14,8 @@ public class Reminder {
     private Recurrence recurrence;         // Tần suất lặp lại (MONTHLY, QUARTERLY, YEARLY)
     private int reminderOffsetDays;        // Thời gian nhắc trước (số ngày)
     private ReminderStatus status;         // Trạng thái (PENDING, PAID)
-    private String category;               // Danh mục liên kết
+    private long categoryId;               // ID danh mục liên kết
+    private String categoryName;           // Tên danh mục liên kết (lấy từ JOIN)
     private long userId;                   // ID người dùng liên kết
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -26,7 +27,7 @@ public class Reminder {
 
     public Reminder(long id, String title, double estimatedAmount, LocalDateTime dueDate,
                     Recurrence recurrence, int reminderOffsetDays, ReminderStatus status,
-                    String category, long userId) {
+                    long categoryId, String categoryName, long userId) {
         this.id = id;
         this.title = title;
         this.estimatedAmount = estimatedAmount;
@@ -34,7 +35,23 @@ public class Reminder {
         this.recurrence = recurrence;
         this.reminderOffsetDays = reminderOffsetDays;
         this.status = status != null ? status : ReminderStatus.PENDING;
-        this.category = category;
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.userId = userId;
+    }
+
+    public Reminder(long id, String title, double estimatedAmount, LocalDateTime dueDate,
+                    Recurrence recurrence, int reminderOffsetDays, ReminderStatus status,
+                    String categoryName, long userId) {
+        this.id = id;
+        this.title = title;
+        this.estimatedAmount = estimatedAmount;
+        this.dueDate = dueDate;
+        this.recurrence = recurrence;
+        this.reminderOffsetDays = reminderOffsetDays;
+        this.status = status != null ? status : ReminderStatus.PENDING;
+        this.categoryId = 0;
+        this.categoryName = categoryName;
         this.userId = userId;
     }
 
@@ -60,8 +77,15 @@ public class Reminder {
     public ReminderStatus getStatus() { return status; }
     public void setStatus(ReminderStatus status) { this.status = status; }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public long getCategoryId() { return categoryId; }
+    public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
+
+    // Tương thích ngược với mã nguồn cũ gọi getCategory() để lấy tên hiển thị
+    public String getCategory() { return categoryName; }
+    public void setCategory(String categoryName) { this.categoryName = categoryName; }
+
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     public long getUserId() { return userId; }
     public void setUserId(long userId) { this.userId = userId; }
