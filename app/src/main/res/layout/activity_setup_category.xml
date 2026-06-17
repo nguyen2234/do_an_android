@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Màn hình Onboarding Bước 1: Thiết lập Danh mục
-    Người dùng phải thêm ÍT NHẤT 1 danh mục trước khi được tiếp tục.
-    Nút "Tiếp tục" sẽ bị vô hiệu hóa (disabled) cho đến khi categoryCount >= 1.
--->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -11,7 +7,7 @@
     android:background="@color/colorBackground"
     android:fitsSystemWindows="true">
 
-    <!-- ===== HEADER ===== -->
+    
     <LinearLayout
         android:id="@+id/headerSetupCategory"
         android:layout_width="match_parent"
@@ -21,7 +17,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Step Indicator -->
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,13 +25,13 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="12dp">
 
-            <!-- Step 1 (active) -->
+            
             <View
                 android:layout_width="36dp"
                 android:layout_height="6dp"
                 android:background="#FFFFFF"
                 android:layout_marginEnd="4dp"/>
-            <!-- Step 2 (inactive) -->
+            
             <View
                 android:layout_width="36dp"
                 android:layout_height="6dp"
@@ -69,11 +65,8 @@
             android:textSize="13sp"/>
     </LinearLayout>
 
-    <!-- ===== NÚT "TIẾP TỤC" (cố định dưới cùng) ===== -->
-    <!--
-        Ban đầu alpha=0.5 và enabled=false.
-        Java code sẽ bật lên khi categoryCount >= 1.
-    -->
+    
+    
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnContinueSetupCategory"
         android:layout_width="match_parent"
@@ -90,7 +83,7 @@
         app:cornerRadius="14dp"
         app:elevation="4dp"/>
 
-    <!-- ===== THÂN TRANG ===== -->
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -99,7 +92,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Card thêm danh mục nhanh -->
+        
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -123,7 +116,7 @@
                     android:textColor="@color/colorPrimary"
                     android:layout_marginBottom="12dp"/>
 
-                <!-- Tên danh mục -->
+                
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -143,7 +136,7 @@
                         android:textSize="15sp"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Chọn màu nhanh -->
+                
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,7 +168,7 @@
                         android:backgroundTint="#3498DB"/>
                 </LinearLayout>
 
-                <!-- Nút Thêm -->
+                
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddCategorySetup"
                     android:layout_width="match_parent"
@@ -187,7 +180,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Tiêu đề danh sách đã thêm -->
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -213,7 +206,7 @@
                 android:textColor="@color/colorTextSecondary"/>
         </LinearLayout>
 
-        <!-- Danh sách danh mục đã thêm (RecyclerView) -->
+        
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCategoriesSetup"
             android:layout_width="match_parent"

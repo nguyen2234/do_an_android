@@ -14,9 +14,7 @@ import com.example.android_app.R;
 import com.example.android_app.model.ThongBao;
 import java.util.List;
 
-/**
- * Adapter hiển thị danh sách thông báo trong RecyclerView.
- */
+
 public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHolder> {
 
     private Context context;
@@ -54,7 +52,7 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHo
         holder.tvContent.setText(tb.getContent());
         holder.tvDate.setText(tb.getDate());
 
-        // Hiển thị trạng thái Chưa đọc (dấu chấm xanh) và kiểu chữ
+        
         if (tb.isRead()) {
             holder.viewUnreadDot.setVisibility(View.GONE);
             holder.tvTitle.setAlpha(0.7f);
@@ -65,7 +63,7 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHo
             holder.tvContent.setAlpha(1.0f);
         }
 
-        // Định dạng Icon và màu nền tương ứng với loại thông báo
+        
         String type = tb.getType();
         if ("warning".equalsIgnoreCase(type)) {
             holder.imgIcon.setImageResource(R.drawable.ic_info);
@@ -73,7 +71,7 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHo
             holder.viewIconBg.setBackgroundResource(R.drawable.bg_badge_red);
             holder.viewIconBg.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorExpenseLight));
         } else if ("transaction".equalsIgnoreCase(type)) {
-            // Xem tiêu đề có chứa chữ Nạp tiền hoặc Chi tiêu không để chọn icon phù hợp
+            
             if (tb.getTitle().contains("Nạp")) {
                 holder.imgIcon.setImageResource(R.drawable.ic_topup_modern);
             } else if (tb.getTitle().contains("Chi")) {
@@ -86,11 +84,11 @@ public class ThongBaoAdapter extends RecyclerView.Adapter<ThongBaoAdapter.ViewHo
             holder.viewIconBg.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorIncomeLight));
         } else if ("reminder".equalsIgnoreCase(type)) {
             holder.imgIcon.setImageResource(R.drawable.ic_calendar);
-            holder.imgIcon.setColorFilter(Color.parseColor("#3B82F6")); // Blue accent
+            holder.imgIcon.setColorFilter(Color.parseColor("#3B82F6")); 
             holder.viewIconBg.setBackgroundResource(R.drawable.bg_badge_red);
-            holder.viewIconBg.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorIncomeLight)); // Tận dụng nền sáng
+            holder.viewIconBg.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorIncomeLight)); 
         } else {
-            // Mặc định
+            
             holder.imgIcon.setImageResource(R.drawable.ic_notification);
             holder.imgIcon.setColorFilter(ContextCompat.getColor(context, R.color.colorTextSecondary));
             holder.viewIconBg.setBackgroundResource(R.drawable.bg_badge_red);

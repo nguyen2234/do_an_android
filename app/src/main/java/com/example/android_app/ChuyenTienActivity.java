@@ -33,12 +33,12 @@ public class ChuyenTienActivity extends AppCompatActivity {
     private LinearLayout containerInternal, containerBank;
     private ImageView btnBackTransfer;
 
-    // Internal Views
+    
     private Spinner spinnerSenderWallet, spinnerReceiverWallet;
     private EditText etInternalAmount, etInternalNote;
     private Button btnConfirmInternal;
 
-    // Bank Views
+    
     private Spinner spinnerBankSourceWallet, spinnerBeneficiaryBank;
     private EditText etBeneficiaryAccount, etBeneficiaryName, etBankAmount, etBankNote;
     private Button btnConfirmBank;
@@ -65,27 +65,27 @@ public class ChuyenTienActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chuyen_tien);
 
-        // Init DAOs
+        
         walletDAO = new ViTienDAO(this);
         transactionDAO = new GiaoDichDAO(this);
         walletDAO.open();
         transactionDAO.open();
 
-        // Map general views
+        
         tabInternal = findViewById(R.id.tabInternal);
         tabBank = findViewById(R.id.tabBank);
         containerInternal = findViewById(R.id.containerInternal);
         containerBank = findViewById(R.id.containerBank);
         btnBackTransfer = findViewById(R.id.btnBackTransfer);
 
-        // Internal views
+        
         spinnerSenderWallet = findViewById(R.id.spinnerSenderWallet);
         spinnerReceiverWallet = findViewById(R.id.spinnerReceiverWallet);
         etInternalAmount = findViewById(R.id.etInternalAmount);
         etInternalNote = findViewById(R.id.etInternalNote);
         btnConfirmInternal = findViewById(R.id.btnConfirmInternal);
 
-        // Bank views
+        
         spinnerBankSourceWallet = findViewById(R.id.spinnerBankSourceWallet);
         spinnerBeneficiaryBank = findViewById(R.id.spinnerBeneficiaryBank);
         etBeneficiaryAccount = findViewById(R.id.etBeneficiaryAccount);
@@ -94,16 +94,16 @@ public class ChuyenTienActivity extends AppCompatActivity {
         etBankNote = findViewById(R.id.etBankNote);
         btnConfirmBank = findViewById(R.id.btnConfirmBank);
 
-        // Click listeners for General Tabs
+        
         tabInternal.setOnClickListener(v -> selectTab(true));
         tabBank.setOnClickListener(v -> selectTab(false));
         btnBackTransfer.setOnClickListener(v -> finish());
 
-        // Confirm buttons
+        
         btnConfirmInternal.setOnClickListener(v -> executeInternalTransfer());
         btnConfirmBank.setOnClickListener(v -> executeBankTransfer());
 
-        // Setup spinners
+        
         setupWallets();
         setupBankSpinner();
     }
@@ -147,7 +147,7 @@ public class ChuyenTienActivity extends AppCompatActivity {
         spinnerReceiverWallet.setAdapter(walletAdapter);
         spinnerBankSourceWallet.setAdapter(walletAdapter);
 
-        // Default selection for receiver to avoid selecting identical sender wallet
+        
         if (walletAdapter.getCount() > 1) {
             spinnerReceiverWallet.setSelection(1);
         }
@@ -188,16 +188,16 @@ public class ChuyenTienActivity extends AppCompatActivity {
             return;
         }
 
-        // Processing transfer
+        
         double newSenderBalance = senderWallet.getBalance() - amount;
         double newReceiverBalance = receiverWallet.getBalance() + amount;
 
-        // Perform balance updates
+        
         int updateSender = walletDAO.updateBalance(senderWallet.getId(), newSenderBalance);
         int updateReceiver = walletDAO.updateBalance(receiverWallet.getId(), newReceiverBalance);
 
         if (updateSender > 0 && updateReceiver > 0) {
-            // Log expense transaction for sender wallet
+            
             String dateStr = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
             String note = etInternalNote.getText().toString().trim();
             if (note.isEmpty()) {
@@ -207,11 +207,11 @@ public class ChuyenTienActivity extends AppCompatActivity {
             GiaoDich expenseTrans = new GiaoDich(0, "Chuyển tiền nội bộ", amount, "Chuyển tiền", "expense", dateStr, note, senderWallet.getId());
             transactionDAO.addTransaction(expenseTrans);
 
-            // Log income transaction for receiver wallet
+            
             GiaoDich incomeTrans = new GiaoDich(0, "Nhận tiền nội bộ", amount, "Chuyển tiền", "income", dateStr, "Nhận từ ví " + senderWallet.getName() + ": " + note, receiverWallet.getId());
             transactionDAO.addTransaction(incomeTrans);
 
-            // Gửi thông báo chuyển tiền và kiểm tra cảnh báo số dư thấp của ví gửi
+            
             NotificationHelper.showTransferNotification(this, senderWallet.getName(), receiverWallet.getName(), amount);
             if (newSenderBalance < senderWallet.getMinBalance() && senderWallet.getMinBalance() > 0) {
                 NotificationHelper.showLowBalanceNotification(this, senderWallet.getName(), newSenderBalance);
@@ -219,7 +219,7 @@ public class ChuyenTienActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Chuyển tiền nội bộ thành công!", Toast.LENGTH_SHORT).show();
 
-            // Redirect to KetQuaGiaoDichActivity
+            
             Intent intent = new Intent(this, KetQuaGiaoDichActivity.class);
             intent.putExtra("isSuccess", true);
             intent.putExtra("amount", amount);
@@ -270,7 +270,7 @@ public class ChuyenTienActivity extends AppCompatActivity {
             return;
         }
 
-        // Deduct balance
+        
         double newBalance = sourceWallet.getBalance() - amount;
         int updateResult = walletDAO.updateBalance(sourceWallet.getId(), newBalance);
 
@@ -281,11 +281,11 @@ public class ChuyenTienActivity extends AppCompatActivity {
             }
             String fullNote = "Nguồn: " + sourceWallet.getName() + " | TK Nhận: " + accountNo + " - " + beneficiaryName + " | Lời nhắn: " + note;
 
-            // Log single expense transaction representing the bank transfer
+            
             GiaoDich bankTrans = new GiaoDich(0, "CK Ngân hàng (" + bank + ")", amount, "Chuyển tiền", "expense", dateStr, fullNote, sourceWallet.getId());
             transactionDAO.addTransaction(bankTrans);
 
-            // Gửi thông báo chuyển tiền và kiểm tra cảnh báo số dư thấp của ví gửi
+            
             NotificationHelper.showTransferNotification(this, sourceWallet.getName(), beneficiaryName + " (" + bank + ")", amount);
             if (newBalance < sourceWallet.getMinBalance() && sourceWallet.getMinBalance() > 0) {
                 NotificationHelper.showLowBalanceNotification(this, sourceWallet.getName(), newBalance);
@@ -293,7 +293,7 @@ public class ChuyenTienActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Chuyển khoản liên ngân hàng thành công!", Toast.LENGTH_SHORT).show();
 
-            // Redirect to KetQuaGiaoDichActivity
+            
             Intent intent = new Intent(this, KetQuaGiaoDichActivity.class);
             intent.putExtra("isSuccess", true);
             intent.putExtra("amount", amount);

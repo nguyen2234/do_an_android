@@ -6,7 +6,7 @@
     android:background="@color/colorBackground"
     >
 
-    <!-- Background Pattern (circles) -->
+    
     <View
         android:layout_width="260dp"
         android:layout_height="260dp"
@@ -27,7 +27,7 @@
         android:alpha="0.05"
         android:background="@drawable/bg_icon_primary"/>
 
-    <!-- Header Bar -->
+    
     <RelativeLayout
         android:id="@+id/headerLayoutNotif"
         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             android:focusable="true"/>
     </RelativeLayout>
 
-    <!-- Empty State Layout -->
+    
     <LinearLayout
         android:id="@+id/layoutEmptyNotification"
         android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
             android:fontFamily="sans-serif-medium"/>
     </LinearLayout>
 
-    <!-- Notification List -->
+    
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNotifications"
         android:layout_width="match_parent"
@@ -115,7 +115,7 @@
         android:overScrollMode="never"
         android:scrollbars="none"/>
 
-    <!-- Bottom Delete All Button -->
+    
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDeleteAllNotifications"
         android:layout_width="match_parent"

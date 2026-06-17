@@ -12,9 +12,7 @@ import com.example.android_app.model.ReminderStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data Access Object cho bảng Nhắc hẹn thanh toán (reminders).
- */
+
 public class ReminderDAO {
 
     private SQLiteDatabase db;
@@ -34,7 +32,7 @@ public class ReminderDAO {
         dbHelper.close();
     }
 
-    // Lấy ID người dùng hiện tại từ SharedPreferences
+    
     private long getCurrentUserId() {
         if (context == null) return 1;
         android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -66,16 +64,14 @@ public class ReminderDAO {
         if (catId <= 0) {
             ContentValues catValues = new ContentValues();
             catValues.put("name", name);
-            catValues.put("type", "expense"); // Reminders are generally expenses
+            catValues.put("type", "expense"); 
             catValues.put("user_id", getCurrentUserId());
             catId = db.insert("categories", null, catValues);
         }
         return catId;
     }
 
-    /**
-     * Thêm nhắc hẹn thanh toán mới.
-     */
+    
     public long addReminder(Reminder item) {
         long catId = item.getCategoryId();
         if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
@@ -95,9 +91,7 @@ public class ReminderDAO {
         return db.insert(DatabaseHelper.TABLE_REMINDERS, null, values);
     }
 
-    /**
-     * Cập nhật nhắc hẹn thanh toán.
-     */
+    
     public int updateReminder(Reminder item) {
         long catId = item.getCategoryId();
         if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
@@ -118,18 +112,14 @@ public class ReminderDAO {
                 new String[]{String.valueOf(item.getId()), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Xóa một nhắc hẹn thanh toán.
-     */
+    
     public int deleteReminder(long id) {
         return db.delete(DatabaseHelper.TABLE_REMINDERS,
                 DatabaseHelper.COL_REMINDER_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
                 new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Đánh dấu nhắc hẹn là đã thanh toán (PAID).
-     */
+    
     public int markAsPaid(long id) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_REMINDER_STATUS, ReminderStatus.PAID.name());
@@ -138,9 +128,7 @@ public class ReminderDAO {
                 new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Lấy nhắc hẹn theo ID.
-     */
+    
     public Reminder getReminderById(long id) {
         Reminder item = null;
         String sql = "SELECT r.id, r.title, r.estimated_amount, r.due_date, r.recurrence, r.offset_days, r.status, r.category_id, c.name AS category_name, r.user_id " +
@@ -155,9 +143,7 @@ public class ReminderDAO {
         return item;
     }
 
-    /**
-     * Lấy danh sách tất cả nhắc hẹn thanh toán (xếp theo hạn gần nhất).
-     */
+    
     public List<Reminder> getAllReminders() {
         List<Reminder> list = new ArrayList<>();
         String sql = "SELECT r.id, r.title, r.estimated_amount, r.due_date, r.recurrence, r.offset_days, r.status, r.category_id, c.name AS category_name, r.user_id " +
@@ -175,9 +161,7 @@ public class ReminderDAO {
         return list;
     }
 
-    /**
-     * Lấy tối đa N nhắc hẹn đang PENDING có hạn gần nhất.
-     */
+    
     public List<Reminder> getPendingReminders(int limit) {
         List<Reminder> list = new ArrayList<>();
         String sql = "SELECT r.id, r.title, r.estimated_amount, r.due_date, r.recurrence, r.offset_days, r.status, r.category_id, c.name AS category_name, r.user_id " +

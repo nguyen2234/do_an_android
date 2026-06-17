@@ -6,20 +6,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Lớp trợ giúp thao tác với SQLite.
- * Chịu trách nhiệm tạo bảng và nâng cấp phiên bản cơ sở dữ liệu.
- */
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    // Tên database và phiên bản
+    
     private static final String DATABASE_NAME = "ExpenseManager.db";
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
-    // Khóa ngoại trỏ tới người dùng
+    
     public static final String COL_USER_ID_FK = "user_id";
+    public static final String COL_WALLET_IS_HIDDEN = "is_hidden";
 
-    // --- BẢNG NGƯỜI DÙNG (USERS) ---
+    
     public static final String TABLE_USERS = "users";
     public static final String COL_USER_ID = "id";
     public static final String COL_USER_USERNAME = "username";
@@ -29,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_USER_THEME = "theme_mode";
     public static final String COL_USER_FULLNAME = "fullname";
     public static final String COL_USER_PIN = "transaction_pin";
-
+ 
     private static final String CREATE_TABLE_USERS =
             "CREATE TABLE " + TABLE_USERS + " (" +
                     COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -41,8 +39,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_FULLNAME + " TEXT, " +
                     COL_USER_PIN + " TEXT" +
                     ");";
-
-    // --- BẢNG VÍ (WALLETS) ---
+ 
+    
     public static final String TABLE_WALLETS = "wallets";
     public static final String COL_WALLET_ID = "id";
     public static final String COL_WALLET_NAME = "name";
@@ -52,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_WALLET_ICON = "icon";
     public static final String COL_WALLET_COLOR = "color";
     public static final String COL_WALLET_MIN_BALANCE = "min_balance";
-
+ 
     private static final String CREATE_TABLE_WALLETS =
             "CREATE TABLE " + TABLE_WALLETS + " (" +
                     COL_WALLET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -63,15 +61,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_WALLET_ICON + " TEXT, " +
                     COL_WALLET_COLOR + " TEXT, " +
                     COL_WALLET_MIN_BALANCE + " REAL DEFAULT 0, " +
+                    COL_WALLET_IS_HIDDEN + " INTEGER DEFAULT 0, " +
                     COL_USER_ID_FK + " INTEGER" +
                     ");";
 
-    // --- BẢNG DANH MỤC (CATEGORIES) ---
+    
     public static final String TABLE_CATEGORIES = "categories";
     public static final String COL_CATEGORY_ID = "id";
     public static final String COL_CATEGORY_NAME = "name";
     public static final String COL_CATEGORY_ICON = "icon";
-    public static final String COL_CATEGORY_TYPE = "type"; // "income" hoặc "expense"
+    public static final String COL_CATEGORY_TYPE = "type"; 
     public static final String COL_CATEGORY_COLOR = "color";
     public static final String COL_CATEGORY_NOTE = "note";
 
@@ -86,13 +85,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_ID_FK + " INTEGER" +
                     ");";
 
-    // --- BẢNG GIAO DỊCH (TRANSACTIONS) ---
+    
     public static final String TABLE_TRANSACTIONS = "transactions";
     public static final String COL_TRANS_ID = "id";
     public static final String COL_TRANS_TITLE = "title";
     public static final String COL_TRANS_AMOUNT = "amount";
     public static final String COL_TRANS_CATEGORY_ID = "category_id";
-    public static final String COL_TRANS_TYPE = "type"; // "income" hoặc "expense"
+    public static final String COL_TRANS_TYPE = "type"; 
     public static final String COL_TRANS_DATE = "date";
     public static final String COL_TRANS_NOTE = "note";
     public static final String COL_TRANS_WALLET_ID = "wallet_id";
@@ -112,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(" + COL_TRANS_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COL_CATEGORY_ID + ")" +
                     ");";
 
-    // --- BẢNG NGÂN SÁCH (BUDGETS) ---
+    
     public static final String TABLE_BUDGETS = "budgets";
     public static final String COL_BUDGET_ID = "id";
     public static final String COL_BUDGET_NAME = "name";
@@ -120,7 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_BUDGET_SPENT = "spent_amount";
     public static final String COL_BUDGET_START = "start_date";
     public static final String COL_BUDGET_END = "end_date";
-    public static final String COL_BUDGET_CATEGORIES = "category_ids"; // Deprecated (chỉ dùng trong migration)
+    public static final String COL_BUDGET_CATEGORIES = "category_ids"; 
 
     private static final String CREATE_TABLE_BUDGETS =
             "CREATE TABLE " + TABLE_BUDGETS + " (" +
@@ -133,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_ID_FK + " INTEGER" +
                     ");";
 
-    // --- BẢNG TRUNG GIAN NGÂN SÁCH - DANH MỤC (BUDGET_CATEGORIES) [MỚI] ---
+    
     public static final String TABLE_BUDGET_CATEGORIES = "budget_categories";
     public static final String COL_BC_BUDGET_ID = "budget_id";
     public static final String COL_BC_CATEGORY_ID = "category_id";
@@ -147,7 +146,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COL_BC_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COL_CATEGORY_ID + ") ON DELETE CASCADE" +
                     ");";
 
-    // --- BẢNG GIAO DỊCH DỰ KIẾN (PLANNED TRANSACTIONS) ---
+    
     public static final String TABLE_PLANNED = "planned_transactions";
     public static final String COL_PLANNED_ID = "id";
     public static final String COL_PLANNED_TITLE = "title";
@@ -174,7 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY(" + COL_PLANNED_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + COL_CATEGORY_ID + ")" +
                     ");";
 
-    // --- BẢNG THÔNG BÁO (NOTIFICATIONS) ---
+    
     public static final String TABLE_NOTIFICATIONS = "notifications";
     public static final String COL_NOTIFICATION_ID = "id";
     public static final String COL_NOTIFICATION_TITLE = "title";
@@ -194,7 +193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COL_USER_ID_FK + " INTEGER" +
                     ");";
 
-    // --- BẢNG NHẮC HẸN THANH TOÁN (REMINDERS) ---
+    
     public static final String TABLE_REMINDERS = "reminders";
     public static final String COL_REMINDER_ID = "id";
     public static final String COL_REMINDER_TITLE = "title";
@@ -244,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Nâng cấp khéo léo để giữ lại dữ liệu cũ
+        
         if (oldVersion < 7) {
             try {
                 db.execSQL("ALTER TABLE " + TABLE_WALLETS + " ADD COLUMN " + COL_WALLET_MIN_BALANCE + " REAL DEFAULT 0");
@@ -287,7 +286,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (oldVersion < 11) {
-            // Hệ thống danh mục chung không thay đổi cấu trúc bảng
+            
         }
 
         if (oldVersion < 12) {
@@ -306,11 +305,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        // Thực hiện nâng cấp từ v13 lên v14: Chuẩn hóa 1NF ngân sách và thay đổi category TEXT -> category_id INTEGER
+        
         if (oldVersion < 14) {
             db.beginTransaction();
             try {
-                // 1. Tạo bảng trung gian budget_categories
+                
                 db.execSQL("CREATE TABLE budget_categories (" +
                         "budget_id INTEGER, " +
                         "category_id INTEGER, " +
@@ -319,7 +318,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE" +
                         ");");
 
-                // 2. Tách chuỗi category_ids và lưu vào budget_categories
+                
                 Cursor budgetsCursor = db.rawQuery("SELECT id, category_ids, user_id FROM budgets", null);
                 if (budgetsCursor != null) {
                     while (budgetsCursor.moveToNext()) {
@@ -332,7 +331,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             for (String name : names) {
                                 String cleanName = name.trim();
                                 if (!cleanName.isEmpty()) {
-                                    // Tìm id danh mục tương ứng
+                                    
                                     Cursor catCursor = db.rawQuery(
                                             "SELECT id FROM categories WHERE name = ? AND user_id = ?",
                                             new String[]{cleanName, String.valueOf(userId)});
@@ -350,7 +349,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                     }
                                     if (catCursor != null) catCursor.close();
 
-                                    // Nếu không tìm thấy, thêm mới danh mục để tránh mất liên kết
+                                    
                                     if (catId == -1) {
                                         ContentValues catValues = new ContentValues();
                                         catValues.put("name", cleanName);
@@ -372,7 +371,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     budgetsCursor.close();
                 }
 
-                // 3. Xóa cột category_ids khỏi bảng budgets
+                
                 db.execSQL("CREATE TABLE budgets_new (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "name TEXT NOT NULL, " +
@@ -387,7 +386,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE budgets;");
                 db.execSQL("ALTER TABLE budgets_new RENAME TO budgets;");
 
-                // 4. Chuyển đổi bảng transactions (category TEXT -> category_id INTEGER)
+                
                 db.execSQL("CREATE TABLE transactions_new (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "title TEXT NOT NULL, " +
@@ -459,7 +458,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE transactions;");
                 db.execSQL("ALTER TABLE transactions_new RENAME TO transactions;");
 
-                // 5. Chuyển đổi bảng planned_transactions (category TEXT -> category_id INTEGER)
+                
                 db.execSQL("CREATE TABLE planned_transactions_new (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "title TEXT NOT NULL, " +
@@ -533,7 +532,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE planned_transactions;");
                 db.execSQL("ALTER TABLE planned_transactions_new RENAME TO planned_transactions;");
 
-                // 6. Chuyển đổi bảng reminders (category TEXT -> category_id INTEGER)
+                
                 db.execSQL("CREATE TABLE reminders_new (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "title TEXT NOT NULL, " +
@@ -609,6 +608,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 e.printStackTrace();
             } finally {
                 db.endTransaction();
+            }
+        }
+        if (oldVersion < 15) {
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_WALLETS + " ADD COLUMN " + COL_WALLET_IS_HIDDEN + " INTEGER DEFAULT 0");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

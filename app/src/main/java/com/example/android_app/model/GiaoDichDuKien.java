@@ -1,19 +1,17 @@
 package com.example.android_app.model;
 
-/**
- * Model đại diện cho một Giao dịch Dự kiến (khoản thu/chi đến hạn).
- */
+
 public class GiaoDichDuKien {
     private long id;
-    private String title;       // Tên khoản (vd: Tiền điện, Tiền thuê nhà)
-    private double amount;      // Số tiền
-    private long categoryId;    // ID danh mục của giao dịch dự kiến
-    private String categoryName;// Tên danh mục của giao dịch dự kiến (lấy từ JOIN)
-    private String type;        // "income" (thu) hoặc "expense" (chi)
-    private String dueDate;     // Ngày đến hạn (dd/MM/yyyy)
-    private String status;      // "pending" hoặc "completed"
-    private String note;        // Ghi chú
-    private long walletId;      // ID ví liên kết
+    private String title;       
+    private double amount;      
+    private long categoryId;    
+    private String categoryName;
+    private String type;        
+    private String dueDate;     
+    private String status;      
+    private String note;        
+    private long walletId;      
 
     public GiaoDichDuKien() {}
 
@@ -45,7 +43,7 @@ public class GiaoDichDuKien {
         this.walletId = walletId;
     }
 
-    // Getters & Setters
+    
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
@@ -58,7 +56,7 @@ public class GiaoDichDuKien {
     public long getCategoryId() { return categoryId; }
     public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
 
-    // Tương thích ngược với mã nguồn cũ gọi getCategory() để lấy tên hiển thị
+    
     public String getCategory() { return categoryName; }
     public void setCategory(String categoryName) { this.categoryName = categoryName; }
 
@@ -80,9 +78,9 @@ public class GiaoDichDuKien {
     public long getWalletId() { return walletId; }
     public void setWalletId(long walletId) { this.walletId = walletId; }
 
-    /** Kiểm tra khoản này là chi tiêu không */
+    
     public boolean isExpense() { return "expense".equals(type); }
 
-    /** Kiểm tra khoản này còn pending không */
+    
     public boolean isPending() { return "pending".equals(status); }
 }

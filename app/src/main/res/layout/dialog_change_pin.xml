@@ -25,7 +25,7 @@
         android:gravity="center"
         android:layout_marginBottom="20dp"/>
 
-    <!-- Mã PIN mới -->
+    
     <EditText
         android:id="@+id/etNewPin"
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
         android:textSize="15sp"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Xác nhận mã PIN mới -->
+    
     <EditText
         android:id="@+id/etConfirmPin"
         android:layout_width="match_parent"

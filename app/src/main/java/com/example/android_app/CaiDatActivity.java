@@ -44,11 +44,11 @@ public class CaiDatActivity extends AppCompatActivity {
         userDAO = new NguoiDungDAO(this);
         userDAO.open();
 
-        // Khởi tạo ActivityResultLauncher để chọn ảnh tạm thời trong cache
+        
         imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             if (uri != null && ivPreviewAvatar != null) {
                 try {
-                    // Copy ảnh vào thư mục cache trước
+                    
                     InputStream is = getContentResolver().openInputStream(uri);
                     File tempFile = new File(getCacheDir(), "temp_avatar_" + System.currentTimeMillis() + ".jpg");
                     FileOutputStream fos = new FileOutputStream(tempFile);
@@ -75,7 +75,7 @@ public class CaiDatActivity extends AppCompatActivity {
         findViewById(R.id.btnEditProfile).setOnClickListener(v -> showEditProfileDialog());
         findViewById(R.id.btnChangePassword).setOnClickListener(v -> showChangePasswordDialog());
 
-        // Xử lý action từ Intent chuyển hướng
+        
         String action = getIntent().getStringExtra("action");
         if ("change_password".equals(action)) {
             showChangePasswordDialog();
@@ -92,7 +92,7 @@ public class CaiDatActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            // Khôi phục lại đường dẫn avatar cũ
+            
             long userId = prefs.getLong("user_id", -1);
             if (userId != -1) {
                 NguoiDung user = userDAO.getUserById(userId);
@@ -109,7 +109,7 @@ public class CaiDatActivity extends AppCompatActivity {
         NguoiDung user = userDAO.getUserById(userId);
         if (user == null) return;
 
-        currentSelectedAvatarPath = user.getAvatar(); // Lưu lại đường dẫn cũ
+        currentSelectedAvatarPath = user.getAvatar(); 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_sua_thong_tin, null);
@@ -120,7 +120,7 @@ public class CaiDatActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        // Tự động dọn dẹp ảnh tạm trong cache khi đóng dialog mà không lưu
+        
         dialog.setOnDismissListener(d -> cleanupTempAvatar());
 
         EditText etName = dialogView.findViewById(R.id.etEditName);
@@ -129,7 +129,7 @@ public class CaiDatActivity extends AppCompatActivity {
 
         etName.setText(user.getFullname() != null ? user.getFullname() : "");
 
-        // Hiển thị avatar hiện tại
+        
         if (currentSelectedAvatarPath != null && !currentSelectedAvatarPath.isEmpty()) {
             if (currentSelectedAvatarPath.startsWith("/")) {
                 ivPreviewAvatar.setImageBitmap(BitmapFactory.decodeFile(currentSelectedAvatarPath));
@@ -141,7 +141,7 @@ public class CaiDatActivity extends AppCompatActivity {
             ivPreviewAvatar.setImageResource(R.drawable.ic_avatar_banana);
         }
 
-        // Xử lý nút chọn ảnh
+        
         btnChooseImage.setOnClickListener(v -> {
             imagePickerLauncher.launch("image/*");
         });
@@ -162,7 +162,7 @@ public class CaiDatActivity extends AppCompatActivity {
                 return;
             }
 
-            // Di chuyển ảnh từ cache sang bộ nhớ chính thức nếu được lưu
+            
             if (currentSelectedAvatarPath != null && currentSelectedAvatarPath.contains("temp_avatar_")) {
                 try {
                     File tempFile = new File(currentSelectedAvatarPath);
@@ -182,7 +182,7 @@ public class CaiDatActivity extends AppCompatActivity {
                         fos.close();
                         is.close();
                         
-                        tempFile.delete(); // xóa ảnh tạm
+                        tempFile.delete(); 
                         currentSelectedAvatarPath = finalFile.getAbsolutePath();
                     }
                 } catch (Exception e) {
@@ -195,7 +195,7 @@ public class CaiDatActivity extends AppCompatActivity {
 
             int result = userDAO.updateUser(user);
             if (result > 0) {
-                // Cập nhật SharedPreferences
+                
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("fullname", newFullName);
                 editor.apply();

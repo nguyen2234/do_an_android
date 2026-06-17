@@ -15,7 +15,7 @@ public class ChaoMungActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chao_mung);
 
-        // Fade in animation on root view
+        
         View root = getWindow().getDecorView();
         AlphaAnimation fadeIn = new AlphaAnimation(0f, 1f);
         fadeIn.setDuration(800);
@@ -25,11 +25,23 @@ public class ChaoMungActivity extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             long userId = prefs.getLong("user_id", -1);
             if (userId != -1) {
-                boolean onboardingDone = prefs.getBoolean("isOnboardingDone", false);
-                if (!onboardingDone) {
-                    startActivity(new Intent(ChaoMungActivity.this, SetupCategoryActivity.class));
-                } else {
+                
+                com.example.android_app.database.ViTienDAO walletDAO = new com.example.android_app.database.ViTienDAO(ChaoMungActivity.this);
+                walletDAO.open();
+                int walletCount = walletDAO.getWalletCount();
+                walletDAO.close();
+
+                if (walletCount > 0) {
+                    
+                    prefs.edit().putBoolean("isOnboardingDone", true).apply();
                     startActivity(new Intent(ChaoMungActivity.this, MainActivity.class));
+                } else {
+                    boolean onboardingDone = prefs.getBoolean("isOnboardingDone", false);
+                    if (!onboardingDone) {
+                        startActivity(new Intent(ChaoMungActivity.this, SetupCategoryActivity.class));
+                    } else {
+                        startActivity(new Intent(ChaoMungActivity.this, MainActivity.class));
+                    }
                 }
             } else {
                 startActivity(new Intent(ChaoMungActivity.this, DangNhapActivity.class));

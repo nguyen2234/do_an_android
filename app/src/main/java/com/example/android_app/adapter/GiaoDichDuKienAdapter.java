@@ -16,9 +16,7 @@ import com.example.android_app.model.GiaoDichDuKien;
 
 import java.util.List;
 
-/**
- * Adapter hiển thị danh sách Giao dịch Dự kiến (khoản thu/chi đến hạn).
- */
+
 public class GiaoDichDuKienAdapter extends RecyclerView.Adapter<GiaoDichDuKienAdapter.ViewHolder> {
 
     public interface OnItemActionListener {
@@ -54,7 +52,7 @@ public class GiaoDichDuKienAdapter extends RecyclerView.Adapter<GiaoDichDuKienAd
         holder.tvNgayHan.setText("Đến hạn: " + item.getDueDate());
         holder.tvDanhMuc.setText(item.getCategory() != null ? item.getCategory() : "");
 
-        // Màu số tiền và badge theo loại
+        
         String amountStr = String.format("%,.0f", item.getAmount()).replace(",", ".") + " ₫";
         if (item.isExpense()) {
             holder.tvSoTien.setText("- " + amountStr);
@@ -66,7 +64,7 @@ public class GiaoDichDuKienAdapter extends RecyclerView.Adapter<GiaoDichDuKienAd
             holder.viewBadge.setBackgroundColor(Color.parseColor("#27AE60"));
         }
 
-        // Trạng thái
+        
         if ("completed".equals(item.getStatus())) {
             holder.tvTrangThai.setText("✅ Xong");
             holder.tvTrangThai.setTextColor(Color.WHITE);
@@ -77,12 +75,12 @@ public class GiaoDichDuKienAdapter extends RecyclerView.Adapter<GiaoDichDuKienAd
             holder.tvTrangThai.setBackgroundColor(Color.parseColor("#F39C12"));
         }
 
-        // Nút xóa
+        
         holder.btnXoa.setOnClickListener(v -> {
             if (listener != null) listener.onDelete(item, holder.getAdapterPosition());
         });
 
-        // Long click -> đánh dấu hoàn thành
+        
         holder.itemView.setOnLongClickListener(v -> {
             if (listener != null) listener.onMarkComplete(item, holder.getAdapterPosition());
             return true;

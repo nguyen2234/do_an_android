@@ -33,10 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Màn hình Xác nhận thanh toán nhắc hẹn.
- * Cho phép chọn ví, xác minh số dư, xác thực mã PIN và lưu giao dịch.
- */
+
 public class ThanhToanReminderActivity extends AppCompatActivity {
 
     private TextView tvReminderTitle, tvAmountDisplay, tvCategoryDisplay, tvNotesDisplay;
@@ -73,7 +70,7 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
 
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        // Đọc dữ liệu từ Intent
+        
         Intent intent = getIntent();
         if (intent != null) {
             amount = intent.getDoubleExtra("prefilled_amount", 0);
@@ -82,7 +79,7 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
             reminderId = intent.getLongExtra("reminder_id", -1);
         }
 
-        // Điền dữ liệu vào giao diện (chỉ hiển thị, không cho phép sửa đổi)
+        
         tvReminderTitle.setText(title != null ? title : "Chưa rõ");
         tvAmountDisplay.setText(formatCurrency(amount));
         tvCategoryDisplay.setText(category != null ? category : "Chi tiêu");
@@ -116,7 +113,7 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
         int idx = spinnerWallet.getSelectedItemPosition();
         final ViTien selectedWallet = walletList.get(idx);
 
-        // Chặn chi tiêu nếu không đủ số dư ví
+        
         ViTien currentWallet = walletDAO.getWalletById(selectedWallet.getId());
         double currentBalance = (currentWallet != null) ? currentWallet.getBalance() : 0;
         if (amount > currentBalance) {
@@ -128,7 +125,7 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
             return;
         }
 
-        // Show PIN verification dialog
+        
         showPinVerificationDialog(selectedWallet);
     }
 
@@ -181,16 +178,16 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
         String date = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
         String finalNote = tvNotesDisplay.getText().toString().trim();
 
-        // Tạo đối tượng GiaoDich
+        
         GiaoDich transaction = new GiaoDich(0, category, amount, category, "expense", date, finalNote, selectedWallet.getId());
         
         long id = giaoDichDAO.addTransaction(transaction);
         if (id > 0) {
-            // Cập nhật số dư ví
+            
             double newBalance = selectedWallet.getBalance() - amount;
             walletDAO.updateBalance(selectedWallet.getId(), newBalance);
 
-            // Gửi thông báo tương ứng với giao dịch chi tiêu
+            
             NotificationHelper.showExpenseNotification(this, selectedWallet.getName(), amount, category);
             capNhatNganSach(date, category, amount);
 
@@ -201,7 +198,7 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
                         this, selectedWallet.getName(), newBalance);
             }
 
-            // Đánh dấu nhắc hẹn đã hoàn tất thanh toán
+            
             if (reminderId > 0) {
                 com.example.android_app.database.ReminderDAO rDAO = new com.example.android_app.database.ReminderDAO(this);
                 rDAO.open();
@@ -210,7 +207,7 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
                 Toast.makeText(this, "✅ Đã thanh toán nhắc hẹn thành công!", Toast.LENGTH_SHORT).show();
             }
 
-            // Chuyển sang màn hình thông báo thành công
+            
             Intent intent = new Intent(this, KetQuaGiaoDichActivity.class);
             intent.putExtra("isSuccess", true);
             intent.putExtra("amount", amount);
@@ -218,7 +215,7 @@ public class ThanhToanReminderActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            // Chuyển sang màn hình thông báo thất bại
+            
             Intent intent = new Intent(this, KetQuaGiaoDichActivity.class);
             intent.putExtra("isSuccess", false);
             intent.putExtra("amount", amount);

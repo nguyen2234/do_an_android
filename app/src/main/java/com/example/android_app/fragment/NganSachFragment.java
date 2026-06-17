@@ -58,7 +58,7 @@ public class NganSachFragment extends Fragment {
         List<NganSach> list = budgetDAO.getAllBudgets();
         adapter = new NganSachAdapter(getContext(), list);
 
-        // Wire click listener: mở màn hình Chi tiết khi bấm vào một thẻ ngân sách
+        
         adapter.setOnItemClickListener(budget -> {
             Intent intent = new Intent(getContext(), ChiTietNganSachActivity.class);
             intent.putExtra(ChiTietNganSachActivity.EXTRA_BUDGET_ID, budget.getId());

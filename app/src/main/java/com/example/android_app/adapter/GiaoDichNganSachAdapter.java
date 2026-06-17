@@ -18,22 +18,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Adapter để hiển thị danh sách giao dịch (GiaoDich) bên trong màn hình Chi tiết Ngân sách.
- *
- * Điểm khác biệt so với GiaoDichAdapter:
- * - Nhận thêm map walletNames để dịch walletId -> tên ví
- * - Luôn hiển thị màu đỏ (expense) vì ngân sách chỉ track chi tiêu
- * - Layout sử dụng item_giao_dich_ngan_sach.xml (có thêm dòng tên ví)
- */
+
 public class GiaoDichNganSachAdapter extends RecyclerView.Adapter<GiaoDichNganSachAdapter.ViewHolder> {
 
     private final Context context;
     private final List<GiaoDich> transactionList;
-    /**
-     * Map chứa ánh xạ walletId -> walletName.
-     * Được nạp trước từ ViTienDAO để tránh truy vấn DB trong quá trình bind view.
-     */
+    
     private final Map<Long, String> walletNames;
 
     public GiaoDichNganSachAdapter(Context context, List<GiaoDich> transactionList, Map<Long, String> walletNames) {
@@ -53,20 +43,20 @@ public class GiaoDichNganSachAdapter extends RecyclerView.Adapter<GiaoDichNganSa
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         GiaoDich t = transactionList.get(position);
 
-        // -- Tiêu đề giao dịch --
+        
         holder.tvTitle.setText(t.getTitle() != null ? t.getTitle() : "Giao dịch");
 
-        // -- Tên danh mục --
+        
         holder.tvCategory.setText(t.getCategory() != null ? t.getCategory() : "Khác");
 
-        // -- Tên ví: tra cứu từ map, fallback về "Không rõ" nếu không tìm thấy --
+        
         String walletName = walletNames.get(t.getWalletId());
         holder.tvWallet.setText(walletName != null ? walletName : "Không rõ");
 
-        // -- Ngày giao dịch --
+        
         holder.tvDate.setText(t.getNgay() != null ? t.getNgay() : "");
 
-        // -- Số tiền: luôn âm (chi tiêu) và màu đỏ --
+        
         NumberFormat fmt = NumberFormat.getInstance(new Locale("vi", "VN"));
         holder.tvAmount.setText("-" + fmt.format(t.getSoTien()) + " ₫");
     }
@@ -76,9 +66,7 @@ public class GiaoDichNganSachAdapter extends RecyclerView.Adapter<GiaoDichNganSa
         return transactionList != null ? transactionList.size() : 0;
     }
 
-    /**
-     * ViewHolder giữ tham chiếu tới các View con trong layout item_giao_dich_ngan_sach.xml
-     */
+    
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivIcon;
         TextView tvTitle, tvCategory, tvWallet, tvDate, tvAmount;

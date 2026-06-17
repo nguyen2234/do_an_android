@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Quyền gửi thông báo (Android 13+) -->
+    
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Android_app"
         tools:ignore="ExtraText">
 
-        <!-- Splash Screen -->
+        
         <activity
             android:name=".ChaoMungActivity"
             android:exported="true"
@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
 
-        <!-- Main Activity -->
+        
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Authentication -->
+        
         <activity
             android:name=".DangNhapActivity"
             android:exported="false"
@@ -44,7 +44,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- GiaoDich Result -->
+        
         <activity
             android:name=".KetQuaGiaoDichActivity"
             android:exported="false"
@@ -52,57 +52,57 @@
 
 
 
-        <!-- Budget Activities -->
+        
         <activity
             android:name=".ThemNganSachActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Chi tiết ngân sách (xem, sửa, xóa) -->
+        
         <activity
             android:name=".ChiTietNganSachActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Nạp tiền -->
+        
         <activity
             android:name=".NapTienActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Chuyển tiền -->
+        
         <activity
             android:name=".ChuyenTienActivity"
             android:exported="false"
             android:theme="@style/Theme.Android_app"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Thanh toán nhắc hẹn -->
+        
         <activity
             android:name=".ThanhToanReminderActivity"
             android:exported="false"
             android:theme="@style/Theme.Android_app"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Cài đặt -->
+        
         <activity
             android:name=".CaiDatActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Thông báo -->
+        
         <activity
             android:name=".ThongBaoActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Setup Category (Onboarding 1) -->
+        
         <activity
             android:name=".SetupCategoryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Setup Wallet (Onboarding 2) -->
+        
         <activity
             android:name=".SetupWalletActivity"
             android:exported="false"

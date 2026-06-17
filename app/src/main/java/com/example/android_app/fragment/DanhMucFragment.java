@@ -61,7 +61,7 @@ public class DanhMucFragment extends Fragment {
     private void loadCategories() {
         List<DanhMuc> list = categoryDAO.getAllCategories();
 
-        // Thêm danh mục mặc định nếu chưa có
+        
         if (list.isEmpty()) {
             categoryDAO.addCategory(new DanhMuc(0, "Ăn uống", "ic_food", "general", Color.parseColor("#E74C3C")));
             categoryDAO.addCategory(new DanhMuc(0, "Di chuyển", "ic_transport", "general", Color.parseColor("#3498DB")));
@@ -77,6 +77,16 @@ public class DanhMucFragment extends Fragment {
 
             @Override
             public void onDeleteClick(DanhMuc category) {
+                
+                if (categoryDAO.isCategoryUsed(category.getId())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Không Thể Xóa Danh Mục")
+                            .setMessage("Không thể xóa danh mục này vì đang được sử dụng trong các Ngân sách, Giao dịch hoặc Nhắc hẹn!")
+                            .setPositiveButton("Đóng", null)
+                            .show();
+                    return;
+                }
+
                 new AlertDialog.Builder(getContext())
                         .setTitle("Xóa Danh Mục")
                         .setMessage("Bạn có chắc chắn muốn xóa danh mục này?")
@@ -126,7 +136,7 @@ public class DanhMucFragment extends Fragment {
                 }
                 v.setAlpha(1.0f);
             });
-            // Init alpha
+            
             if (i == 0) colorViews[i].setAlpha(1.0f);
             else colorViews[i].setAlpha(0.3f);
         }

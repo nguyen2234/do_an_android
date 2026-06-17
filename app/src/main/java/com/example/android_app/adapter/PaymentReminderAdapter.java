@@ -19,9 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * Adapter hiển thị danh sách nhắc hẹn thanh toán.
- */
+
 public class PaymentReminderAdapter extends RecyclerView.Adapter<PaymentReminderAdapter.ViewHolder> {
 
     public interface OnItemActionListener {
@@ -70,16 +68,16 @@ public class PaymentReminderAdapter extends RecyclerView.Adapter<PaymentReminder
             holder.tvRecurrence.setText("Danh mục: Khác");
         }
 
-        // Thiết lập trạng thái hiển thị
+        
         if (item.getStatus() == ReminderStatus.PAID) {
             holder.tvStatus.setText("Đã trả");
-            holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_red); // Reuse or tint green
-            holder.tvStatus.setBackgroundColor(Color.parseColor("#27AE60")); // Green
+            holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_red); 
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#27AE60")); 
             holder.viewStatusIndicator.setBackgroundColor(Color.parseColor("#27AE60"));
-            holder.btnPay.setVisibility(View.GONE); // Đã trả thì ẩn nút thanh toán
+            holder.btnPay.setVisibility(View.GONE); 
         } else {
             holder.tvStatus.setText("Chờ trả");
-            holder.tvStatus.setBackgroundColor(Color.parseColor("#F39C12")); // Orange
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#F39C12")); 
             holder.viewStatusIndicator.setBackgroundColor(Color.parseColor("#F39C12"));
             holder.btnPay.setVisibility(View.VISIBLE);
         }
@@ -91,17 +89,17 @@ public class PaymentReminderAdapter extends RecyclerView.Adapter<PaymentReminder
             holder.tvOffsetWarning.setVisibility(View.GONE);
         }
 
-        // Event click nút sửa
+        
         holder.btnEdit.setOnClickListener(v -> {
             if (listener != null) listener.onEdit(item, holder.getAdapterPosition());
         });
 
-        // Event click nút xoá
+        
         holder.btnDelete.setOnClickListener(v -> {
             if (listener != null) listener.onDelete(item, holder.getAdapterPosition());
         });
 
-        // Event click nút thanh toán
+        
         holder.btnPay.setOnClickListener(v -> {
             if (listener != null) listener.onPay(item, holder.getAdapterPosition());
         });

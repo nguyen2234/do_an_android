@@ -5,9 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class SecurityUtils {
     
-    /**
-     * Hàm băm mật khẩu sử dụng thuật toán SHA-256
-     */
+    
     public static String hashPasswordSHA256(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -24,7 +22,7 @@ public class SecurityUtils {
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            // Fallback (không an toàn lắm nhưng cần thiết nếu thiết bị không hỗ trợ, thường là không xảy ra)
+            
             return String.valueOf(password.hashCode());
         }
     }

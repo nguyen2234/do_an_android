@@ -10,9 +10,7 @@ import com.example.android_app.model.GiaoDich;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data Access Object (DAO) cho thao tác với bảng Giao dịch (Transactions).
- */
+
 public class GiaoDichDAO {
 
     private SQLiteDatabase db;
@@ -32,18 +30,14 @@ public class GiaoDichDAO {
         dbHelper.close();
     }
 
-    // Lấy ID người dùng hiện tại từ SharedPreferences
+    
     private long getCurrentUserId() {
         if (context == null) return 1;
         android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         return prefs.getLong("user_id", 1);
     }
 
-    /**
-     * Thêm một giao dịch mới.
-     * @param transaction Giao dịch cần thêm
-     * @return ID của giao dịch vừa thêm, hoặc -1 nếu lỗi
-     */
+    
     public long addTransaction(GiaoDich transaction) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_TRANS_TITLE, transaction.getTitle());
@@ -86,10 +80,7 @@ public class GiaoDichDAO {
         return db.insert(DatabaseHelper.TABLE_TRANSACTIONS, null, values);
     }
 
-    /**
-     * Lấy danh sách tất cả các giao dịch, sắp xếp theo ID giảm dần (mới nhất lên trên).
-     * @return Danh sách giao dịch
-     */
+    
     public List<GiaoDich> getAllTransactions() {
         List<GiaoDich> transactions = new ArrayList<>();
         String sql = "SELECT t.id, t.title, t.amount, t.category_id, c.name AS category_name, t.type, t.date, t.note, t.wallet_id " +
@@ -119,9 +110,7 @@ public class GiaoDichDAO {
         return transactions;
     }
 
-    /**
-     * Lấy danh sách giao dịch dựa trên từ khóa tìm kiếm và khoảng thời gian.
-     */
+    
     public List<GiaoDich> getTransactionsByFilter(String keyword, String startDate, String endDate) {
         List<GiaoDich> transactions = new ArrayList<>();
         
@@ -164,9 +153,7 @@ public class GiaoDichDAO {
         return transactions;
     }
 
-    /**
-     * Lấy danh sách giao dịch gần đây với số lượng giới hạn.
-     */
+    
     public List<GiaoDich> getRecentTransactions(int limit) {
         List<GiaoDich> transactions = new ArrayList<>();
         String sql = "SELECT t.id, t.title, t.amount, t.category_id, c.name AS category_name, t.type, t.date, t.note, t.wallet_id " +

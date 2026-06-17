@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Chi Tiêu</string>
 
-    <!-- Bottom Navigation -->
+    
     <string name="nav_home">Tổng quan</string>
     <string name="nav_budget">Ngân sách</string>
     <string name="nav_stats">Thống kê</string>
@@ -9,7 +9,7 @@
     <string name="nav_wallet">Ví</string>
     <string name="nav_profile">Hồ sơ</string>
 
-    <!-- Home Screen -->
+    
     <string name="hello">Xin chào,</string>
     <string name="balance_total">Tổng số dư</string>
     <string name="income">Thu nhập</string>
@@ -19,7 +19,7 @@
     <string name="this_month">Tháng này</string>
     <string name="budget_limit">Hạn mức ngân sách</string>
 
-    <!-- Add GiaoDich -->
+    
     <string name="add_transaction">Thêm giao dịch</string>
     <string name="add_income">Thu nhập</string>
     <string name="add_expense">Chi tiêu</string>
@@ -31,7 +31,7 @@
     <string name="save">Lưu</string>
     <string name="cancel">Hủy</string>
 
-    <!-- Categories -->
+    
     <string name="cat_food">Ăn uống</string>
     <string name="cat_transport">Di chuyển</string>
     <string name="cat_shopping">Mua sắm</string>
@@ -41,14 +41,14 @@
     <string name="cat_salary">Lương</string>
     <string name="cat_other">Khác</string>
 
-    <!-- ViTien -->
+    
     <string name="my_wallets">Ví của tôi</string>
     <string name="add_wallet">Thêm ví</string>
     <string name="total_balance">Tổng số dư</string>
     <string name="wallet_cash">Tiền mặt</string>
     <string name="wallet_bank">Ngân hàng</string>
 
-    <!-- Stats -->
+    
     <string name="statistics">Thống kê</string>
     <string name="monthly_report">Báo cáo tháng</string>
     <string name="weekly">Tuần</string>
@@ -56,7 +56,7 @@
     <string name="yearly">Năm</string>
     <string name="top_spending">Chi nhiều nhất</string>
 
-    <!-- Profile -->
+    
     <string name="profile">Hồ sơ</string>
     <string name="settings">Cài đặt</string>
     <string name="notification">Thông báo</string>
@@ -67,7 +67,7 @@
     <string name="privacy">Bảo mật</string>
     <string name="backup">Sao lưu dữ liệu</string>
 
-    <!-- Currency Formatting -->
+    
     <string name="format_currency_income">+%s ₫</string>
     <string name="format_currency_expense">-%s ₫</string>
     <string name="format_currency_neutral">%s ₫</string>

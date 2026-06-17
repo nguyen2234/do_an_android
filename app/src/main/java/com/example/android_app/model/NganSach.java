@@ -95,7 +95,7 @@ public class NganSach {
         }
     }
 
-    // Tương thích ngược với mã nguồn cũ gọi getCategoryIds() trả về chuỗi tên danh mục phân tách bằng dấu phẩy
+    
     public String getCategoryIds() {
         if (categories == null || categories.isEmpty()) return "";
         List<String> names = new ArrayList<>();
@@ -105,7 +105,7 @@ public class NganSach {
         return android.text.TextUtils.join(", ", names);
     }
 
-    // Tương thích ngược với mã nguồn cũ gọi setCategoryIds(String)
+    
     public void setCategoryIds(String categoryIdsStr) {
         this.categories = new ArrayList<>();
         if (categoryIdsStr != null && !categoryIdsStr.trim().isEmpty()) {

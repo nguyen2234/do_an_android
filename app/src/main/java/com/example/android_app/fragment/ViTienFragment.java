@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -44,7 +45,7 @@ public class ViTienFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Ánh xạ View với ID chính xác từ fragment_vi_tien.xml
+        
         tvTotalBalance = view.findViewById(R.id.tvTotalBalance);
         tvTongThuNhap = view.findViewById(R.id.tvCardIncome);
         tvTongChiTieu = view.findViewById(R.id.tvCardExpense);
@@ -94,117 +95,140 @@ public class ViTienFragment extends Fragment {
             }
         }
 
-        // Cập nhật text Thu nhập / Chi tiêu
+        
         if (tvTongThuNhap != null) tvTongThuNhap.setText("+ " + dinhDangTien(income) + " ₫");
         if (tvTongChiTieu != null) tvTongChiTieu.setText("- " + dinhDangTien(expense) + " ₫");
+
         
-        // QUAN TRỌNG: Tổng số dư = Tổng Thu nhập - Tổng Chi tiêu
-        double actualTotalBalance = income - expense;
-        tvTotalBalance.setText(dinhDangTien(actualTotalBalance) + " ₫");
+        double totalBalance = walletDAO.getTotalBalance();
+        if (tvTotalBalance != null) {
+            tvTotalBalance.setText(dinhDangTien(totalBalance) + " ₫");
+        }
     }
 
-    private void showWalletDialog(@Nullable ViTien walletToEdit) {
+    private void showWalletDialog(ViTien existingWallet) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_vi_tien, null);
         builder.setView(dialogView);
-        
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+        AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        TextView tvTitle = dialogView.findViewById(R.id.tvDialogTitle);
         EditText etName = dialogView.findViewById(R.id.etWalletName);
         EditText etBalance = dialogView.findViewById(R.id.etWalletBalance);
         EditText etMinBalance = dialogView.findViewById(R.id.etWalletMinBalance);
         Spinner spinnerIcon = dialogView.findViewById(R.id.spinnerWalletIcon);
         Spinner spinnerColor = dialogView.findViewById(R.id.spinnerWalletColor);
-        Button btnHuy = dialogView.findViewById(R.id.btnCancelWallet);
-        Button btnLuu = dialogView.findViewById(R.id.btnSaveWallet);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancelWallet);
+        Button btnSave = dialogView.findViewById(R.id.btnSaveWallet);
 
-        String[] iconKeys = {"cash", "bank", "saving"};
-        String[] iconLabels = {"Tiền mặt", "Ngân hàng", "Tiết kiệm"};
-        String[] colorHexes = {"#4CAF50", "#2196F3", "#F44336", "#FF9800", "#9C27B0"};
-        String[] colorLabels = {"Xanh lá", "Xanh dương", "Đỏ", "Cam", "Tím"};
+        String[] icons = {"cash", "bank", "saving"};
+        String[] iconNames = {"Tiền mặt", "Ngân hàng", "Tiết kiệm"};
+        String[] colors = {"#4CAF50", "#2196F3", "#FF9800", "#E91E63", "#9C27B0"};
+        String[] colorNames = {"Xanh lá", "Xanh dương", "Cam", "Hồng", "Tím"};
 
-        ArrayAdapter<String> iconAdapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner, iconLabels);
-        iconAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        ArrayAdapter<String> iconAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, iconNames);
+        iconAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerIcon.setAdapter(iconAdapter);
 
-        ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(getContext(), R.layout.item_spinner, colorLabels);
-        colorAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, colorNames);
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerColor.setAdapter(colorAdapter);
 
-        if (walletToEdit != null) {
-            etName.setText(walletToEdit.getName());
-            etBalance.setText(String.valueOf((long) walletToEdit.getBalance()));
-            if (walletToEdit.getMinBalance() > 0) {
-                etMinBalance.setText(String.valueOf((long) walletToEdit.getMinBalance()));
-            }
-            for (int i = 0; i < iconKeys.length; i++) {
-                if (iconKeys[i].equals(walletToEdit.getIcon())) {
+        if (existingWallet != null) {
+            tvTitle.setText("Sửa ví tiền");
+            etName.setText(existingWallet.getName());
+            etBalance.setText(String.valueOf(existingWallet.getBalance()));
+            etMinBalance.setText(String.valueOf(existingWallet.getMinBalance()));
+            for (int i = 0; i < icons.length; i++) {
+                if (icons[i].equalsIgnoreCase(existingWallet.getIcon())) {
                     spinnerIcon.setSelection(i);
                     break;
                 }
             }
-            for (int i = 0; i < colorHexes.length; i++) {
-                if (colorHexes[i].equals(walletToEdit.getColor())) {
+            for (int i = 0; i < colors.length; i++) {
+                if (colors[i].equalsIgnoreCase(existingWallet.getColor())) {
                     spinnerColor.setSelection(i);
                     break;
                 }
             }
+        } else {
+            tvTitle.setText("Thêm ví mới");
         }
 
-        btnHuy.setOnClickListener(v -> dialog.dismiss());
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
 
-        btnLuu.setOnClickListener(v -> {
+        btnSave.setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
-            // Xử lý dấu phẩy do bàn phím tạo ra
-            String balanceStr = etBalance.getText().toString().trim().replace(",", ".");
-            String minBalanceStr = etMinBalance.getText().toString().trim().replace(",", ".");
-            
-            if (name.isEmpty() || balanceStr.isEmpty()) {
-                android.widget.Toast.makeText(getContext(), "Vui lòng nhập tên và số dư", android.widget.Toast.LENGTH_SHORT).show();
+            if (name.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng nhập tên ví", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             double balance = 0;
-            double minBalance = 0;
-            try {
-                balance = Double.parseDouble(balanceStr);
-                if (!minBalanceStr.isEmpty()) {
-                    minBalance = Double.parseDouble(minBalanceStr);
+            String balanceStr = etBalance.getText().toString().trim();
+            if (!balanceStr.isEmpty()) {
+                try {
+                    balance = Double.parseDouble(balanceStr);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getContext(), "Số dư không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            } catch (NumberFormatException e) {
-                android.widget.Toast.makeText(getContext(), "Số tiền không hợp lệ!", android.widget.Toast.LENGTH_SHORT).show();
-                return;
             }
 
-            String selectedIcon = iconKeys[spinnerIcon.getSelectedItemPosition()];
-            String selectedColor = colorHexes[spinnerColor.getSelectedItemPosition()];
+            double minBalance = 0;
+            String minBalanceStr = etMinBalance.getText().toString().trim();
+            if (!minBalanceStr.isEmpty()) {
+                try {
+                    minBalance = Double.parseDouble(minBalanceStr);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getContext(), "Số dư cảnh báo không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
 
-            if (walletToEdit == null) {
-                walletDAO.addWallet(new ViTien(0, name, balance, "cash", "VND", selectedIcon, selectedColor, minBalance));
+            String selectedIcon = icons[spinnerIcon.getSelectedItemPosition()];
+            String selectedColor = colors[spinnerColor.getSelectedItemPosition()];
+
+            if (existingWallet != null) {
+                existingWallet.setName(name);
+                existingWallet.setBalance(balance);
+                existingWallet.setMinBalance(minBalance);
+                existingWallet.setIcon(selectedIcon);
+                existingWallet.setColor(selectedColor);
+                walletDAO.updateWallet(existingWallet);
+                Toast.makeText(getContext(), "Đã cập nhật ví tiền", Toast.LENGTH_SHORT).show();
             } else {
-                walletToEdit.setName(name);
-                walletToEdit.setBalance(balance);
-                walletToEdit.setMinBalance(minBalance);
-                walletToEdit.setIcon(selectedIcon);
-                walletToEdit.setColor(selectedColor);
-                walletDAO.updateWallet(walletToEdit);
+                ViTien newWallet = new ViTien(0, name, balance, selectedIcon, "VND", selectedIcon, selectedColor, minBalance);
+                walletDAO.addWallet(newWallet);
+                Toast.makeText(getContext(), "Đã thêm ví tiền", Toast.LENGTH_SHORT).show();
             }
-            dialog.dismiss();
+
             refreshData();
+            dialog.dismiss();
         });
+
         dialog.show();
     }
 
     private void showDeleteConfirmDialog(ViTien wallet) {
         new AlertDialog.Builder(getContext())
-                .setTitle("Xóa ví")
-                .setMessage("Xác nhận xóa ví '" + wallet.getName() + "'?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    walletDAO.deleteWallet(wallet.getId());
-                    refreshData();
+                .setTitle("Xóa ví tiền")
+                .setMessage("Bạn có muốn xóa ví tiền này không? Các dữ liệu thanh toán sẽ được giữ nguyên.")
+                .setPositiveButton("Đồng ý", (dialog, which) -> {
+                    int result = walletDAO.deleteWallet(wallet.getId());
+                    if (result > 0) {
+                        Toast.makeText(getContext(), "Đã xóa ví tiền", Toast.LENGTH_SHORT).show();
+                        refreshData();
+                    } else {
+                        Toast.makeText(getContext(), "Xóa ví tiền thất bại", Toast.LENGTH_SHORT).show();
+                    }
                 })
-                .setNegativeButton("Hủy", null).show();
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private String dinhDangTien(double amount) {

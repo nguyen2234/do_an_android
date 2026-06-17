@@ -83,7 +83,7 @@ public class ThemGiaoDichFragment extends Fragment {
         spinnerWallet = view.findViewById(R.id.spinnerWallet);
         layoutCategoryInput = view.findViewById(R.id.layoutCategoryInput);
 
-        // Xử lý điền sẵn dữ liệu từ màn hình quản lý nhắc hẹn chuyển qua (hành động Pay)
+        
         Bundle args = getArguments();
         if (args != null) {
             double prefilledAmount = args.getDouble("prefilled_amount", -1);
@@ -101,24 +101,24 @@ public class ThemGiaoDichFragment extends Fragment {
             }
         }
 
-        // Set current date
+        
         updateDateDisplay();
 
-        // Setup Spinners
+        
         setupCategorySpinner();
         setupWalletSpinner();
 
-        // Tab switch
+        
         btnExpenseTab.setOnClickListener(v -> setTransactionType(true));
         btnIncomeTab.setOnClickListener(v -> setTransactionType(false));
 
-        // Khởi tạo tab mặc định là Chi tiêu
+        
         setTransactionType(true);
 
-        // Date picker
+        
         view.findViewById(R.id.btnDate).setOnClickListener(v -> showDatePicker());
 
-        // Amount update
+        
         etSoTien.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -136,7 +136,7 @@ public class ThemGiaoDichFragment extends Fragment {
             @Override public void afterTextChanged(android.text.Editable s) {}
         });
 
-        // Save button
+        
         MaterialButton btnLuu = view.findViewById(R.id.btnLuu);
         btnLuu.setOnClickListener(v -> saveTransaction());
     }
@@ -183,7 +183,7 @@ public class ThemGiaoDichFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerCategory.setAdapter(adapter);
 
-        // Thiết lập chọn danh mục nếu được truyền qua arguments
+        
         Bundle args = getArguments();
         if (args != null) {
             String prefilledCategory = args.getString("prefilled_category", null);
@@ -201,7 +201,7 @@ public class ThemGiaoDichFragment extends Fragment {
         List<String> walletNames = new ArrayList<>();
         
         if (walletList.isEmpty()) {
-            // Thêm ví mặc định nếu trống
+            
             walletDAO.addWallet(new ViTien(0, "Tiền mặt", 0, "cash", "VND"));
             walletList = walletDAO.getAllWallets();
         }
@@ -246,11 +246,11 @@ public class ThemGiaoDichFragment extends Fragment {
         String category = isExpense ? (spinnerCategory.getSelectedItem() != null ? spinnerCategory.getSelectedItem().toString() : "Chi tiêu") : "Nạp tiền";
         String note = etGhiChu.getText().toString();
 
-        // Tự động lấy ngày hiện tại của hệ thống thay vì hiển thị và cho người dùng chọn
+        
         String date = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
         String type = isExpense ? "expense" : "income";
         
-        // Lấy ID ví được chọn
+        
         int selectedWalletIndex = spinnerWallet.getSelectedItemPosition();
         if (selectedWalletIndex < 0 || walletList == null || walletList.isEmpty()) {
             Toast.makeText(getContext(), "Vui lòng chọn ví", Toast.LENGTH_SHORT).show();
@@ -258,7 +258,7 @@ public class ThemGiaoDichFragment extends Fragment {
         }
         ViTien selectedWallet = walletList.get(selectedWalletIndex);
 
-        // Chặn chi tiêu nếu không đủ số dư ví
+        
         if (isExpense) {
             ViTien currentWallet = walletDAO.getWalletById(selectedWallet.getId());
             double currentBalance = (currentWallet != null) ? currentWallet.getBalance() : 0;
@@ -272,8 +272,51 @@ public class ThemGiaoDichFragment extends Fragment {
             }
         }
 
-        // Hiện Dialog xác thực PIN giao dịch trước khi lưu
+        
+        if (isExpense) {
+            NganSach activeBudget = getActiveBudgetForCategoryAndDate(category, date);
+            if (activeBudget != null) {
+                double newTotalSpent = activeBudget.getSpentAmount() + amount;
+                if (newTotalSpent > activeBudget.getAmount()) {
+                    new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                            .setTitle("Cảnh báo vượt ngân sách")
+                            .setMessage("Mức chi tiêu của bạn vào danh mục sẽ bị vượt quá ngân sách tương đương")
+                            .setPositiveButton("Xác nhận", (dialog, which) -> {
+                                
+                                showPinVerificationDialog(amount, category, note, date, type, selectedWallet);
+                            })
+                            .setNegativeButton("Trở về", null)
+                            .show();
+                    return;
+                }
+            }
+        }
+
+        
         showPinVerificationDialog(amount, category, note, date, type, selectedWallet);
+    }
+
+    
+    private NganSach getActiveBudgetForCategoryAndDate(String categoryName, String dateStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
+            Date transDate = sdf.parse(dateStr);
+
+            List<NganSach> list = budgetDAO.getAllBudgets();
+            for (NganSach b : list) {
+                Date start = sdf.parse(b.getStartDate());
+                Date end = sdf.parse(b.getEndDate());
+
+                if (!transDate.before(start) && !transDate.after(end)) {
+                    if (b.getCategoryIds() != null && b.getCategoryIds().contains(categoryName)) {
+                        return b;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void showPinVerificationDialog(final double amount, final String category, final String note, final String date, final String type, final ViTien selectedWallet) {
@@ -324,17 +367,17 @@ public class ThemGiaoDichFragment extends Fragment {
     }
 
     private void executeSaveTransaction(double amount, String category, String note, String date, String type, ViTien selectedWallet) {
-        // Tạo đối tượng GiaoDich
+        
         GiaoDich transaction = new GiaoDich(0, category, amount, category, type, date, note, selectedWallet.getId());
         
-        // Lưu vào CSDL
+        
         long id = transactionDAO.addTransaction(transaction);
         if (id > 0) {
-            // Cập nhật số dư ví
+            
             double newBalance = isExpense ? selectedWallet.getBalance() - amount : selectedWallet.getBalance() + amount;
             walletDAO.updateBalance(selectedWallet.getId(), newBalance);
 
-            // Gửi thông báo tương ứng với loại giao dịch
+            
             if (isExpense) {
                 NotificationHelper.showExpenseNotification(getContext(), selectedWallet.getName(), amount, category);
                 capNhatNganSach(date, category, amount);
@@ -348,7 +391,7 @@ public class ThemGiaoDichFragment extends Fragment {
                 NotificationHelper.showTopUpNotification(getContext(), selectedWallet.getName(), amount);
             }
 
-            // Đánh dấu nhắc hẹn đã hoàn tất thanh toán nếu bắt nguồn từ nút Pay
+            
             if (prefilledReminderId > 0) {
                 com.example.android_app.database.ReminderDAO rDAO = new com.example.android_app.database.ReminderDAO(getContext());
                 rDAO.open();
@@ -356,22 +399,22 @@ public class ThemGiaoDichFragment extends Fragment {
                 rDAO.close();
 
                 Toast.makeText(getContext(), "✅ Đã thanh toán nhắc hẹn thành công!", Toast.LENGTH_SHORT).show();
-                prefilledReminderId = -1; // Reset lại
+                prefilledReminderId = -1; 
             }
             
-            // Reset form
+            
             etSoTien.setText("");
             etGhiChu.setText("");
             tvAmountDisplay.setText("0 ₫");
 
-            // Chuyển sang màn hình thông báo thành công
+            
             android.content.Intent intent = new android.content.Intent(getActivity(), com.example.android_app.KetQuaGiaoDichActivity.class);
             intent.putExtra("isSuccess", true);
             intent.putExtra("amount", amount);
             intent.putExtra("type", type);
             startActivity(intent);
         } else {
-            // Chuyển sang màn hình thông báo thất bại
+            
             android.content.Intent intent = new android.content.Intent(getActivity(), com.example.android_app.KetQuaGiaoDichActivity.class);
             intent.putExtra("isSuccess", false);
             intent.putExtra("amount", amount);

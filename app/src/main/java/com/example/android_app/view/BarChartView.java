@@ -52,7 +52,7 @@ public class BarChartView extends View {
         for (float val : data) {
             if (val > maxVal) maxVal = val;
         }
-        if (maxVal == 0) maxVal = 1000000; // Tránh chia cho 0
+        if (maxVal == 0) maxVal = 1000000; 
         invalidate();
     }
 
@@ -72,13 +72,13 @@ public class BarChartView extends View {
         float barGroupWidth = (float) width / barCount;
         float barWidth = barGroupWidth * 0.5f;
 
-        // Draw horizontal guide lines
+        
         for (int i = 0; i <= 4; i++) {
             float y = paddingTop + chartHeight - (chartHeight * i / 4f);
             canvas.drawLine(0, y, width, y, linePaint);
         }
 
-        // Draw bars
+        
         for (int i = 0; i < barCount; i++) {
             float centerX = barGroupWidth * i + barGroupWidth / 2f;
 
@@ -92,12 +92,12 @@ public class BarChartView extends View {
 
             if (data[i] > 0) {
                 RectF rect = new RectF(left, top, right, bottom);
-                // Highlight cột cao nhất hoặc dùng màu mặc định
+                
                 barPaint.setAlpha(data[i] == maxVal && maxVal > 0 ? 255 : 180);
                 canvas.drawRoundRect(rect, 12, 12, barPaint);
             }
 
-            // Label
+            
             canvas.drawText(labels[i], centerX, height - 15, textPaint);
         }
     }

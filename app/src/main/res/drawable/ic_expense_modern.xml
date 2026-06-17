@@ -3,7 +3,7 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <!-- Arrow pointing up right (Money going out) -->
+    
     <path
         android:fillColor="@color/colorExpense"
         android:pathData="M3,19 L3,21 L21,21 L21,19 Z M3,9 L12,3 L21,9 L19.6,10.4 L13,7.1 L13,18 L11,18 L11,7.1 L4.4,10.4 Z"/>

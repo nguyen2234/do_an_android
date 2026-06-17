@@ -26,10 +26,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Fragment quản lý danh sách khoản thu/chi đến hạn.
- * Người dùng có thể xem, thêm, xóa và đánh dấu hoàn thành.
- */
+
 public class GiaoDichDuKienFragment extends Fragment {
 
     private GiaoDichDuKienDAO dao;
@@ -59,7 +56,7 @@ public class GiaoDichDuKienFragment extends Fragment {
 
         loadData();
 
-        // FAB thêm mới
+        
         view.findViewById(R.id.fabThemDuKien).setOnClickListener(v -> showThemDialog());
     }
 
@@ -116,7 +113,7 @@ public class GiaoDichDuKienFragment extends Fragment {
         EditText etGhiChu = dialogView.findViewById(R.id.etGhiChuDuKien);
         RadioGroup rgLoai = dialogView.findViewById(R.id.rgLoaiDuKien);
 
-        // Chọn ngày hạn qua DatePicker
+        
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
         etNgayHan.setOnClickListener(v -> {

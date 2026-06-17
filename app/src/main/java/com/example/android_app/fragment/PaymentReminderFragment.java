@@ -39,9 +39,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Fragment quản lý danh sách nhắc hẹn thanh toán.
- */
+
 public class PaymentReminderFragment extends Fragment {
 
     private ReminderDAO dao;
@@ -75,7 +73,7 @@ public class PaymentReminderFragment extends Fragment {
 
         loadData();
 
-        // Nút quay lại
+        
         View btnBack = view.findViewById(R.id.btnBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> {
@@ -85,7 +83,7 @@ public class PaymentReminderFragment extends Fragment {
             });
         }
 
-        // FAB thêm mới nhắc hẹn
+        
         View fabThemReminder = view.findViewById(R.id.fabThemReminder);
         if (fabThemReminder != null) {
             fabThemReminder.setOnClickListener(v -> showReminderDialog(null, -1));
@@ -107,7 +105,7 @@ public class PaymentReminderFragment extends Fragment {
                             dataList.remove(position);
                             adapter.notifyItemRemoved(position);
                             updateEmptyState();
-                            Toast.makeText(getContext(), "❌ Đã xóa nhắc hẹn!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Đã xóa nhắc hẹn!", Toast.LENGTH_SHORT).show();
                             
                             NotificationHelper.showReminderNotification(
                                     getContext(),
@@ -127,7 +125,7 @@ public class PaymentReminderFragment extends Fragment {
 
             @Override
             public void onPay(Reminder item, int position) {
-                // Luồng thanh toán: Chuyển sang ThanhToanReminderActivity để xác nhận
+                
                 android.content.Intent intent = new android.content.Intent(getContext(), com.example.android_app.ThanhToanReminderActivity.class);
                 intent.putExtra("prefilled_amount", item.getEstimatedAmount());
                 intent.putExtra("prefilled_category", item.getCategory());
@@ -152,7 +150,7 @@ public class PaymentReminderFragment extends Fragment {
         EditText etDueDate = dialogView.findViewById(R.id.etDialogDueDate);
         EditText etOffsetDays = dialogView.findViewById(R.id.etDialogOffsetDays);
 
-        // Thiết lập Danh mục Spinner
+        
         List<DanhMuc> categories = categoryDAO.getAllCategories();
         List<String> categoryNames = new ArrayList<>();
         for (DanhMuc c : categories) {
@@ -168,14 +166,14 @@ public class PaymentReminderFragment extends Fragment {
         catAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerCategory.setAdapter(catAdapter);
 
-        // Thiết lập Tần suất lặp Spinner
+        
         String[] recOptions = {"Hàng tháng", "Hàng quý", "Hàng năm"};
         ArrayAdapter<String> recAdapter = new ArrayAdapter<>(requireContext(),
                 R.layout.item_spinner, recOptions);
         recAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
         spinnerRecurrence.setAdapter(recAdapter);
 
-        // Xử lý Date & Time picker cho Due Date
+        
         Calendar cal = Calendar.getInstance();
         final boolean[] isDateSelected = {false};
         
@@ -208,7 +206,7 @@ public class PaymentReminderFragment extends Fragment {
             dp.show();
         });
 
-        // Điền dữ liệu nếu là sửa (Edit Mode)
+        
         if (item != null) {
             tvTitle.setText("Sửa nhắc hẹn thanh toán");
             etTitle.setText(item.getTitle());
@@ -290,7 +288,7 @@ public class PaymentReminderFragment extends Fragment {
             );
 
             if (item == null) {
-                // Thêm mới nhắc hẹn
+                
                 Reminder newReminder = new Reminder(
                         0, title, amount, localDateTime, recurrence, offset,
                         ReminderStatus.PENDING, category, 0
@@ -302,7 +300,7 @@ public class PaymentReminderFragment extends Fragment {
                     adapter.notifyItemInserted(0);
                     rv.smoothScrollToPosition(0);
                     updateEmptyState();
-                    Toast.makeText(getContext(), "✅ Đã thêm nhắc hẹn mới thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Đã thêm nhắc hẹn mới thành công!", Toast.LENGTH_SHORT).show();
                     
                     NotificationHelper.showReminderNotification(
                             getContext(),
@@ -313,7 +311,7 @@ public class PaymentReminderFragment extends Fragment {
                     dialog.dismiss();
                 }
             } else {
-                // Sửa nhắc hẹn
+                
                 item.setTitle(title);
                 item.setEstimatedAmount(amount);
                 item.setDueDate(localDateTime);
@@ -324,7 +322,7 @@ public class PaymentReminderFragment extends Fragment {
                 int rows = dao.updateReminder(item);
                 if (rows > 0) {
                     adapter.notifyItemChanged(position);
-                    Toast.makeText(getContext(), "✅ Đã cập nhật nhắc hẹn thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Đã cập nhật nhắc hẹn thành công!", Toast.LENGTH_SHORT).show();
                     
                     NotificationHelper.showReminderNotification(
                             getContext(),

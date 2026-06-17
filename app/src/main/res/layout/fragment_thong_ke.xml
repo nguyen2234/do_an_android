@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <!-- Header -->
+    
     <LinearLayout
         android:id="@+id/statsHeader"
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
 
-        <!-- Search Bar -->
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -52,7 +52,7 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Date Filters -->
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Chart Card -->
+            
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
@@ -139,7 +139,7 @@
                         android:textSize="14sp"
                         android:textStyle="bold"/>
 
-                    <!-- Chart placeholder -->
+                    
                     <com.example.android_app.view.BarChartView
                         android:id="@+id/bieuDoCot"
                         android:layout_width="match_parent"
@@ -150,7 +150,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Summary Stats Row -->
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
-                <!-- Income Summary -->
+                
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -203,7 +203,7 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Expense Summary -->
+                
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -250,13 +250,13 @@
 
             </LinearLayout>
 
-            <!-- Top Spending Categories -->
+            
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="8dp"
                 app:cardBackgroundColor="@color/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
@@ -278,6 +278,42 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvTopDanhMuc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:nestedScrollingEnabled="false"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Lịch sử chi tiêu"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvLichSuChiTieu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"

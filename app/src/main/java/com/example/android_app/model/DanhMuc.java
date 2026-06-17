@@ -1,17 +1,15 @@
 package com.example.android_app.model;
 
-/**
- * Lớp đại diện cho một Danh mục (thu nhập hoặc chi tiêu).
- */
+
 public class DanhMuc {
-    private long id;            // ID danh mục trong cơ sở dữ liệu
-    private String name;        // Tên danh mục (vd: Ăn uống, Mua sắm)
-    private String icon;        // Tên icon (dùng để map với drawable)
-    private String type;        // Loại danh mục: "income" (thu nhập) hoặc "expense" (chi tiêu)
-    private int color;          // Mã màu hiển thị cho danh mục
+    private long id;            
+    private String name;        
+    private String icon;        
+    private String type;        
+    private int color;          
 
     public DanhMuc() {
-        // Constructor mặc định cần thiết cho một số thao tác
+        
     }
 
     public DanhMuc(long id, String name, String icon, String type, int color) {
@@ -22,10 +20,7 @@ public class DanhMuc {
         this.color = color;
     }
 
-    /**
-     * Constructor cho danh mục chung (không phân biệt thu/chi).
-     * Mặc định trường type sẽ là "general".
-     */
+    
     public DanhMuc(long id, String name, String icon, int color) {
         this.id = id;
         this.name = name;
@@ -34,7 +29,7 @@ public class DanhMuc {
         this.color = color;
     }
 
-    // Các hàm Getter và Setter (Lấy và Gán giá trị)
+    
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 

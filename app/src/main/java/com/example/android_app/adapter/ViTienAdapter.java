@@ -16,13 +16,11 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Adapter dùng để hiển thị danh sách các Ví tiền (ViTien) lên RecyclerView.
- */
+
 public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder> {
 
     private final Context context;
-    private final List<ViTien> wallets; // Danh sách dữ liệu ví
+    private final List<ViTien> wallets; 
     
     private OnEditClickListener editListener;
     private OnDeleteClickListener deleteListener;
@@ -48,9 +46,7 @@ public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder
         this.deleteListener = listener;
     }
 
-    /**
-     * Tạo giao diện cho một dòng ví.
-     */
+    
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,22 +54,20 @@ public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
-    /**
-     * Gắn dữ liệu của một ví cụ thể vào giao diện dòng.
-     */
+    
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ViTien w = wallets.get(position);
         
-        // Hiển thị tên ví và loại ví
+        
         holder.tvName.setText(w.getName());
-        holder.tvType.setText(getTypeName(w.getIcon())); // Dùng icon làm type
+        holder.tvType.setText(getTypeName(w.getIcon())); 
 
-        // Định dạng số dư ví
+        
         NumberFormat fmt = NumberFormat.getInstance(new Locale("vi", "VN"));
         holder.tvBalance.setText(fmt.format(w.getBalance()) + " ₫");
 
-        // Chọn icon tùy theo wallet.getIcon()
+        
         String icon = w.getIcon() != null ? w.getIcon() : "cash";
         switch (icon) {
             case "bank":
@@ -82,18 +76,18 @@ public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder
             case "saving":
                 holder.ivIcon.setImageResource(R.drawable.ic_piggy_bank);
                 break;
-            default: // cash
+            default: 
                 holder.ivIcon.setImageResource(R.drawable.ic_wallet_modern);
                 break;
         }
 
-        // Tạo hình nền bo góc cho icon với màu sắc tương ứng wallet.getColor()
+        
         String colorStr = w.getColor() != null ? w.getColor() : "#4CAF50";
         try {
             int colorInt = Color.parseColor(colorStr);
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.OVAL);
-            // Pha thêm màu trắng để làm nền sáng hơn (ví dụ: alpha 30%)
+            
             int bgColor = Color.argb(40, Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt));
             shape.setColor(bgColor);
             holder.ivIcon.setBackground(shape);
@@ -102,20 +96,18 @@ public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder
             e.printStackTrace();
         }
 
-        // Bắt sự kiện click sửa
+        
         holder.ivEdit.setOnClickListener(v -> {
             if (editListener != null) editListener.onEditClick(w);
         });
 
-        // Bắt sự kiện click xóa
+        
         holder.ivDelete.setOnClickListener(v -> {
             if (deleteListener != null) deleteListener.onDeleteClick(w);
         });
     }
 
-    /**
-     * Dịch loại ví từ tiếng Anh sang tiếng Việt để hiển thị lên giao diện
-     */
+    
     private String getTypeName(String type) {
         if (type == null) return "Tiền mặt";
         switch (type) {
@@ -128,9 +120,7 @@ public class ViTienAdapter extends RecyclerView.Adapter<ViTienAdapter.ViewHolder
     @Override
     public int getItemCount() { return wallets.size(); }
 
-    /**
-     * Lớp ánh xạ các thành phần UI của dòng.
-     */
+    
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivIcon, ivEdit, ivDelete;
         TextView tvName, tvType, tvBalance;
