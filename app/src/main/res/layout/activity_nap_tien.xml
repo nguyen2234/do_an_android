@@ -6,7 +6,7 @@
     android:background="@color/colorBackground"
     >
 
-    <!-- Background Pattern (circles for visual depth) -->
+    
     <View
         android:layout_width="260dp"
         android:layout_height="260dp"
@@ -27,9 +27,9 @@
         android:alpha="0.05"
         android:background="@drawable/bg_icon_primary"/>
 
-    <!-- Header Bar -->
+    
 
-    <!-- Scrollable Form Content -->
+    
     <RelativeLayout
         android:id="@+id/headerLayoutNap"
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Premium Floating Card -->
+            
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!-- Header/icon inside Card -->
+                    
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                             android:fontFamily="sans-serif-medium"/>
                     </LinearLayout>
 
-                    <!-- Amount Display (Live updating in app) -->
+                    
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                         android:layout_marginBottom="16dp"
                         android:fontFamily="sans-serif-medium"/>
 
-                    <!-- Amount Input Field -->
+                    
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                             android:textSize="15sp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Wallet Selection Spinner -->
+                    
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                             android:background="@null"
                             android:spinnerMode="dropdown"/>
 
-                        <!-- Visual down arrow icon for spinner -->
+                        
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -194,7 +194,7 @@
                             android:rotation="90"/>
                     </RelativeLayout>
 
-                    <!-- Notes Field -->
+                    
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -225,7 +225,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Fixed Bottom Button -->
+    
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnXacNhanNap"
         android:layout_width="match_parent"

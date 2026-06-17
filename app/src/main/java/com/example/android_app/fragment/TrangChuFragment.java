@@ -39,6 +39,7 @@ public class TrangChuFragment extends Fragment {
     private NganSachDAO budgetDAO;
     private ThongBaoDAO notificationDAO;
     private com.example.android_app.database.ReminderDAO reminderDAO;
+    private com.example.android_app.database.ViTienDAO walletDAO;
     private TextView tvNotificationBadge;
 
     @Nullable
@@ -53,20 +54,22 @@ public class TrangChuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Khởi tạo DAO
+        
         transactionDAO = new GiaoDichDAO(getContext());
         budgetDAO = new NganSachDAO(getContext());
         notificationDAO = new ThongBaoDAO(getContext());
         reminderDAO = new com.example.android_app.database.ReminderDAO(getContext());
+        walletDAO = new com.example.android_app.database.ViTienDAO(getContext());
         transactionDAO.open();
         budgetDAO.open();
         notificationDAO.open();
         reminderDAO.open();
+        walletDAO.open();
 
-        // Nạp dữ liệu lần đầu
+        
         loadHomeData();
 
-        // Ánh xạ nút Thông báo
+        
         View layoutNotification = view.findViewById(R.id.layoutNotification);
         tvNotificationBadge = view.findViewById(R.id.tvNotificationBadge);
 
@@ -76,14 +79,14 @@ public class TrangChuFragment extends Fragment {
             });
         }
 
-        // Nút Nạp tiền
+        
         View cardNapTien = view.findViewById(R.id.cardNapTien);
         if (cardNapTien != null) {
             cardNapTien.setOnClickListener(v ->
                     startActivity(new Intent(getContext(), NapTienActivity.class)));
         }
 
-        // Nút Chuyển tiền
+        
         View cardChuyenTien = view.findViewById(R.id.cardChuyenTien);
         if (cardChuyenTien != null) {
             cardChuyenTien.setOnClickListener(v ->
@@ -92,7 +95,7 @@ public class TrangChuFragment extends Fragment {
 
 
 
-        // Click vào widget Nhắc hẹn thanh toán -> sang màn hình chính của nhắc hẹn
+        
         View cardPaymentReminderWidget = view.findViewById(R.id.cardPaymentReminderWidget);
         if (cardPaymentReminderWidget != null) {
             cardPaymentReminderWidget.setOnClickListener(v -> {
@@ -105,7 +108,7 @@ public class TrangChuFragment extends Fragment {
             });
         }
 
-        // Click vào widget Giao dịch gần đây -> sang tab Thống kê
+        
         View cardGiaoDichGanDay = view.findViewById(R.id.cardGiaoDichGanDay);
         if (cardGiaoDichGanDay != null) {
             cardGiaoDichGanDay.setOnClickListener(v -> {
@@ -119,9 +122,9 @@ public class TrangChuFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Cập nhật số lượng thông báo chưa đọc khi quay lại màn hình
+        
         updateNotificationBadge();
-        // Cập nhật lại dữ liệu màn hình chính (số dư, giao dịch, ngân sách...)
+        
         loadHomeData();
     }
 
@@ -132,6 +135,7 @@ public class TrangChuFragment extends Fragment {
         if (budgetDAO != null) budgetDAO.close();
         if (notificationDAO != null) notificationDAO.close();
         if (reminderDAO != null) reminderDAO.close();
+        if (walletDAO != null) walletDAO.close();
     }
 
     private void updateNotificationBadge() {
@@ -169,27 +173,27 @@ public class TrangChuFragment extends Fragment {
         tinhToanNganSachThang(layoutBudgetListHome, tvNoBudgetHome);
         loadReminderWidgetData(view);
 
-        // Thiết lập RecyclerView
+        
         if (rvTransactions != null) {
             rvTransactions.setLayoutManager(new LinearLayoutManager(getContext()));
             rvTransactions.setNestedScrollingEnabled(false);
 
-            // Lấy dữ liệu từ DB
+            
             List<GiaoDich> transactions = transactionDAO.getAllTransactions();
             
-            // Tính toán tổng thu chi từ tất cả giao dịch
+            
             double totalIncome = 0;
             double totalExpense = 0;
             for (GiaoDich t : transactions) {
                 if (t.isIncome()) totalIncome += t.getSoTien();
                 if (t.isExpense()) totalExpense += t.getSoTien();
             }
-            double balance = totalIncome - totalExpense;
+            double balance = walletDAO.getTotalBalance();
 
-            // Lấy 5 giao dịch gần đây nhất để hiển thị
+            
             List<GiaoDich> recentTransactions = transactionDAO.getRecentTransactions(5);
 
-            // Hiển thị danh sách
+            
             GiaoDichAdapter adapter = new GiaoDichAdapter(getContext(), recentTransactions);
             adapter.setOnItemClickListener(transaction -> {
                 if (getActivity() instanceof MainActivity) {
@@ -198,7 +202,7 @@ public class TrangChuFragment extends Fragment {
             });
             rvTransactions.setAdapter(adapter);
 
-            // Cập nhật text tổng quan
+            
             if (tvTotalBalance != null) {
                 tvTotalBalance.setText(getString(R.string.format_currency_neutral, dinhDangTien(balance)));
             }
@@ -228,7 +232,7 @@ public class TrangChuFragment extends Fragment {
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
-            // Loại bỏ giờ/phút/giây để so sánh chính xác mốc ngày bắt đầu và ngày kết thúc
+            
             Date today = sdf.parse(sdf.format(new Date()));
 
             List<NganSach> list = budgetDAO.getAllBudgets();
@@ -292,7 +296,7 @@ public class TrangChuFragment extends Fragment {
 
                 layoutBudgetList.addView(itemView);
 
-                // Thêm đường kẻ phân cách nếu chưa phải phần tử cuối
+                
                 if (i < activeBudgets.size() - 1) {
                     View divider = new View(getContext());
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(

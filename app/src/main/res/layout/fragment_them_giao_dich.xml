@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <!-- Header -->
+    
     <LinearLayout
         android:id="@+id/addHeader"
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:paddingTop="40dp"
         android:paddingBottom="24dp">
 
-        <!-- Income / Expense Toggle -->
+        
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -47,7 +47,7 @@
 
         </LinearLayout>
 
-        <!-- Amount Display -->
+        
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- Amount Input -->
+                    
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -236,7 +236,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="32dp"
                 android:backgroundTint="@color/colorPrimary"
-                android:text="@string/save"
+                android:text="Xác nhận"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Màn hình Onboarding Bước 2: Thiết lập Ví tiền
-    Người dùng phải tạo ÍT NHẤT 1 ví trước khi được vào MainActivity.
-    Nút "Hoàn thành" bị vô hiệu hóa (disabled) cho đến khi walletCount >= 1.
--->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -11,7 +7,7 @@
     android:background="@color/colorBackground"
     android:fitsSystemWindows="true">
 
-    <!-- ===== HEADER ===== -->
+    
     <LinearLayout
         android:id="@+id/headerSetupWallet"
         android:layout_width="match_parent"
@@ -21,7 +17,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Step Indicator -->
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,13 +25,13 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="12dp">
 
-            <!-- Step 1 (done) -->
+            
             <View
                 android:layout_width="36dp"
                 android:layout_height="6dp"
                 android:background="#80FFFFFF"
                 android:layout_marginEnd="4dp"/>
-            <!-- Step 2 (active) -->
+            
             <View
                 android:layout_width="36dp"
                 android:layout_height="6dp"
@@ -69,12 +65,8 @@
             android:textSize="13sp"/>
     </LinearLayout>
 
-    <!-- ===== NÚT "HOÀN THÀNH" (cố định dưới cùng) ===== -->
-    <!--
-        Ban đầu alpha=0.5 và enabled=false.
-        Java code sẽ bật lên khi walletCount >= 1.
-        Khi nhấn: lưu isOnboardingDone=true và chuyển vào MainActivity.
-    -->
+    
+    
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnFinishSetupWallet"
         android:layout_width="match_parent"
@@ -91,7 +83,7 @@
         app:cornerRadius="14dp"
         app:elevation="4dp"/>
 
-    <!-- ===== THÂN TRANG ===== -->
+    
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -106,7 +98,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Card tạo ví nhanh -->
+            
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,7 +122,7 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_marginBottom="12dp"/>
 
-                    <!-- Tên ví -->
+                    
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -152,7 +144,7 @@
                             android:textSize="15sp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Số dư ban đầu -->
+                    
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -175,7 +167,7 @@
                             android:textSize="15sp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Nút Thêm ví -->
+                    
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAddWalletSetup"
                         android:layout_width="match_parent"
@@ -187,7 +179,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Tiêu đề danh sách ví đã tạo -->
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,7 +205,7 @@
                     android:textColor="@color/colorTextSecondary"/>
             </LinearLayout>
 
-            <!-- RecyclerView danh sách ví đã tạo -->
+            
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvWalletsSetup"
                 android:layout_width="match_parent"

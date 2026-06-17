@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Màn hình Chi tiết Ngân sách (ChiTietNganSachActivity)
-    Cấu trúc: Header cố định trên cùng (AppBar + tổng quan) + RecyclerView danh sách giao dịch
--->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,7 +7,7 @@
     android:background="@color/colorBackground"
     android:fitsSystemWindows="true">
 
-    <!-- ===== HEADER / APP BAR ===== -->
+    
     <RelativeLayout
         android:id="@+id/headerBudgetDetail"
         android:layout_width="match_parent"
@@ -21,7 +18,7 @@
         android:paddingBottom="16dp"
         android:paddingHorizontal="16dp">
 
-        <!-- Nút quay lại -->
+        
         <ImageView
             android:id="@+id/btnBackBudgetDetail"
             android:layout_width="40dp"
@@ -36,7 +33,7 @@
             android:tint="@color/white"
             android:contentDescription="Quay lại"/>
 
-        <!-- Tiêu đề màn hình -->
+        
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +44,7 @@
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"/>
 
-        <!-- Nút Sửa (Edit) - góc phải -->
+        
         <ImageView
             android:id="@+id/btnEditBudget"
             android:layout_width="40dp"
@@ -63,7 +60,7 @@
             android:tint="@color/white"
             android:contentDescription="Sửa ngân sách"/>
 
-        <!-- Nút Xóa (Delete) - góc phải ngoài cùng -->
+        
         <ImageView
             android:id="@+id/btnDeleteBudget"
             android:layout_width="40dp"
@@ -79,7 +76,7 @@
             android:contentDescription="Xóa ngân sách"/>
     </RelativeLayout>
 
-    <!-- ===== THÂN TRANG (Scrollable) ===== -->
+    
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -93,7 +90,7 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- ===== CARD TỔNG QUAN NGÂN SÁCH ===== -->
+            
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +107,7 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- Tên ngân sách -->
+                    
                     <TextView
                         android:id="@+id/tvDetailBudgetName"
                         android:layout_width="wrap_content"
@@ -120,7 +117,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/colorTextPrimary"/>
 
-                    <!-- Khoảng thời gian áp dụng -->
+                    
                     <TextView
                         android:id="@+id/tvDetailBudgetDates"
                         android:layout_width="wrap_content"
@@ -130,7 +127,7 @@
                         android:textSize="12sp"
                         android:textColor="@color/colorTextSecondary"/>
 
-                    <!-- Danh mục áp dụng -->
+                    
                     <TextView
                         android:id="@+id/tvDetailBudgetCategories"
                         android:layout_width="wrap_content"
@@ -140,19 +137,19 @@
                         android:textSize="12sp"
                         android:textColor="@color/colorPrimary"/>
 
-                    <!-- Đường phân cách -->
+                    
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginVertical="16dp"
                         android:background="#F0F0F0"/>
 
-                    <!-- Hàng số tiền: Đã chi / Hạn mức -->
+                    
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <!-- Bên trái: Đã chi -->
+                        
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -176,7 +173,7 @@
                                 android:textColor="@color/colorExpense"/>
                         </LinearLayout>
 
-                        <!-- Bên phải: Còn lại và hạn mức -->
+                        
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -202,7 +199,7 @@
                         </LinearLayout>
                     </RelativeLayout>
 
-                    <!-- Phần trăm sử dụng -->
+                    
                     <TextView
                         android:id="@+id/tvDetailPercent"
                         android:layout_width="wrap_content"
@@ -212,7 +209,7 @@
                         android:textSize="12sp"
                         android:textColor="@color/colorTextSecondary"/>
 
-                    <!-- Thanh tiến độ -->
+                    
                     <ProgressBar
                         android:id="@+id/pbDetailBudget"
                         style="?android:attr/progressBarStyleHorizontal"
@@ -224,7 +221,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ===== TIÊU ĐỀ DANH SÁCH GIAO DỊCH ===== -->
+            
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -241,7 +238,7 @@
                     android:textColor="@color/colorTextPrimary"
                     android:layout_centerVertical="true"/>
 
-                <!-- Số lượng giao dịch -->
+                
                 <TextView
                     android:id="@+id/tvTransactionCount"
                     android:layout_width="wrap_content"
@@ -253,7 +250,7 @@
                     android:textColor="@color/colorTextSecondary"/>
             </RelativeLayout>
 
-            <!-- ===== TRẠNG THÁI RỖNG (hiển thị khi chưa có giao dịch) ===== -->
+            
             <LinearLayout
                 android:id="@+id/layoutEmptyTransactions"
                 android:layout_width="match_parent"
@@ -280,11 +277,8 @@
                     android:gravity="center"/>
             </LinearLayout>
 
-            <!-- ===== DANH SÁCH GIAO DỊCH (RecyclerView) ===== -->
-            <!--
-                Lưu ý: RecyclerView đặt bên trong NestedScrollView.
-                Cần đặt nestedScrollingEnabled=false để tránh lỗi cuộn.
-            -->
+            
+            
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBudgetTransactions"
                 android:layout_width="match_parent"

@@ -41,8 +41,9 @@ public class ThongKeFragment extends Fragment {
     private EditText etTimKiemThongKe;
     private ImageView btnLocThongKe;
     private BarChartView bieuDoCot;
-    private RecyclerView rvTopDanhMuc;
+    private RecyclerView rvTopDanhMuc, rvLichSuChiTieu;
     private GiaoDichDAO transactionDAO;
+    private com.example.android_app.adapter.GiaoDichAdapter historyAdapter;
     
     private Calendar startCal = Calendar.getInstance();
     private Calendar endCal = Calendar.getInstance();
@@ -64,12 +65,12 @@ public class ThongKeFragment extends Fragment {
         khoiTaoGiaoDien(view);
         caiDatChonNgay();
 
-        // Mặc định lọc trong 30 ngày gần đây
+        
         startCal.add(Calendar.DAY_OF_MONTH, -30);
         tvNgayBatDau.setText(sdf.format(startCal.getTime()));
         tvNgayKetThuc.setText(sdf.format(endCal.getTime()));
 
-        // Tự động lọc khi nhập từ khóa tìm kiếm
+        
         if (etTimKiemThongKe != null) {
             etTimKiemThongKe.addTextChangedListener(new android.text.TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -92,8 +93,10 @@ public class ThongKeFragment extends Fragment {
         btnLocThongKe = view.findViewById(R.id.btnLocThongKe);
         bieuDoCot = view.findViewById(R.id.bieuDoCot);
         rvTopDanhMuc = view.findViewById(R.id.rvTopDanhMuc);
+        rvLichSuChiTieu = view.findViewById(R.id.rvLichSuChiTieu);
 
         rvTopDanhMuc.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvLichSuChiTieu.setLayoutManager(new LinearLayoutManager(getContext()));
         btnLocThongKe.setOnClickListener(v -> apDungBoLoc());
     }
 
@@ -125,7 +128,7 @@ public class ThongKeFragment extends Fragment {
         double totalExpense = 0;
         Map<String, Double> categoryMap = new HashMap<>();
 
-        // Chuẩn hóa thời gian lọc (Bắt đầu lúc 00:00:00 và kết thúc lúc 23:59:59)
+        
         Calendar startLimit = (Calendar) startCal.clone();
         startLimit.set(Calendar.HOUR_OF_DAY, 0);
         startLimit.set(Calendar.MINUTE, 0);
@@ -170,6 +173,12 @@ public class ThongKeFragment extends Fragment {
         capNhatGiaoDienTongQuan(totalIncome, totalExpense);
         updateChartData(filteredList);
         updateCategoryList(categoryMap);
+        updateHistoryList(filteredList);
+    }
+
+    private void updateHistoryList(List<GiaoDich> list) {
+        historyAdapter = new com.example.android_app.adapter.GiaoDichAdapter(getContext(), list);
+        rvLichSuChiTieu.setAdapter(historyAdapter);
     }
 
     private void capNhatGiaoDienTongQuan(double income, double expense) {
@@ -179,7 +188,7 @@ public class ThongKeFragment extends Fragment {
     }
 
     private void updateChartData(List<GiaoDich> list) {
-        // Sử dụng LinkedHashMap thay vì TreeMap để bảo toàn đúng thứ tự thời gian tuyến tính
+        
         Map<String, Float> dailyData = new java.util.LinkedHashMap<>();
         
         Calendar cal = (Calendar) endCal.clone();

@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Type badge color indicator -->
+            
             <View
                 android:id="@+id/viewStatusIndicator"
                 android:layout_width="4dp"
@@ -51,7 +51,7 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <!-- Divider line -->
+        
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -121,7 +121,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Actions container -->
+            
             <LinearLayout
                 android:id="@+id/layoutActions"
                 android:layout_width="wrap_content"

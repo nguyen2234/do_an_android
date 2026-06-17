@@ -16,9 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Activity hiển thị và quản lý Trung tâm thông báo.
- */
+
 public class ThongBaoActivity extends AppCompatActivity {
 
     private RecyclerView rvNotifications;
@@ -35,38 +33,38 @@ public class ThongBaoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thong_bao);
 
-        // Khởi tạo DAO
+        
         notificationDAO = new ThongBaoDAO(this);
         notificationDAO.open();
 
-        // Ánh xạ views
+        
         View btnBack = findViewById(R.id.btnBackNotification);
         btnMarkAllRead = findViewById(R.id.btnMarkAllRead);
         layoutEmpty = findViewById(R.id.layoutEmptyNotification);
         rvNotifications = findViewById(R.id.rvNotifications);
         btnDeleteAll = findViewById(R.id.btnDeleteAllNotifications);
 
-        // Nút quay lại
+        
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
 
-        // Thiết lập RecyclerView
+        
         rvNotifications.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ThongBaoAdapter(this, notificationList, this::showNotificationDetail);
         rvNotifications.setAdapter(adapter);
 
-        // Đọc tất cả
+        
         if (btnMarkAllRead != null) {
             btnMarkAllRead.setOnClickListener(v -> markAllNotificationsAsRead());
         }
 
-        // Xóa tất cả
+        
         if (btnDeleteAll != null) {
             btnDeleteAll.setOnClickListener(v -> confirmDeleteAllNotifications());
         }
 
-        // Load dữ liệu
+        
         loadNotifications();
     }
 
@@ -76,7 +74,7 @@ public class ThongBaoActivity extends AppCompatActivity {
         notificationList = notificationDAO.getAllNotifications();
         adapter.updateData(notificationList);
 
-        // Kiểm tra xem danh sách có trống không để cập nhật giao diện
+        
         if (notificationList.isEmpty()) {
             rvNotifications.setVisibility(View.GONE);
             btnDeleteAll.setVisibility(View.GONE);
@@ -94,17 +92,15 @@ public class ThongBaoActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Hiển thị hộp thoại chi tiết thông báo khi người dùng click vào.
-     */
+    
     private void showNotificationDetail(ThongBao thongBao) {
-        // Đánh dấu là đã đọc trong DB
+        
         if (!thongBao.isRead()) {
             notificationDAO.markAsRead(thongBao.getId());
-            loadNotifications(); // Reload dữ liệu để cập nhật chấm xanh biến mất
+            loadNotifications(); 
         }
 
-        // Hiển thị Dialog chi tiết
+        
         new AlertDialog.Builder(this)
                 .setTitle(thongBao.getTitle())
                 .setMessage(thongBao.getContent() + "\n\nThời gian: " + thongBao.getDate())
@@ -112,9 +108,7 @@ public class ThongBaoActivity extends AppCompatActivity {
                 .show();
     }
 
-    /**
-     * Đánh dấu toàn bộ thông báo là đã đọc.
-     */
+    
     private void markAllNotificationsAsRead() {
         int result = notificationDAO.markAllAsRead();
         if (result > 0) {
@@ -125,9 +119,7 @@ public class ThongBaoActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Xác nhận trước khi xóa toàn bộ lịch sử thông báo.
-     */
+    
     private void confirmDeleteAllNotifications() {
         new AlertDialog.Builder(this)
                 .setTitle("Xóa toàn bộ thông báo")

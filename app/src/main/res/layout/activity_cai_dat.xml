@@ -7,7 +7,7 @@
     android:orientation="vertical"
     >
 
-    <!-- Header -->
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -34,7 +34,7 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- Settings Options -->
+    
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Thay đổi thông tin -->
+            
             <LinearLayout
                 android:id="@+id/btnEditProfile"
                 android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                     android:tint="@color/colorTextSecondary" />
             </LinearLayout>
 
-            <!-- Đổi mật khẩu -->
+            
             <LinearLayout
                 android:id="@+id/btnChangePassword"
                 android:layout_width="match_parent"

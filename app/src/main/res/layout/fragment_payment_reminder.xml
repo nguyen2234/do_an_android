@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/colorBackground">
 
-    <!-- Header -->
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:contentDescription="Thêm nhắc hẹn"/>
     </RelativeLayout>
 
-    <!-- Danh sách -->
+    
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvReminder"
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
         android:paddingBottom="16dp"
         android:clipToPadding="false"/>
 
-    <!-- Trạng thái rỗng -->
+    
     <LinearLayout
         android:id="@+id/layoutEmpty"
         android:layout_width="match_parent"

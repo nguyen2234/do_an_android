@@ -1,22 +1,20 @@
 package com.example.android_app.model;
 
-/**
- * Lớp model đại diện cho một thông báo (Notification) trong ứng dụng.
- */
+
 public class ThongBao {
     private int id;
     private String title;
     private String content;
-    private String date;       // Định dạng dd/MM/yyyy HH:mm
-    private boolean isRead;    // true nếu đã đọc, false nếu chưa đọc
-    private String type;       // system, warning, transaction, reminder
-    private long userId;       // Khóa ngoại trỏ đến bảng users
+    private String date;       
+    private boolean isRead;    
+    private String type;       
+    private long userId;       
 
-    // Constructor mặc định
+    
     public ThongBao() {
     }
 
-    // Constructor đầy đủ
+    
     public ThongBao(int id, String title, String content, String date, boolean isRead, String type, long userId) {
         this.id = id;
         this.title = title;

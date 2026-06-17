@@ -22,9 +22,7 @@ public class NguoiDungDAO {
         dbHelper.close();
     }
 
-    /**
-     * Đăng ký người dùng mới
-     */
+    
     public long registerUser(NguoiDung user) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_USER_USERNAME, user.getUsername());
@@ -37,9 +35,7 @@ public class NguoiDungDAO {
         return db.insert(DatabaseHelper.TABLE_USERS, null, values);
     }
 
-    /**
-     * Kiểm tra xem username đã tồn tại chưa
-     */
+    
     public boolean checkUsernameExist(String username) {
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, new String[]{DatabaseHelper.COL_USER_ID},
                 DatabaseHelper.COL_USER_USERNAME + "=?",
@@ -52,9 +48,7 @@ public class NguoiDungDAO {
         return exists;
     }
 
-    /**
-     * Kiểm tra đăng nhập
-     */
+    
     public NguoiDung checkLogin(String username, String password) {
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, null,
                 DatabaseHelper.COL_USER_USERNAME + "=? AND " + DatabaseHelper.COL_USER_PASSWORD + "=?",
@@ -77,9 +71,7 @@ public class NguoiDungDAO {
         return null;
     }
 
-    /**
-     * Lấy thông tin user theo ID
-     */
+    
     public NguoiDung getUserById(long id) {
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS, null,
                 DatabaseHelper.COL_USER_ID + "=?",
@@ -102,9 +94,7 @@ public class NguoiDungDAO {
         return null;
     }
 
-    /**
-     * Cập nhật thông tin NguoiDung (Mật khẩu, Avatar, Theme)
-     */
+    
     public int updateUser(NguoiDung user) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_USER_USERNAME, user.getUsername());
@@ -120,9 +110,7 @@ public class NguoiDungDAO {
                 new String[]{String.valueOf(user.getId())});
     }
 
-    /**
-     * Cập nhật thông tin profile của người dùng (Username, Email, Avatar)
-     */
+    
     public int updateUserProfile(long userId, String username, String email, String avatar) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_USER_USERNAME, username);
@@ -135,9 +123,7 @@ public class NguoiDungDAO {
                 new String[]{String.valueOf(userId)});
     }
 
-    /**
-     * Cập nhật mã PIN giao dịch
-     */
+    
     public int updateTransactionPin(long userId, String newPin) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_USER_PIN, newPin);

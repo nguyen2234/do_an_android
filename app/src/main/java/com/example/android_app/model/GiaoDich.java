@@ -1,21 +1,19 @@
 package com.example.android_app.model;
 
-/**
- * Lớp đại diện cho một Giao dịch.
- */
+
 public class GiaoDich {
-    private long id;            // ID giao dịch trong cơ sở dữ liệu
-    private String title;       // Tiêu đề/Tên giao dịch
-    private double amount;      // Số tiền giao dịch
-    private long categoryId;    // ID danh mục của giao dịch
-    private String categoryName;// Tên danh mục của giao dịch (lấy từ JOIN)
-    private String type;        // Loại: "income" (thu nhập) hoặc "expense" (chi tiêu)
-    private String date;        // Ngày thực hiện giao dịch (định dạng dd/MM/yyyy)
-    private String note;        // Ghi chú thêm
-    private long walletId;      // ID của ví thực hiện giao dịch này
+    private long id;            
+    private String title;       
+    private double amount;      
+    private long categoryId;    
+    private String categoryName;
+    private String type;        
+    private String date;        
+    private String note;        
+    private long walletId;      
 
     public GiaoDich() {
-        // Constructor mặc định
+        
     }
 
     public GiaoDich(long id, String title, double amount, long categoryId, String categoryName,
@@ -44,7 +42,7 @@ public class GiaoDich {
         this.walletId = walletId;
     }
 
-    // Các hàm Getter và Setter (Lấy và Gán giá trị)
+    
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
@@ -57,7 +55,7 @@ public class GiaoDich {
     public long getCategoryId() { return categoryId; }
     public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
 
-    // Tương thích ngược với mã nguồn cũ gọi getCategory() để lấy tên hiển thị
+    
     public String getCategory() { return categoryName; }
     public void setCategory(String categoryName) { this.categoryName = categoryName; }
 
@@ -76,7 +74,7 @@ public class GiaoDich {
     public long getWalletId() { return walletId; }
     public void setWalletId(long walletId) { this.walletId = walletId; }
 
-    // Kiểm tra loại giao dịch
+    
     public boolean isExpense() { return "expense".equals(type); }
     public boolean isIncome() { return "income".equals(type); }
 }

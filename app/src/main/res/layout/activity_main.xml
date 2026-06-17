@@ -10,14 +10,14 @@
         android:layout_height="40dp" >
 
     </FrameLayout>
-    <!-- Fragment Container -->
+    
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNavigation"/>
 
-    <!-- Bottom Navigation -->
+    
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         app:menu="@menu/bottom_nav_menu"
         app:elevation="8dp"/>
 
-    <!-- FAB for Add GiaoDich -->
+    
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"

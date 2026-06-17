@@ -31,9 +31,9 @@ public class KetQuaGiaoDichActivity extends AppCompatActivity {
         String amountStr = fmt.format(amount) + " ₫";
 
         if (isSuccess) {
-            // Icon Success (Có thể dùng ảnh tích xanh tự tạo, ở đây dùng mặc định)
+            
             ivIcon.setImageResource(android.R.drawable.ic_dialog_info);
-            ivIcon.setColorFilter(Color.parseColor("#4CAF50")); // Màu xanh lá
+            ivIcon.setColorFilter(Color.parseColor("#4CAF50")); 
             tvMessage.setText("Giao dịch thành công!");
             
             if ("income".equals(type)) {
@@ -44,16 +44,16 @@ public class KetQuaGiaoDichActivity extends AppCompatActivity {
                 tvAmount.setTextColor(Color.parseColor("#E74C3C"));
             }
         } else {
-            // Icon Fail
+            
             ivIcon.setImageResource(android.R.drawable.ic_delete);
-            ivIcon.setColorFilter(Color.parseColor("#F44336")); // Màu đỏ
+            ivIcon.setColorFilter(Color.parseColor("#F44336")); 
             tvMessage.setText("Giao dịch thất bại");
             tvAmount.setText(amountStr);
             tvAmount.setTextColor(Color.parseColor("#F44336"));
         }
 
         btnBack.setOnClickListener(v -> {
-            finish(); // Quay lại trang trước (Fragment Home)
+            finish(); 
         });
     }
 }

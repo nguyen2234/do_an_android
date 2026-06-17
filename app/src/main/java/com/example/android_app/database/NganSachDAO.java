@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.android_app.model.NganSach;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class NganSachDAO {
@@ -31,7 +33,7 @@ public class NganSachDAO {
         dbHelper.close();
     }
 
-    // Lấy ID người dùng hiện tại từ SharedPreferences
+    
     private long getCurrentUserId() {
         if (context == null) return 1;
         android.content.SharedPreferences prefs =
@@ -39,9 +41,9 @@ public class NganSachDAO {
         return prefs.getLong("user_id", 1);
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    //  THÊM MỚI
-    // ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     public long addNganSach(NganSach budget) {
         db.beginTransaction();
@@ -56,7 +58,7 @@ public class NganSachDAO {
             
             long budgetId = db.insert(DatabaseHelper.TABLE_BUDGETS, null, values);
             if (budgetId > 0) {
-                // Thêm các bản ghi liên kết vào bảng budget_categories
+                
                 for (com.example.android_app.model.DanhMuc c : budget.getCategories()) {
                     long catId = c.getId();
                     if (catId <= 0) {
@@ -86,13 +88,11 @@ public class NganSachDAO {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    //  CẬP NHẬT
-    // ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
-    /**
-     * Cập nhật số tiền đã chi của ngân sách.
-     */
+    
     public int updateSpentAmount(int id, double newSpentAmount) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_BUDGET_SPENT, newSpentAmount);
@@ -102,9 +102,7 @@ public class NganSachDAO {
                 new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Cập nhật toàn bộ thông tin ngân sách (dùng cho chức năng Sửa).
-     */
+    
     public int updateNganSach(NganSach budget) {
         db.beginTransaction();
         try {
@@ -120,12 +118,12 @@ public class NganSachDAO {
                     new String[]{String.valueOf(budget.getId()), String.valueOf(getCurrentUserId())});
             
             if (rows > 0) {
-                // Xóa liên kết cũ trong budget_categories
+                
                 db.delete(DatabaseHelper.TABLE_BUDGET_CATEGORIES,
                         DatabaseHelper.COL_BC_BUDGET_ID + " = ?",
                         new String[]{String.valueOf(budget.getId())});
                 
-                // Thêm liên kết mới
+                
                 for (com.example.android_app.model.DanhMuc c : budget.getCategories()) {
                     long catId = c.getId();
                     if (catId <= 0) {
@@ -155,14 +153,14 @@ public class NganSachDAO {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    //  XÓA
-    // ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     public int deleteNganSach(int budgetId) {
         db.beginTransaction();
         try {
-            // Xóa liên kết trong budget_categories
+            
             db.delete(DatabaseHelper.TABLE_BUDGET_CATEGORIES,
                     DatabaseHelper.COL_BC_BUDGET_ID + " = ?",
                     new String[]{String.valueOf(budgetId)});
@@ -182,9 +180,9 @@ public class NganSachDAO {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    //  TRUY VẤN
-    // ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     public NganSach getBudgetById(int budgetId) {
         Cursor cursor = db.query(
@@ -256,20 +254,37 @@ public class NganSachDAO {
 
     public double calculateSpentAmountForBudget(int budgetId, String startDate, String endDate) {
         double spent = 0;
+        
+        
+        String startDateIso = startDate;
+        String endDateIso = endDate;
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            
+            
+            String startClean = startDate.trim().substring(0, Math.min(startDate.trim().length(), 10));
+            String endClean = endDate.trim().substring(0, Math.min(endDate.trim().length(), 10));
+            
+            startDateIso = formatter.format(parser.parse(startClean));
+            endDateIso = formatter.format(parser.parse(endClean));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         String sql = "SELECT SUM(t.amount) FROM transactions t " +
                 "INNER JOIN budget_categories bc ON t.category_id = bc.category_id " +
                 "WHERE bc.budget_id = ? " +
                 "AND t.type = 'expense' " +
                 "AND t.user_id = ? " +
                 "AND (substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2)) " +
-                "BETWEEN (substr(?, 7, 4) || '-' || substr(?, 4, 2) || '-' || substr(?, 1, 2)) " +
-                "AND (substr(?, 7, 4) || '-' || substr(?, 4, 2) || '-' || substr(?, 1, 2))";
+                "BETWEEN ? AND ?";
         
         Cursor cursor = db.rawQuery(sql, new String[]{
                 String.valueOf(budgetId),
                 String.valueOf(getCurrentUserId()),
-                startDate, startDate,
-                endDate, endDate
+                startDateIso,
+                endDateIso
         });
         
         if (cursor != null && cursor.moveToFirst()) {
@@ -279,9 +294,9 @@ public class NganSachDAO {
         return spent;
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    //  UNIQUE CATEGORY – Kiểm tra danh mục độc quyền
-    // ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     public Set<String> getUsedCategoryNames() {
         Set<String> usedNames = new HashSet<>();
@@ -326,9 +341,9 @@ public class NganSachDAO {
         return usedNames;
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    //  HELPER NỘI BỘ
-    // ──────────────────────────────────────────────────────────────────────────
+    
+    
+    
 
     private NganSach mapCursorToBudget(Cursor cursor) {
         NganSach b = new NganSach();

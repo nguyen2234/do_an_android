@@ -16,7 +16,7 @@
         android:textColor="@color/colorTextPrimary"
         android:layout_marginBottom="16dp"/>
 
-    <!-- Tên nhắc hẹn -->
+    
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Số tiền dự kiến -->
+    
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:inputType="numberDecimal"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Danh mục Spinner -->
+    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         android:paddingHorizontal="16dp"
         android:spinnerMode="dropdown"/>
 
-    <!-- Tần suất lặp lại Spinner -->
+    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
         android:paddingHorizontal="16dp"
         android:spinnerMode="dropdown"/>
 
-    <!-- Ngày giờ đến hạn -->
+    
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             android:clickable="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Thời gian nhắc trước (ngày) -->
+    
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

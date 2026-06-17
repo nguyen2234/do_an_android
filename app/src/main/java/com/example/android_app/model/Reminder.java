@@ -3,20 +3,18 @@ package com.example.android_app.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Model đại diện cho một Nhắc hẹn thanh toán (Payment Reminder).
- */
+
 public class Reminder {
     private long id;
-    private String title;                  // Tên khoản chi
-    private double estimatedAmount;        // Số tiền dự kiến
-    private LocalDateTime dueDate;         // Ngày giờ đến hạn
-    private Recurrence recurrence;         // Tần suất lặp lại (MONTHLY, QUARTERLY, YEARLY)
-    private int reminderOffsetDays;        // Thời gian nhắc trước (số ngày)
-    private ReminderStatus status;         // Trạng thái (PENDING, PAID)
-    private long categoryId;               // ID danh mục liên kết
-    private String categoryName;           // Tên danh mục liên kết (lấy từ JOIN)
-    private long userId;                   // ID người dùng liên kết
+    private String title;                  
+    private double estimatedAmount;        
+    private LocalDateTime dueDate;         
+    private Recurrence recurrence;         
+    private int reminderOffsetDays;        
+    private ReminderStatus status;         
+    private long categoryId;               
+    private String categoryName;           
+    private long userId;                   
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
@@ -55,7 +53,7 @@ public class Reminder {
         this.userId = userId;
     }
 
-    // Getters & Setters
+    
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 
@@ -80,7 +78,7 @@ public class Reminder {
     public long getCategoryId() { return categoryId; }
     public void setCategoryId(long categoryId) { this.categoryId = categoryId; }
 
-    // Tương thích ngược với mã nguồn cũ gọi getCategory() để lấy tên hiển thị
+    
     public String getCategory() { return categoryName; }
     public void setCategory(String categoryName) { this.categoryName = categoryName; }
 
@@ -90,7 +88,7 @@ public class Reminder {
     public long getUserId() { return userId; }
     public void setUserId(long userId) { this.userId = userId; }
 
-    // Helpers cho Cơ sở dữ liệu SQLite
+    
     public String getDueDateString() {
         if (dueDate == null) return null;
         return dueDate.format(formatter);

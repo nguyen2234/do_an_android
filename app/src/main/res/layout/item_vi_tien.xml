@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- ViTien Icon -->
+        
         <ImageView
             android:id="@+id/ivWalletIcon"
             android:layout_width="48dp"
@@ -25,7 +25,7 @@
             android:src="@drawable/ic_wallet_modern"
             android:tint="@color/colorIncome"/>
 
-        <!-- ViTien Info -->
+        
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
                 android:textSize="12sp"/>
         </LinearLayout>
 
-        <!-- Actions (Edit/Delete) -->
+        
         <LinearLayout
             android:id="@+id/llActions"
             android:layout_width="wrap_content"

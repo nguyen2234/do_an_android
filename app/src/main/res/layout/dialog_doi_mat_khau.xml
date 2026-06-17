@@ -17,7 +17,7 @@
         android:gravity="center"
         android:layout_marginBottom="20dp"/>
 
-    <!-- Mật khẩu hiện tại -->
+    
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:textSize="15sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Mật khẩu mới -->
+    
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:textSize="15sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Xác nhận mật khẩu mới -->
+    
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

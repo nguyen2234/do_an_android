@@ -31,10 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
 
-    // Launcher xin quyền POST_NOTIFICATIONS (Android 13+)
+    
     private final ActivityResultLauncher<String> notifPermLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
-                // Không cần làm gì thêm, notification sẽ hoạt động nếu được cấp
+                
             });
 
     @Override
@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 1. Khởi tạo Notification Channels
+        
         NotificationHelper.createNotificationChannels(this);
 
-        // 2. Xin quyền POST_NOTIFICATIONS trên Android 13+
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // 3. Đăng ký Worker nhắc nhở chạy mỗi 24 giờ
+        
         PeriodicWorkRequest reminderWork = new PeriodicWorkRequest.Builder(
                 ReminderWorker.class, 24, TimeUnit.HOURS)
                 .build();
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottomNavigation);
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
 
-        // Load fragment mặc định khi mở app
+        
         if (savedInstanceState == null) {
             loadFragment(new TrangChuFragment());
             bottomNavigation.setSelectedItemId(R.id.nav_home);
@@ -108,16 +108,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Mở màn hình Khoản đến hạn (có thể gọi từ notification hoặc các nơi khác).
-     */
+    
     public void openDuKienFragment() {
         loadFragment(new GiaoDichDuKienFragment());
     }
 
-    /**
-     * Chọn mục trên thanh điều hướng dưới.
-     */
+    
     public void setSelectedItemId(int itemId) {
         if (bottomNavigation != null) {
             bottomNavigation.setSelectedItemId(itemId);

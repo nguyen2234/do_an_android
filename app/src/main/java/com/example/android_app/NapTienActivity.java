@@ -22,10 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Màn hình Nạp tiền vào ví.
- * Cộng số tiền vào số dư ví và ghi nhận lịch sử giao dịch.
- */
+
 public class NapTienActivity extends AppCompatActivity {
 
     private EditText etSoTien, etGhiChu;
@@ -45,20 +42,20 @@ public class NapTienActivity extends AppCompatActivity {
         giaoDichDAO = new GiaoDichDAO(this);
         giaoDichDAO.open();
 
-        // Ánh xạ view
+        
         etSoTien = findViewById(R.id.etSoTienNap);
         etGhiChu = findViewById(R.id.etGhiChuNap);
         tvAmountDisplay = findViewById(R.id.tvAmountDisplayNap);
         spinnerWallet = findViewById(R.id.spinnerWalletNap);
         MaterialButton btnXacNhan = findViewById(R.id.btnXacNhanNap);
 
-        // Nút back
+        
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        // Load danh sách ví
+        
         setupWalletSpinner();
 
-        // Cập nhật hiển thị số tiền khi nhập
+        
         etSoTien.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
             @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
@@ -113,16 +110,16 @@ public class NapTienActivity extends AppCompatActivity {
             return;
         }
 
-        // Lấy ví được chọn
+        
         int idx = spinnerWallet.getSelectedItemPosition();
         ViTien selectedWallet = walletList.get(idx);
 
-        // Cập nhật số dư ví
+        
         double newBalance = selectedWallet.getBalance() + soTien;
         walletDAO.updateBalance(selectedWallet.getId(), newBalance);
 
-        // Ghi nhận lịch sử giao dịch. Tự động lấy ngày/giờ hiện tại của hệ thống (timestamp)
-        // thay vì yêu cầu người dùng chọn thủ công để đơn giản hóa giao diện nạp tiền.
+        
+        
         String date = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi")).format(Calendar.getInstance().getTime());
         String note = etGhiChu.getText().toString().trim();
         GiaoDich giaoDich = new GiaoDich(
@@ -132,7 +129,7 @@ public class NapTienActivity extends AppCompatActivity {
         );
         giaoDichDAO.addTransaction(giaoDich);
 
-        // Gửi thông báo
+        
         NotificationHelper.showTopUpNotification(this, selectedWallet.getName(), soTien);
 
         Toast.makeText(this, "✅ Nạp " + formatCurrency(soTien) + " thành công!", Toast.LENGTH_SHORT).show();

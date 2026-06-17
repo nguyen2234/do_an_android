@@ -6,7 +6,7 @@
     android:background="@color/colorPrimary"
     >
 
-    <!-- Background Pattern (circles) -->
+    
     <View
         android:layout_width="300dp"
         android:layout_height="300dp"
@@ -27,7 +27,7 @@
         android:alpha="0.1"
         android:background="@drawable/bg_icon_primary"/>
 
-    <!-- Center content -->
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="40dp">
 
-        <!-- App Icon -->
+        
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -64,7 +64,7 @@
 
     </LinearLayout>
 
-    <!-- Bottom loading indicator -->
+    
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="40dp"

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <!-- Header -->
+    
     <RelativeLayout
         android:id="@+id/walletHeader"
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Total Balance Card -->
+            
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Wallets List Header -->
+            
 
             <TextView
                 android:layout_width="wrap_content"

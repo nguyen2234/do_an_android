@@ -1,15 +1,13 @@
 package com.example.android_app.model;
 
-/**
- * Lớp đại diện cho Người dùng (NguoiDung) trong hệ thống.
- */
+
 public class NguoiDung {
     private long id;
     private String username;
     private String password;
     private String email;
     private String avatar;
-    private int themeMode; // 0: Auto, 1: Light, 2: Dark
+    private int themeMode; 
     private String fullname;
     private String transactionPin;
 

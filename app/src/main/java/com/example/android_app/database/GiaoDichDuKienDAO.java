@@ -10,9 +10,7 @@ import com.example.android_app.model.GiaoDichDuKien;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data Access Object cho bảng Giao dịch Dự kiến (planned_transactions).
- */
+
 public class GiaoDichDuKienDAO {
 
     private SQLiteDatabase db;
@@ -32,7 +30,7 @@ public class GiaoDichDuKienDAO {
         dbHelper.close();
     }
 
-    // Lấy ID người dùng hiện tại từ SharedPreferences
+    
     private long getCurrentUserId() {
         if (context == null) return 1;
         android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -71,9 +69,7 @@ public class GiaoDichDuKienDAO {
         return catId;
     }
 
-    /**
-     * Thêm một giao dịch dự kiến mới.
-     */
+    
     public long addPlanned(GiaoDichDuKien item) {
         long catId = item.getCategoryId();
         if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
@@ -94,9 +90,7 @@ public class GiaoDichDuKienDAO {
         return db.insert(DatabaseHelper.TABLE_PLANNED, null, values);
     }
 
-    /**
-     * Cập nhật giao dịch dự kiến.
-     */
+    
     public int updatePlanned(GiaoDichDuKien item) {
         long catId = item.getCategoryId();
         if (catId <= 0 && item.getCategory() != null && !item.getCategory().isEmpty()) {
@@ -118,18 +112,14 @@ public class GiaoDichDuKienDAO {
                 new String[]{String.valueOf(item.getId()), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Xóa một giao dịch dự kiến.
-     */
+    
     public int deletePlanned(long id) {
         return db.delete(DatabaseHelper.TABLE_PLANNED,
                 DatabaseHelper.COL_PLANNED_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
                 new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Đánh dấu giao dịch dự kiến là hoàn thành.
-     */
+    
     public int markCompleted(long id) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_PLANNED_STATUS, "completed");
@@ -138,9 +128,7 @@ public class GiaoDichDuKienDAO {
                 new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Lấy tất cả giao dịch dự kiến đang pending.
-     */
+    
     public List<GiaoDichDuKien> getAllPending() {
         List<GiaoDichDuKien> list = new ArrayList<>();
         String sql = "SELECT p.id, p.title, p.amount, p.category_id, c.name AS category_name, p.type, p.due_date, p.status, p.note, p.wallet_id " +
@@ -158,9 +146,7 @@ public class GiaoDichDuKienDAO {
         return list;
     }
 
-    /**
-     * Lấy tất cả giao dịch dự kiến (mọi trạng thái).
-     */
+    
     public List<GiaoDichDuKien> getAll() {
         List<GiaoDichDuKien> list = new ArrayList<>();
         String sql = "SELECT p.id, p.title, p.amount, p.category_id, c.name AS category_name, p.type, p.due_date, p.status, p.note, p.wallet_id " +
@@ -178,11 +164,7 @@ public class GiaoDichDuKienDAO {
         return list;
     }
 
-    /**
-     * Lấy các khoản đến hạn hôm nay hoặc ngày mai (dùng cho Worker nhắc nhở).
-     * @param today Ngày hôm nay theo định dạng dd/MM/yyyy
-     * @param tomorrow Ngày mai theo định dạng dd/MM/yyyy
-     */
+    
     public List<GiaoDichDuKien> getDueSoon(String today, String tomorrow) {
         List<GiaoDichDuKien> list = new ArrayList<>();
         String sql = "SELECT p.id, p.title, p.amount, p.category_id, c.name AS category_name, p.type, p.due_date, p.status, p.note, p.wallet_id " +

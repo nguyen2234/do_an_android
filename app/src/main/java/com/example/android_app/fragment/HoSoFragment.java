@@ -53,23 +53,23 @@ public class HoSoFragment extends Fragment {
         tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
         ivAvatar = view.findViewById(R.id.ivAvatar);
 
-//        btnStatistics = view.findViewById(R.id.btnStatistics);
+
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
         btnTransferMoney = view.findViewById(R.id.btnTransferMoney);
 
-        // Load thông tin NguoiDung
+        
         loadUserProfile();
 
-        // Xử lý Chỉnh sửa hồ sơ
+        
         if (btnEditProfile != null) {
             btnEditProfile.setOnClickListener(v -> {
-                // Sử dụng CaiDatActivity thay vì ChinhSuaHoSoActivity vì đã gộp
+                
                 Intent intent = new Intent(getActivity(), com.example.android_app.CaiDatActivity.class);
                 startActivity(intent);
             });
         }
 
-        // Xử lý Chuyển tiền
+        
         if (btnTransferMoney != null) {
             btnTransferMoney.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), com.example.android_app.ChuyenTienActivity.class);
@@ -77,13 +77,13 @@ public class HoSoFragment extends Fragment {
             });
         }
 
-        // Xử lý Thay đổi mã PIN giao dịch
+        
         View btnChangePin = view.findViewById(R.id.btnChangePin);
         if (btnChangePin != null) {
             btnChangePin.setOnClickListener(v -> showVerifyPasswordDialog());
         }
 
-        // Xử lý Đăng xuất
+        
         View btnLogoutProfile = view.findViewById(R.id.btnLogoutProfile);
         if (btnLogoutProfile != null) {
             btnLogoutProfile.setOnClickListener(v -> {
@@ -98,7 +98,7 @@ public class HoSoFragment extends Fragment {
             });
         }
         
-        // Xử lý Thống kê (Chuyển hướng sang màn hình Thống kê chính thức)
+        
         if (btnStatistics != null) {
             btnStatistics.setOnClickListener(v -> {
                 if (getActivity() instanceof MainActivity) {
@@ -107,7 +107,7 @@ public class HoSoFragment extends Fragment {
             });
         }
 
-        // Xử lý Quản lý
+        
         View btnManageCategories = view.findViewById(R.id.btnManageCategories);
         View btnManageWallets = view.findViewById(R.id.btnManageWallets);
 
@@ -160,7 +160,7 @@ public class HoSoFragment extends Fragment {
                     tvProfileEmail.setText("Chưa cập nhật Email");
                 }
 
-                // Load Avatar
+                
                 String avatarPath = user.getAvatar();
                 if (avatarPath != null && !avatarPath.isEmpty()) {
                     if (avatarPath.startsWith("/")) {
@@ -265,7 +265,7 @@ public class HoSoFragment extends Fragment {
 
             int result = userDAO.updateTransactionPin(userId, newPin);
             if (result > 0) {
-                Toast.makeText(getContext(), "✅ Đổi mã PIN giao dịch thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Đổi mã PIN giao dịch thành công!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
                 Toast.makeText(getContext(), "Đã xảy ra lỗi khi đổi mã PIN", Toast.LENGTH_SHORT).show();

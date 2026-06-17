@@ -51,7 +51,7 @@ public class DangNhapActivity extends AppCompatActivity {
         String hashedPassword = SecurityUtils.hashPasswordSHA256(password);
         NguoiDung user = userDAO.checkLogin(username, hashedPassword);
         if (user != null) {
-            // Lưu session đăng nhập
+            
             SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putLong("user_id", user.getId());
@@ -61,20 +61,25 @@ public class DangNhapActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-            /*
-             * KIỂM TRA ONBOARDING:
-             * - Nếu "isOnboardingDone" chưa được set (lần đầu đăng nhập sau khi cài đặt / reset dữ liệu)
-             *   → Điều hướng sang SetupCategoryActivity (Đọc hướng dẫn tạo DM + Ví)
-             * - Nếu "isOnboardingDone" = true (người dùng cũ)
-             *   → Vào thẳng MainActivity
-             */
-            boolean onboardingDone = prefs.getBoolean("isOnboardingDone", false);
-            if (!onboardingDone) {
-                // Lần đầu → bắt đầu Onboarding
-                startActivity(new Intent(this, SetupCategoryActivity.class));
-            } else {
-                // Người dùng cũ → vào thẳng Main
+            
+            com.example.android_app.database.ViTienDAO walletDAO = new com.example.android_app.database.ViTienDAO(this);
+            walletDAO.open();
+            int walletCount = walletDAO.getWalletCount();
+            walletDAO.close();
+
+            if (walletCount > 0) {
+                
+                editor.putBoolean("isOnboardingDone", true);
+                editor.apply();
                 startActivity(new Intent(this, MainActivity.class));
+            } else {
+                
+                boolean onboardingDone = prefs.getBoolean("isOnboardingDone", false);
+                if (!onboardingDone) {
+                    startActivity(new Intent(this, SetupCategoryActivity.class));
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
             }
             finish();
         } else {

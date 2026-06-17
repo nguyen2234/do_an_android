@@ -10,9 +10,7 @@ import com.example.android_app.model.ViTien;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data Access Object (DAO) cho thao tác với bảng Ví (Wallets).
- */
+
 public class ViTienDAO {
 
     private SQLiteDatabase db;
@@ -24,26 +22,24 @@ public class ViTienDAO {
         this.context = context;
     }
 
-    // Mở kết nối cơ sở dữ liệu
+    
     public void open() {
         db = dbHelper.getWritableDatabase();
     }
 
-    // Đóng kết nối
+    
     public void close() {
         dbHelper.close();
     }
 
-    // Lấy ID người dùng hiện tại từ SharedPreferences
+    
     private long getCurrentUserId() {
         if (context == null) return 1;
         android.content.SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         return prefs.getLong("user_id", 1);
     }
 
-    /**
-     * Thêm một ví mới vào cơ sở dữ liệu.
-     */
+    
     public long addWallet(ViTien wallet) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_WALLET_NAME, wallet.getName());
@@ -58,9 +54,7 @@ public class ViTienDAO {
         return db.insert(DatabaseHelper.TABLE_WALLETS, null, values);
     }
 
-    /**
-     * Cập nhật thông tin một ví đã có.
-     */
+    
     public int updateWallet(ViTien wallet) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_WALLET_NAME, wallet.getName());
@@ -76,23 +70,21 @@ public class ViTienDAO {
                 new String[]{String.valueOf(wallet.getId()), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Xóa một ví khỏi cơ sở dữ liệu.
-     */
+    
     public int deleteWallet(long id) {
-        return db.delete(DatabaseHelper.TABLE_WALLETS,
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COL_WALLET_IS_HIDDEN, 1);
+        return db.update(DatabaseHelper.TABLE_WALLETS, values,
                 DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
                 new String[]{String.valueOf(id), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Lấy danh sách tất cả các ví.
-     */
+    
     public List<ViTien> getAllWallets() {
         List<ViTien> wallets = new ArrayList<>();
-        // Truy vấn tất cả dữ liệu từ bảng ví của người dùng hiện tại
+        
         Cursor cursor = db.query(DatabaseHelper.TABLE_WALLETS, null,
-                DatabaseHelper.COL_USER_ID_FK + " = ?",
+                DatabaseHelper.COL_USER_ID_FK + " = ? AND " + DatabaseHelper.COL_WALLET_IS_HIDDEN + " = 0",
                 new String[]{String.valueOf(getCurrentUserId())}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -130,9 +122,7 @@ public class ViTienDAO {
         return wallets;
     }
 
-    /**
-     * Lấy thông tin một ví theo ID.
-     */
+    
     public ViTien getWalletById(long id) {
         Cursor cursor = db.query(DatabaseHelper.TABLE_WALLETS, null,
                 DatabaseHelper.COL_WALLET_ID + " = ? AND " + DatabaseHelper.COL_USER_ID_FK + " = ?",
@@ -157,9 +147,7 @@ public class ViTienDAO {
         return null;
     }
 
-    /**
-     * Cập nhật hạn mức số dư tối thiểu của ví.
-     */
+    
     public int updateMinBalance(long walletId, double minBalance) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_WALLET_MIN_BALANCE, minBalance);
@@ -168,9 +156,7 @@ public class ViTienDAO {
                 new String[]{String.valueOf(walletId), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Cập nhật số dư cho một ví.
-     */
+    
     public int updateBalance(long walletId, double newBalance) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_WALLET_BALANCE, newBalance);
@@ -179,15 +165,11 @@ public class ViTienDAO {
                 new String[]{String.valueOf(walletId), String.valueOf(getCurrentUserId())});
     }
 
-    /**
-     * Lấy số lượng ví hiện có của người dùng.
-     * Dùng trong Onboarding để kiểm tra điều kiện enable nút "Hoàn thành".
-     * @return Số lượng ví (>= 0)
-     */
+    
     public int getWalletCount() {
         Cursor cursor = db.rawQuery(
                 "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_WALLETS +
-                " WHERE " + DatabaseHelper.COL_USER_ID_FK + " = ?",
+                " WHERE " + DatabaseHelper.COL_USER_ID_FK + " = ? AND " + DatabaseHelper.COL_WALLET_IS_HIDDEN + " = 0",
                 new String[]{String.valueOf(getCurrentUserId())});
         int count = 0;
         if (cursor != null && cursor.moveToFirst()) {
@@ -195,6 +177,22 @@ public class ViTienDAO {
             cursor.close();
         }
         return count;
+    }
+
+    
+    public double getTotalBalance() {
+        double total = 0;
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(" + DatabaseHelper.COL_WALLET_BALANCE + ") FROM " + DatabaseHelper.TABLE_WALLETS +
+                " WHERE " + DatabaseHelper.COL_USER_ID_FK + " = ? AND " + DatabaseHelper.COL_WALLET_IS_HIDDEN + " = 0",
+                new String[]{String.valueOf(getCurrentUserId())});
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                total = cursor.getDouble(0);
+            }
+            cursor.close();
+        }
+        return total;
     }
 }
 

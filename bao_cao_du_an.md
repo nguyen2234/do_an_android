@@ -10,7 +10,7 @@
 ### 1.1. Công Nghệ Lõi (Core Technology Stack)
 * **Ngôn ngữ phát triển:** Java (Android SDK).
 * **Kiến trúc dữ liệu:** Sử dụng mô hình **DAO (Data Access Object)** phân tách tầng logic truy cập dữ liệu với giao diện (UI).
-* **Hệ quản trị cơ sở dữ liệu:** **SQLite** (`DatabaseHelper` kế thừa từ `SQLiteOpenHelper`), hiện tại đang ở phiên bản database số **9** (hỗ trợ nhiều tài khoản người dùng và lưu trữ thông báo).
+* **Hệ quản trị cơ sở dữ liệu:** **SQLite** (`DatabaseHelper` kế thừa từ `SQLiteOpenHelper`), hiện tại đang ở phiên bản database số **14** (hỗ trợ nhiều tài khoản người dùng, chuẩn hóa 1NF cho ngân sách, kích hoạt khóa ngoại vật lý và lưu trữ thông báo).
 * **Tác vụ nền định kỳ:** **WorkManager** (`ReminderWorker`) thiết lập cơ chế chạy ngầm cứ sau mỗi 24 giờ để tự động quét kiểm tra các khoản hóa đơn sắp đến hạn và gửi thông báo nhắc nhở người dùng.
 * **Lưu trữ phiên (Session Cache):** **SharedPreferences** (`UserPrefs`) lưu trữ khóa `user_id` và `username` để nhận diện phiên làm việc của người dùng đang đăng nhập, làm cơ sở truy vấn dữ liệu cá nhân hóa ở tất cả các bảng.
 * **Thành phần giao diện (UI Elements):** 
@@ -268,14 +268,18 @@ flowchart TD
 
 ## 4. Phân Tích Đánh Giá Kiến Trúc Cơ Sở Dữ Liệu Hiện Tại
 
-Dựa trên phân tích thực tế từ cấu trúc cơ sở dữ liệu (DatabaseHelper v9):
+Dựa trên phân tích thực tế từ cấu trúc cơ sở dữ liệu (DatabaseHelper v14):
 
-### 4.1. Điểm Mạnh (Architectural Strengths)
-1. **Phân tách đa người dùng triệt để (Multi-user Isolation):** Cột `user_id` có mặt ở hầu hết các bảng tài chính cốt lõi (`wallets`, `categories`, `transactions`, `budgets`, `planned_transactions`, `notifications`). Khi đăng nhập, app chỉ truy vấn các bản ghi khớp với `user_id` hiện tại lưu ở SharedPreferences.
-2. **Nâng cấp cơ sở dữ liệu an toàn (Database Migration):** Phương thức `onUpgrade` của `DatabaseHelper` xử lý tuần tự qua từng phiên bản nâng cấp (từ v7 lên v9) bằng các lệnh `ALTER TABLE` được bao bọc trong khối `try-catch`, đảm bảo người dùng cũ khi cập nhật phiên bản mới không bị mất dữ liệu lịch sử chi tiêu cũ.
+### 4.1. Điểm Mạnh & Các Cải Tiến Đã Thực Hiện (Architectural Improvements)
+1. **Phân tách đa người dùng triệt để (Multi-user Isolation):** Cột `user_id` có mặt ở hầu hết các bảng tài chính cốt lõi. Khi đăng nhập, app chỉ truy vấn các bản ghi khớp với `user_id` hiện tại lưu ở SharedPreferences.
+2. **Kích hoạt Khóa ngoại vật lý (Physical Foreign Keys):** Đã override phương thức `onConfigure` trong `DatabaseHelper` để thực hiện `db.setForeignKeyConstraintsEnabled(true)`.
+3. **Chuẩn hóa quan hệ Ngân sách - Danh mục (1NF):** Thay thế chuỗi danh mục gộp `category_ids` trong `budgets` bằng bảng trung gian `budget_categories(budget_id, category_id)`, giúp tính toán ngân sách bằng câu lệnh JOIN SQL thuần túy, gia tăng hiệu năng rõ rệt.
+4. **Chuẩn hóa danh mục (Category Reference):** Thay thế cột `category` dạng TEXT trong các bảng `transactions`, `planned_transactions`, `reminders` bằng cột khóa ngoại `category_id` liên kết với `categories(id)`.
+5. **Nâng cấp cơ sở dữ liệu an toàn (Database Migration):** Phương thức `onUpgrade` của `DatabaseHelper` xử lý tuần tự qua từng phiên bản nâng cấp (từ v7 lên v14) bằng các lệnh được bao bọc trong khối `try-catch`, bảo vệ an toàn cho dữ liệu cũ.
 
-### 4.2. Khuyến Nghị Tối Ưu Hóa (Database Optimization)
-Nhằm nâng cao tính toàn vẹn dữ liệu và tối ưu hiệu năng cho hệ thống, kiến trúc cơ sở dữ liệu có thể cải tiến các điểm sau trong tương lai:
-* **Kích hoạt và khai báo Khóa ngoại vật lý (Foreign Keys):** Hiện tại, các liên kết logic `user_id` và `wallet_id` ở một số bảng chưa có ràng buộc `FOREIGN KEY` chính thức trong SQL mà chỉ đang lưu dạng cột số nguyên thông thường. Nên bổ sung ràng buộc khóa ngoại đi kèm thuộc tính `ON DELETE CASCADE` và gọi `PRAGMA foreign_keys = ON;` khi mở kết nối để SQLite tự động dọn sạch dữ liệu mồ côi khi tài khoản hoặc ví liên quan bị xóa.
-* **Chuẩn hóa quan hệ Ngân sách - Danh mục (1NF):** Cột `category_ids` trong bảng `budgets` đang lưu danh sách các ID danh mục dưới dạng chuỗi phân tách bởi dấu phẩy (ví dụ: `"1,2,5"`). Điều này vi phạm dạng chuẩn 1 (1NF). Nên thiết kế một bảng liên kết trung gian `budget_categories (budget_id, category_id)` để dễ dàng truy vấn `JOIN` SQL trực tiếp thay vì phải tải dữ liệu lên bộ nhớ và cắt chuỗi bằng mã Java như hiện tại.
-* **Chuẩn hóa liên kết giao dịch và danh mục:** Bảng `transactions` đang lưu tên danh mục dưới dạng văn bản trực tiếp (`category` TEXT). Nên thay thế bằng cột `category_id` liên kết tới khóa chính của bảng `categories` để khi người dùng thay đổi tên danh mục (ví dụ đổi "Ăn uống" thành "Cơm trưa"), các giao dịch cũ không bị sai lệch nhãn phân loại.
+### 4.2. Khuyến Nghị & Các Điểm Cần Cải Thiện Trong Tương Lai
+Nhằm tiếp tục tối ưu hóa hệ thống, các phiên bản tiếp theo có thể cải tiến các điểm sau:
+* **Chuẩn hóa định dạng ngày tháng:** Chuyển đổi định dạng lưu trữ từ `dd/MM/yyyy` (TEXT) sang chuẩn ISO-8601 (`YYYY-MM-DD` hoặc `YYYY-MM-DD HH:MM:SS`) để truy vấn so sánh thời gian nhanh và hiệu quả hơn.
+* **Bổ sung khóa ngoại user_id ở mức cơ sở dữ liệu:** Thêm ràng buộc `FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE` ở tất cả các bảng con để SQLite tự động xóa dữ liệu mồ côi khi người dùng bị xóa.
+* **Mã hóa mã PIN giao dịch:** Thực hiện băm một chiều mã PIN giao dịch (`transaction_pin`) thay vì lưu văn bản thô để đảm bảo an toàn bảo mật tuyệt đối.
+* **Ràng buộc Unique theo cặp (user_id, name):** Thêm ràng buộc `UNIQUE(user_id, name)` trên bảng `categories` và `wallets` để hạn chế người dùng tạo danh mục/ví bị trùng tên.

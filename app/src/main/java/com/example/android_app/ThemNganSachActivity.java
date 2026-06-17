@@ -20,20 +20,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- * Màn hình Thêm / Sửa Ngân sách.
- *
- * Hai chế độ hoạt động:
- * - THÊM MỚI: Không có EXTRA_EDIT_BUDGET_ID trong Intent → Tạo ngân sách mới.
- * - SỬA:      Có EXTRA_EDIT_BUDGET_ID trong Intent → Pre-fill dữ liệu và cập nhật.
- *
- * Quy tắc Unique Category:
- * - Khi mở form, lọc bỏ các danh mục đã được dùng trong ngân sách khác.
- * - Khi lưu, kiểm tra lại để chặn trùng lặp ngay cả khi người dùng cố tình submit.
- */
+
 public class ThemNganSachActivity extends AppCompatActivity {
 
-    // Key truyền qua Intent để phân biệt chế độ Thêm / Sửa
+    
     public static final String EXTRA_EDIT_BUDGET_ID = "edit_budget_id";
 
     private EditText etBudgetName, etBudgetAmount;
@@ -45,10 +35,10 @@ public class ThemNganSachActivity extends AppCompatActivity {
     private Calendar endCal = Calendar.getInstance();
 
     private List<CheckBox> categoryCheckboxes = new ArrayList<>();
-    /** Danh sách DanhMuc tương ứng với từng CheckBox (cùng thứ tự) */
+    
     private List<DanhMuc> categoryList = new ArrayList<>();
 
-    // Trạng thái chế độ Edit
+    
     private boolean isEditMode = false;
     private int editBudgetId = -1;
 
@@ -63,16 +53,16 @@ public class ThemNganSachActivity extends AppCompatActivity {
         categoryDAO = new DanhMucDAO(this);
         categoryDAO.open();
 
-        // Xác định chế độ hoạt động
+        
         editBudgetId = getIntent().getIntExtra(EXTRA_EDIT_BUDGET_ID, -1);
         isEditMode = (editBudgetId != -1);
 
-        // Cập nhật tiêu đề AppBar nếu là chế độ Sửa
+        
         if (isEditMode) {
             TextView tvTitle = (TextView) ((android.view.ViewGroup)
                     ((android.view.ViewGroup) getWindow().getDecorView()).getChildAt(0)).getChildAt(1);
-            // Cách an toàn hơn: dùng id nếu header có TextView
-            // Tạm tìm qua View trực tiếp
+            
+            
         }
 
         findViewById(R.id.btnBackAddBudget).setOnClickListener(v -> finish());
@@ -84,9 +74,9 @@ public class ThemNganSachActivity extends AppCompatActivity {
         containerCategories = findViewById(R.id.containerCategories);
 
         setupDatePickers();
-        setupCategoryCheckboxes(); // Lọc danh mục đã dùng theo chế độ hiện tại
+        setupCategoryCheckboxes(); 
 
-        // Nếu là chế độ Sửa, pre-fill dữ liệu cũ vào form
+        
         if (isEditMode) {
             prefillEditData();
         }
@@ -118,23 +108,16 @@ public class ThemNganSachActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Tạo danh sách CheckBox cho từng danh mục chi tiêu.
-     *
-     * Quy tắc Unique Category (Độc quyền Danh mục):
-     * - Nếu THÊM MỚI: Ẩn (lọc bỏ) các danh mục đã có trong BẤT KỲ ngân sách nào.
-     * - Nếu SỬA:      Ẩn các danh mục đã có trong ngân sách KHÁC (không phải ngân sách đang sửa).
-     *   Vì vậy danh mục của chính ngân sách đang sửa vẫn hiển thị để người dùng có thể chọn lại.
-     */
+    
     private void setupCategoryCheckboxes() {
-        // Lấy tập hợp danh mục đã được dùng (loại trừ ngân sách hiện tại nếu đang sửa)
+        
         Set<String> usedCategoryNames = isEditMode
                 ? budgetDAO.getUsedCategoryNamesExcluding(editBudgetId)
                 : budgetDAO.getUsedCategoryNames();
 
         List<DanhMuc> expenseCategories = categoryDAO.getAllCategories();
 
-        // Dự phòng: thêm một số danh mục mặc định nếu DB trống
+        
         if (expenseCategories.isEmpty()) {
             expenseCategories.add(new DanhMuc(0, "Ăn uống", "", "general", 0));
             expenseCategories.add(new DanhMuc(0, "Di chuyển", "", "general", 0));
@@ -142,7 +125,7 @@ public class ThemNganSachActivity extends AppCompatActivity {
             expenseCategories.add(new DanhMuc(0, "Khác", "", "general", 0));
         }
 
-        containerCategories.removeAllViews(); // Xóa view cũ nếu có
+        containerCategories.removeAllViews(); 
         categoryCheckboxes.clear();
         categoryList.clear();
 
@@ -150,15 +133,15 @@ public class ThemNganSachActivity extends AppCompatActivity {
         for (DanhMuc cat : expenseCategories) {
             String catName = cat.getName().trim();
 
-            // Kiểm tra xem danh mục này đã được lập ngân sách bởi ngân sách khác chưa
+            
             boolean isUsedByOther = usedCategoryNames.contains(catName);
 
             CheckBox cb = new CheckBox(this);
             cb.setText(catName + (isUsedByOther ? " (Đã lập ngân sách)" : ""));
-            cb.setEnabled(!isUsedByOther); // Disable nếu đã dùng
+            cb.setEnabled(!isUsedByOther); 
             cb.setTextSize(16);
             cb.setPadding(0, 8, 0, 8);
-            // Màu mờ cho checkbox không khả dụng
+            
             cb.setAlpha(isUsedByOther ? 0.4f : 1.0f);
 
             containerCategories.addView(cb);
@@ -168,7 +151,7 @@ public class ThemNganSachActivity extends AppCompatActivity {
             if (!isUsedByOther) anyAvailable = true;
         }
 
-        // Cảnh báo nếu không còn danh mục nào có thể chọn
+        
         if (!anyAvailable) {
             TextView tvNoCategory = new TextView(this);
             tvNoCategory.setText("⚠ Tất cả danh mục đã được lập ngân sách.\nVui lòng tạo thêm danh mục mới.");
@@ -179,10 +162,7 @@ public class ThemNganSachActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Pre-fill dữ liệu cũ của ngân sách vào các field input (chế độ Sửa).
-     * Gọi SAU setupCategoryCheckboxes() để tích chọn đúng danh mục cũ.
-     */
+    
     private void prefillEditData() {
         NganSach oldBudget = budgetDAO.getBudgetById(editBudgetId);
         if (oldBudget == null) {
@@ -191,11 +171,11 @@ public class ThemNganSachActivity extends AppCompatActivity {
             return;
         }
 
-        // Điền tên và số tiền
+        
         etBudgetName.setText(oldBudget.getName());
         etBudgetAmount.setText(String.valueOf((long) oldBudget.getAmount()));
 
-        // Phân tích các danh mục cũ đã chọn
+        
         Set<String> oldCategories = new java.util.HashSet<>();
         if (oldBudget.getCategoryIds() != null) {
             for (String s : oldBudget.getCategoryIds().split(",")) {
@@ -203,7 +183,7 @@ public class ThemNganSachActivity extends AppCompatActivity {
             }
         }
 
-        // Tích checkbox theo danh mục cũ
+        
         for (int i = 0; i < categoryCheckboxes.size(); i++) {
             CheckBox cb = categoryCheckboxes.get(i);
             if (i < categoryList.size()) {
@@ -212,7 +192,7 @@ public class ThemNganSachActivity extends AppCompatActivity {
             }
         }
 
-        // Phân tích ngày
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("vi"));
         try {
             if (oldBudget.getStartDate() != null) {
@@ -229,14 +209,7 @@ public class ThemNganSachActivity extends AppCompatActivity {
         tvEndDate.setText(sdf.format(endCal.getTime()));
     }
 
-    /**
-     * Lưu hoặc cập nhật ngân sách sau khi validate.
-     *
-     * Validation gồm:
-     * 1. Số tiền không được trống.
-     * 2. Phải chọn ít nhất 1 danh mục.
-     * 3. Danh mục đã chọn không được trùng với ngân sách khác (kiểm tra lại ở tầng lưu để đảm bảo).
-     */
+    
     private void saveBudget() {
         String name = etBudgetName.getText().toString().trim();
         String amountStr = etBudgetAmount.getText().toString().trim();
@@ -258,11 +231,11 @@ public class ThemNganSachActivity extends AppCompatActivity {
             return;
         }
 
-        // -- Thu thập danh mục đã chọn --
+        
         List<String> selectedCatNames = new ArrayList<>();
         for (CheckBox cb : categoryCheckboxes) {
             if (cb.isChecked() && cb.isEnabled()) {
-                // Lấy tên thật (bỏ phần suffix " (Đã lập ngân sách)" nếu có)
+                
                 String fullText = cb.getText().toString();
                 String realName = fullText.replace(" (Đã lập ngân sách)", "").trim();
                 selectedCatNames.add(realName);
@@ -274,8 +247,8 @@ public class ThemNganSachActivity extends AppCompatActivity {
             return;
         }
 
-        // -- VALIDATE trùng lặp danh mục (lần kiểm tra cuối trước khi lưu) --
-        // Lấy danh sách đã dùng bởi ngân sách KHÁC
+        
+        
         Set<String> usedByOthers = isEditMode
                 ? budgetDAO.getUsedCategoryNamesExcluding(editBudgetId)
                 : budgetDAO.getUsedCategoryNames();
@@ -299,7 +272,7 @@ public class ThemNganSachActivity extends AppCompatActivity {
         String startDate = tvStartDate.getText().toString();
         String endDate = tvEndDate.getText().toString();
 
-        // -- Thực thi lưu hoặc cập nhật --
+        
         if (isEditMode) {
             NganSach updatedBudget = new NganSach(editBudgetId, name, amount, 0, startDate, endDate, categoryIds);
             int rows = budgetDAO.updateNganSach(updatedBudget);
